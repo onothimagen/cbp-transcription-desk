@@ -1,0 +1,12 @@
+span.tei-del {text-decoration: line-through;}
+span.tei-add {vertical-align: baseline; font-size: 0.8em; position: relative; top: -0.4em; }
+span.tei-unclear {border-bottom: 1px dotted #000; }
+span.tei-unclear:after {content: "[?]";}
+span.tei-note {border: 1px solid #999; }
+span.tei-hi {text-decoration:underline; } /* N.b. <u> also works */
+span.tei-foreign { border-bottom: 1px dotted #0a0;  }
+span.tei-sic {border-bottom: 1px dotted #aa0; } 
+span.tei-head { display: block; font-size: large; }
+span.tei-gap:after {content: "[ . . . ]";}
+span.superscript {text-decoration: none; vertical-align: baseline; position: relative; top: -0.4em; }
+
