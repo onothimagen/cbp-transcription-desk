@@ -1,111 +1,91 @@
-<?
- 
-if( !isset($wgJBTEIToolbarPath) ) {
-  $wgJBTEIToolbarPath = "$wgScriptPath/extensions/JBTEIToolbar";
-}
- 
-function addJBTEIButtons($text) {
-  global $wgStylePath;
-  global $wgJBTEIToolbarPath;
-  $arr_tool = array(
-		    array(  'image' =>'button_save.png',
-			    'tip'   => wfMsg('savearticle'),
-			    'button'=>"wpSave",
-			    ),
-		    array(  'image' =>'button_preview.png',
-			    'tip'   => wfMsg('showpreview'),
-			    'button'=>"wpPreview",
-			    ),
-		    array(  'image' =>'button_diff.png',
-			    'tip'   => wfMsg('showdiff'),
-			    'button'=>"wpDiff",
-			    ),
-		    );
- 
-  $ret = addJBTEIButtons_js_text();
- 
-  foreach($arr_tool as $tool) {
-    $image=$wgJBTEIToolbarPath ."/images/" . $tool['image'];
-    $button=$tool['button'];
-    $tip=$tool['tip'];
- 
-    $ret.="addJBTEIButtons('$image','$tip','$button');\n";
-  }
-  $text.=$ret;
-  return true;
-}
- 
-function addJBTEIButtons_js_text() {
-        return <<<EOL
-	  ///////////////////////////////////////////////////////////////////////
-	  // Submit buttons extension
-	  //
-	  var mwJBTEIButtons = [];
- 
-	function addJBTEIButtons(imageFile, speedTip, buttonId) {
-        mwJBTEIButtons[mwJBTEIButtons.length] =
-	  {"imageFile": imageFile,
-	   "speedTip": speedTip,
-	   "buttonId": buttonId };
-	}
- 
-	function addJBTEIButtons_insert(toolbar, item){
- 
-	  var image = document.createElement("img");
-	  image.width = 23;
-	  image.height = 22;
-	  image.src = item.imageFile;
-	  image.border = 0;
-	  image.alt = item.speedTip;
-	  image.title = item.speedTip;
-	  image.style.cursor = "pointer";
-	  var buttonId= item.buttonId;
-	  image.onclick = function() {
-	    var button =  document.getElementById(buttonId);
-	    button.click();
-	    return false;
-	  }
-	  //              image.onclick = 'javascript:document.getElementById("' +
-	  //                              escapeQuotesHTML(buttonId) +
-	  //                               '").click();';
-	  toolbar.appendChild(image);
-	}
- 
-	function addJBTEIButtons() {
- 
-	  var toolbar = document.getElementById('toolbar');
-	  if (!toolbar) return false;
-	  sp = document.createElement('span');
-        sp.innerHTML= "&nbsp;"
-	  toolbar.appendChild(sp);
- 
-        for(var i in mwJBTEIButtons) {
-	  addJBTEIButtons_insert(toolbar, mwJBTEIButtons[i]);
- 
-        }
-	}
- 
-	hookEvent("load", addJBTEIButtons);
- 
-EOL;
-}
- 
-/*
-        document.write(
-                '<a href="javascript:' + 
-                        '(document.getElementById(' +
-                                "'" + escapeQuotesHTML(buttonId) + "'" +
-                        ')).click()"' +
-                '>' +
-                '<img width="23" height="22" ' +
-                        'src="' + escapeQuotesHTML(imageFile) + '" ' +
-                        'border="0" ' +
-                        'alt="' + escapeQuotesHTML(speedTip) + '" ' +
-                        'title="'+ escapeQuotesHTML(speedTip) + '" ' +
-                '/></a>');
- 
-}
- 
+<?php
+
+/**
+ * Copyright (C) 2013 Richard Davis
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License Version 2, as
+* published by the Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* @package MediaWiki
+* @subpackage Extensions
+* @author Richard Davis <r.davis@ulcc.ac.uk>
+* @author Ben Parish <b.parish@ulcc.ac.uk>
+* @copyright 2013 Richard Davis
 */
-$wgHooks['EditToolBar'][] = 'addJBTEIButtons';
-?>
+
+# Alert the user that this is not a valid entry point to MediaWiki if they try to access the special pages file directly.
+if ( !defined( 'MEDIAWIKI' ) ) {
+	echo <<<EOT
+To install my extension, put the following line in LocalSettings.php:
+require_once( "\$IP/extensions/JBTEIToolbar/JBTEIToolbar.php" );
+EOT;
+	exit( 1 );
+}
+
+$wgAutoloadClasses[ 'JBTEIToolbarHooks' ]   = __DIR__ . '/JBTEIToolbar.body.php';
+$wgExtensionMessagesFiles[ 'JBTEIToolbar' ] = __DIR__ . '/JBTEIToolbar.i18n.php';
+
+$wgExtensionCredits[ 'jbteitoolbar' ][] = array(
+		'path' 	      =>  __FILE__,
+		'name'        => 'JBTEIToolbar',
+		'author'      => 'Richard Davis',
+		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
+		'version'     => '0.2',
+		'description' => 'Extension to add a toolbar supporting TEI tags for transcription purposes'
+);
+
+
+$wgResourceModules['ext.JBTEIToolbar' ] = array(
+				'localBasePath' => dirname( __FILE__ ) . '/js',
+				'scripts' => 'ext.jbteitoolbar.js',
+				'messages' => array(  /* Label text */
+									  'toolbar-label-line-break'
+									 ,'toolbar-label-page-break'
+									 ,'toolbar-label-heading'
+									 ,'toolbar-label-paragraph'
+									 ,'toolbar-label-addition'
+									 ,'toolbar-label-deletion'
+									 ,'toolbar-label-questionable'
+									 ,'toolbar-label-illegible'
+									 ,'toolbar-label-note'
+									 ,'toolbar-label-underline'
+									 ,'toolbar-label-superscript'
+									 ,'toolbar-label-spelling'
+									 ,'toolbar-label-foreign'
+									 ,'toolbar-label-ampersand'
+									 ,'toolbar-label-long-dash'
+									 ,'toolbar-label-comment'
+
+									  /* Peri text */
+									 ,'toolbar-peri-heading'
+									 ,'toolbar-peri-paragraph'
+									 ,'toolbar-peri-addition'
+									 ,'toolbar-peri-deletion'
+									 ,'toolbar-peri-questionable'
+									 ,'toolbar-peri-note'
+									 ,'toolbar-peri-underline'
+									 ,'toolbar-peri-superscript'
+									 ,'toolbar-peri-spelling'
+									 ,'toolbar-peri-foreign'
+									 ,'toolbar-peri-comment'
+						)
+
+);
+
+
+$wgHooks['EditPage::showEditForm:initial'][] = 'JBTEIToolbarHooks::editPageShowEditFormInitial';
+
+
+
+
+
