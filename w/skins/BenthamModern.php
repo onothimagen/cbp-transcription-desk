@@ -82,7 +82,8 @@ class BenthamModernTemplate extends QuickTemplate {
 
 		$this->html( 'headelement' );
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="<?php $this->text('xhtmldefaultnamespace') ?>" <?php
 	foreach($this->data['xhtmlnamespaces'] as $tag => $ns) {
 		?>xmlns:<?php echo "{$tag}=\"{$ns}\" ";
@@ -92,7 +93,6 @@ class BenthamModernTemplate extends QuickTemplate {
 		<?php $this->html('headlinks') ?>
 		<title><?php $this->text('pagetitle') ?></title>
 		<?php $this->html('csslinks') ?>
-		  <link rel="stylesheet" type="text/css" href="<?php $this->text('stylepath'); ?>/bentham-modern/tei.css" media="all"/>
 		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
 
 		<?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
@@ -192,14 +192,6 @@ class BenthamModernTemplate extends QuickTemplate {
 <div id="contentTitle">
 <h1 class="firstHeading" id="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
 </div>
-<?php
-if (preg_match('/^JB\//',$this->data['title'])) {
-    $item = $this->data['title'];
-    $item = preg_replace("/^JB\//","", $item);
-    $item = preg_replace("/\//","_", $item);
-    echo "<iframe id='myiframe' style='float: right; width: 60%; height: 660px;' src='/td/extensions/JBZV/zviewer.php?item=$item' scrolling='no'></iframe>";
-}
-?>
       	<div id="contentSub"><?php $this->html('subtitle') ?></div>
 
 		<?php if($this->data['undelete']) { ?><div id="contentSub2"><?php     $this->html('undelete') ?></div><?php } ?>
