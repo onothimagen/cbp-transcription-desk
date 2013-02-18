@@ -26,7 +26,7 @@
 class JBTEIToolbarHooks {
 
 	/**
-	 * EditPage::showEditForm:initial hook
+	 * editPageShowEditFormInitial hook
 	 *
 	 * Adds the modules to the edit form
 	 *
@@ -34,18 +34,34 @@ class JBTEIToolbarHooks {
 	 * @return bool
 	 */
 
-	public static function editPageShowEditFormInitial( &$toolbar ) {
+	public function editPageShowEditFormInitial( $toolbar ) {
+
 		global $wgOut;
-		$pagetitle = $wgOut->getTitle();
 
-		if (   preg_match("/^Editing JB\//", $pagetitle )
-				or preg_match("/^View source/", $pagetitle) ) {
+		$pageTitle = $wgOut->getTitle();
 
-			$wgOut->addModules( 'ext.JBTEIToolbar' );
-
+		if( $this->isInEditMode( $pageTitle ) === false ){
+			return TRUE;
 		}
 
-		return true;
+		$wgOut->addModules( 'ext.JBTEIToolbar' );
+
+		return TRUE;
+	}
+
+
+	private function isInEditMode( $pageTitle ){
+
+		/*
+		 * TODO: Need to be able to override this in LocalSettings.php
+		 */
+
+		if (   preg_match( '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^', $pageTitle ) ){
+			return TRUE;
+		}
+
+		return FALSE;
+
 	}
 
 }

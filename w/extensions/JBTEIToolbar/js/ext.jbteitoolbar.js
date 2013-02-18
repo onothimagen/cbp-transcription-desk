@@ -1,5 +1,7 @@
 /**
- * Copyright (C) 2013 Richard Davis
+ 
+
+* Copyright (C) 2013 Richard Davis
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License Version 2, as
@@ -26,7 +28,7 @@
  * (http://www.mediawiki.org/wiki/Customizing_edit_toolbar#How_do_I_add_more_buttons_on_the_edit_page.3F)
  */
 
-var $images_path = "extensions/JBTEItoolbar/images/";
+var $images_path = "extensions/JBTEIToolbar/images/";
 
 mw.loader.using('mediawiki.action.edit', function () {
 	
@@ -188,6 +190,13 @@ mw.loader.using('mediawiki.action.edit', function () {
   	
 	  	
  	}
+    
+	/*
+	 * The toolbar needs to be moved above the edit form so that
+	 * the viewer will float alongside the text area
+	 */
+    
+    $('#toolbar').insertBefore('#editform');
     
 });
 
@@ -480,10 +489,16 @@ var customizeToolbar = function() {
 			    
         }
 	} );
-
 	
+	/*
+	 * The toolbar needs to be moved above the edit form so that
+	 * the viewer will float alongside the text area
+	 */
+
+	$('.wikiEditor-ui-top').insertBefore('#editform');
+	
+
 };
- 
 
 
 /* Check if view is in edit mode and that the required modules are available. Then, customize the toolbar . . . */
@@ -500,6 +515,19 @@ if ( $.inArray( mw.config.get( 'wgAction' ), ['edit', 'submit'] ) !== -1 ) {
 
 
 
+
+/* Re-organises the elements to the correct layout after the wikiEditor has loaded */
+
+$(document).ready(function(){
+		
+	if (document.createStyleSheet){
+		document.createStyleSheet('extensions/JBTEIToolbar/css/ext.jbteitoolbar.css');
+	}
+	else {
+		$("head").append($("<link rel='stylesheet' href='extensions/JBTEIToolbar/css/ext.jbteitoolbar.css' type='text/css' media='screen' />"));
+	}
+
+});
 
 
 

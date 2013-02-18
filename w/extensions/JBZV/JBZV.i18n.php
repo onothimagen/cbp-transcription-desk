@@ -16,6 +16,8 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *
+* Internationalisation for JBZV extension
+*
 * @package MediaWiki
 * @subpackage Extensions
 * @author Richard Davis <r.davis@ulcc.ac.uk>
@@ -36,7 +38,7 @@ EOT;
 $messages       = array();
 
 $messages['en'] = array(  'jbzv'               => 'JB ZV'
-						, 'jbzv-descr'         => 'Extension to add an image to the edit page for transcription purposes'
+						, 'jbzv-descr'         => 'The JBZV Transcription Editor is designed to add an image in an iframe next to the edit form so that it can be transcribed using the edit box'
 						, 'flash-viewer'	   => 'Flash viewer'
 						, 'javascript-viewer'  => 'JavaScript viewer'
 						, 'to-use-javascript'  => 'To use the Javascript viewer'

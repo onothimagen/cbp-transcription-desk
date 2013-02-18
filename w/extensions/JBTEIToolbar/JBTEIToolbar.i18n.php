@@ -21,7 +21,7 @@
  * @author Richard Davis <r.davis@ulcc.ac.uk>
  * @copyright 2013 Richard Davis
 
- * Internationalisation for WikiEditor extension
+ * Internationalisation for JBTEIToolbar extension
  *
  * @file
  * @ingroup Extensions
@@ -30,6 +30,8 @@
 $messages = array();
 
 $messages['en'] = array(
+
+	'jbteitoolbar-descr'        =>'Extension to add a toolbar supporting TEI tags for transcription purposes',
 
 	/* Label text */
 	'toolbar-label-line-break'   => 'Line break',

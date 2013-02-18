@@ -41,51 +41,55 @@ $wgExtensionCredits[ 'jbteitoolbar' ][] = array(
 		'author'      => 'Richard Davis',
 		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
 		'version'     => '0.2',
-		'description' => 'Extension to add a toolbar supporting TEI tags for transcription purposes'
+		'description' => new Message( 'jbteitoolbar-descr' )
 );
+
 
 
 $wgResourceModules['ext.JBTEIToolbar' ] = array(
-				'localBasePath' => dirname( __FILE__ ) . '/js',
-				'scripts' => 'ext.jbteitoolbar.js',
-				'messages' => array(  /* Label text */
-									  'toolbar-label-line-break'
-									 ,'toolbar-label-page-break'
-									 ,'toolbar-label-heading'
-									 ,'toolbar-label-paragraph'
-									 ,'toolbar-label-addition'
-									 ,'toolbar-label-deletion'
-									 ,'toolbar-label-questionable'
-									 ,'toolbar-label-illegible'
-									 ,'toolbar-label-note'
-									 ,'toolbar-label-underline'
-									 ,'toolbar-label-superscript'
-									 ,'toolbar-label-spelling'
-									 ,'toolbar-label-foreign'
-									 ,'toolbar-label-ampersand'
-									 ,'toolbar-label-long-dash'
-									 ,'toolbar-label-comment'
+				'localBasePath' => dirname( __FILE__ ),
+				'scripts'       => 'js/ext.jbteitoolbar.js',
+				'messages'      => array(  /* Label text */
+										  'toolbar-label-line-break'
+										 ,'toolbar-label-page-break'
+										 ,'toolbar-label-heading'
+										 ,'toolbar-label-paragraph'
+										 ,'toolbar-label-addition'
+										 ,'toolbar-label-deletion'
+										 ,'toolbar-label-questionable'
+										 ,'toolbar-label-illegible'
+										 ,'toolbar-label-note'
+										 ,'toolbar-label-underline'
+										 ,'toolbar-label-superscript'
+										 ,'toolbar-label-spelling'
+										 ,'toolbar-label-foreign'
+										 ,'toolbar-label-ampersand'
+										 ,'toolbar-label-long-dash'
+										 ,'toolbar-label-comment'
 
-									  /* Peri text */
-									 ,'toolbar-peri-heading'
-									 ,'toolbar-peri-paragraph'
-									 ,'toolbar-peri-addition'
-									 ,'toolbar-peri-deletion'
-									 ,'toolbar-peri-questionable'
-									 ,'toolbar-peri-note'
-									 ,'toolbar-peri-underline'
-									 ,'toolbar-peri-superscript'
-									 ,'toolbar-peri-spelling'
-									 ,'toolbar-peri-foreign'
-									 ,'toolbar-peri-comment'
-						)
+										  /* Peri text */
+										 ,'toolbar-peri-heading'
+										 ,'toolbar-peri-paragraph'
+										 ,'toolbar-peri-addition'
+										 ,'toolbar-peri-deletion'
+										 ,'toolbar-peri-questionable'
+										 ,'toolbar-peri-note'
+										 ,'toolbar-peri-underline'
+										 ,'toolbar-peri-superscript'
+										 ,'toolbar-peri-spelling'
+										 ,'toolbar-peri-foreign'
+										 ,'toolbar-peri-comment'
+									)
 
 );
 
+$wgResourceModules['ext.JBTEIToolbar.css' ] = array(
+		'localBasePath' => dirname( __FILE__ ) . '/css',
+		'styles'        => 'ext.jbteitoolbar.css',
+);
 
-$wgHooks['EditPage::showEditForm:initial'][] = 'JBTEIToolbarHooks::editPageShowEditFormInitial';
+$JBTEIToolbarHooks 							 = new JBTEIToolbarHooks();
 
-
-
+$wgHooks['EditPage::showEditForm:initial'][] = array( $JBTEIToolbarHooks , 'editPageShowEditFormInitial' );
 
 

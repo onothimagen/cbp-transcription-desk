@@ -32,35 +32,32 @@ EOT;
 	exit( 1 );
 }
 
-
-$wgAutoloadClasses[ 'JBZVHooks' ]    = __DIR__ . '/JBZV.body.php';
-$wgAutoloadClasses[ 'SpecialJBZV' ]  = __DIR__ . '/SpecialJBZV.php';
-$wgExtensionMessagesFiles[ 'JBZV' ]  = __DIR__ . '/JBZV.i18n.php';
-
-$wgTitleTokens[] = 'Editing JB';
-$wgTitleTokens[] = 'View source';
-
-$JBZVHooks       = new JBZVHooks( );
-
-$wgHooks['EditPage::showEditForm:fields'][] = array( $JBZVHooks, 'onEditPageShowEditFormInitial' );
-$wgHooks['ArticlePageDataAfter'][] 			= array( $JBZVHooks, 'onArticlePageDataAfter' );
-
-
-$wgSpecialPages[ 'JBZV' ]                   = 'SpecialJBZV';
-
-$wgExtensionCredits['specialpage'][] = array(
+$wgExtensionCredits['jbzv'][] = array(
 		'path' 	      =>  __FILE__,
 		'name'        => 'JBZVTranscriptionEditor',
+		'type'		  => 'parserhook',
 		'author'      => 'Richard Davis',
 		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
 		'version'     => '0.2',
 		'description' => new Message( 'jbzv-descr' )
 );
 
+
+$wgAutoloadClasses[ 'JBZVHooks' ]    = __DIR__ . '/JBZV.body.php';
+$wgAutoloadClasses[ 'SpecialJBZV' ]  = __DIR__ . '/SpecialJBZV.php';
+$wgExtensionMessagesFiles[ 'JBZV' ]  = __DIR__ . '/JBZV.i18n.php';
+
 $wgResourceModules['ext.JBZV' ] = array(
-										'localBasePath' => dirname( __FILE__ ) . '/css',
-										'styles'  => 'ext.jbzv.css',
-										);
+		'localBasePath' => dirname( __FILE__ ) . '/css',
+		'styles'  => 'ext.jbzv.css',
+);
+
+$wgSpecialPages[ 'JBZV' ]                   = 'SpecialJBZV';
+
+$JBZVHooks = new JBZVHooks( );
+
+$wgHooks['EditPage::showEditForm:fields'][] = array( $JBZVHooks, 'onEditPageShowEditFormInitial' );
+$wgHooks['ArticlePageDataAfter'][] 			= array( $JBZVHooks, 'onArticlePageDataAfter' );
 
 
 

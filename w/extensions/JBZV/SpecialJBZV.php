@@ -35,14 +35,17 @@ EOT;
 class SpecialJBZV extends SpecialPage {
 
 	function __construct() {
-		parent::__construct( 'jbzv' );
+		parent::__construct(  $name      = 'jbzv'
+							, $listed	 = false
+						    , $includable = true);
 	}
 
 	function execute( $par ) {
 
 		$output = $this->getOutput();
 
-		$wikitext = 'The JBZV Transcription Editor is designed to add an iframe next to the edit form so that it can be transcribed using the edit box';
+		$wikitext = new Message( 'jbzv-descr' );
+
 		$output->addWikiText( $wikitext );
 	}
 }
