@@ -39,6 +39,7 @@ $wgExtensionCredits[ 'jbteitoolbar' ][] = array(
 		'path' 	      =>  __FILE__,
 		'name'        => 'JBTEIToolbar',
 		'author'      => 'Richard Davis',
+		'type'		  => 'parserhook',
 		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
 		'version'     => '0.2',
 		'description' => new Message( 'jbteitoolbar-descr' )
