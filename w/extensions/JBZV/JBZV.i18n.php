@@ -33,39 +33,18 @@ EOT;
 }
 
 
-$wgAutoloadClasses[ 'JBZVHooks' ]    = __DIR__ . '/JBZV.body.php';
-$wgAutoloadClasses[ 'SpecialJBZV' ]  = __DIR__ . '/SpecialJBZV.php';
-$wgExtensionMessagesFiles[ 'JBZV' ]  = __DIR__ . '/JBZV.i18n.php';
+$messages       = array();
 
-$wgTitleTokens[] = 'Editing JB';
-$wgTitleTokens[] = 'View source';
+$messages['en'] = array(  'jbzv'               => 'JB ZV'
+						, 'jbzv-descr'         => 'Extension to add an image to the edit page for transcription purposes'
+						, 'flash-viewer'	   => 'Flash viewer'
+						, 'javascript-viewer'  => 'JavaScript viewer'
+						, 'to-use-javascript'  => 'To use the Javascript viewer'
+						, 'to-use-flash'       => 'To use the Flash viewer'
+						, 'click-here'         => 'click here'
+						, 'instead'            => 'instead'
+						, 'javascript-warning' => 'JavaScript must be enabled in order for you to use the BrainMaps API.</b>  However, it seems JavaScript is either disabled or not supported by your browser.   To view this page, enable JavaScript by changing your browser options, and then try again.'
+						, 'error'		       => 'The %s parameter is missing in the URL'
+						);
 
-$JBZVHooks       = new JBZVHooks( );
-
-$wgHooks['EditPage::showEditForm:fields'][] = array( $JBZVHooks, 'onEditPageShowEditFormInitial' );
-$wgHooks['ArticlePageDataAfter'][] 			= array( $JBZVHooks, 'onArticlePageDataAfter' );
-
-
-$wgSpecialPages[ 'JBZV' ]                   = 'SpecialJBZV';
-
-$wgExtensionCredits['specialpage'][] = array(
-		'path' 	      =>  __FILE__,
-		'name'        => 'JBZVTranscriptionEditor',
-		'author'      => 'Richard Davis',
-		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
-		'version'     => '0.2',
-		'description' => new Message( 'jbzv-descr' )
-);
-
-$wgResourceModules['ext.JBZV' ] = array(
-										'localBasePath' => dirname( __FILE__ ) . '/css',
-										'styles'  => 'ext.jbzv.css',
-										);
-
-
-
-
-
-
-
-
+$messages[ 'en-gb' ] = $messages[ 'en' ];

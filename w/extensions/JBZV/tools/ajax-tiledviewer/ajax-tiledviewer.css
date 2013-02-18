@@ -1,0 +1,129 @@
+@CHARSET "UTF-8";
+
+div#Thumb0 {
+	display:block;
+	position:absolute;
+	bottom:40px;
+	right:10;
+	text-align:center;
+	width:200px;
+	height:150px;
+	overflow:hidden;
+}
+
+div#Thumb {
+	display:none;
+	position:absolute;
+	right:0px;
+	top:0px;
+	border:1px solid blue;
+	overflow:hidden;
+}
+
+div#Thumb2 {
+	display:none;
+	position:absolute;
+	border:1px solid cyan;
+	overflow:hidden;
+}
+
+div#wheelMode {
+	display:none;
+	position:absolute;
+	left:10px;
+	top:260px;
+	overflow:hidden;
+	font-size:11px;
+	font-family:sans-serif;
+}
+
+div#outerDiv0 {
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:100%;
+	border:0px solid black;
+	overflow:hidden;
+}
+
+div#overlay {
+	width:100px;
+	height:20px;
+	position:absolute;
+	top:145px;
+	left:0;
+	padding-top:0;
+	z-index:100;
+	color:#000;
+	font-size:12px;
+	font-family:sans-serif;
+	border:0 dotted #000;
+	text-align:center;
+}
+
+#theScale {
+	visibility: hidden;
+}
+
+#main_body { 
+	margin: 0; padding: 0;
+}
+
+#Nav {
+	display:none;
+	position: absolute;
+	top: 70px;
+	left: 20px;
+	z-index: 1;
+}
+
+#outerDiv {
+	position:relative;
+	height:95%;
+	width:100%;
+	border:0;
+	overflow:hidden;
+}
+
+#z_link { 
+	position:absolute;
+	bottom: 10px;
+	left: 10px;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

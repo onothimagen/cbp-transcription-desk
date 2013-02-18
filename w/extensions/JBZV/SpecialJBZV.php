@@ -32,38 +32,20 @@ EOT;
 	exit( 1 );
 }
 
+class SpecialJBZV extends SpecialPage {
 
-$wgAutoloadClasses[ 'JBZVHooks' ]    = __DIR__ . '/JBZV.body.php';
-$wgAutoloadClasses[ 'SpecialJBZV' ]  = __DIR__ . '/SpecialJBZV.php';
-$wgExtensionMessagesFiles[ 'JBZV' ]  = __DIR__ . '/JBZV.i18n.php';
+	function __construct() {
+		parent::__construct( 'jbzv' );
+	}
 
-$wgTitleTokens[] = 'Editing JB';
-$wgTitleTokens[] = 'View source';
+	function execute( $par ) {
 
-$JBZVHooks       = new JBZVHooks( );
+		$output = $this->getOutput();
 
-$wgHooks['EditPage::showEditForm:fields'][] = array( $JBZVHooks, 'onEditPageShowEditFormInitial' );
-$wgHooks['ArticlePageDataAfter'][] 			= array( $JBZVHooks, 'onArticlePageDataAfter' );
-
-
-$wgSpecialPages[ 'JBZV' ]                   = 'SpecialJBZV';
-
-$wgExtensionCredits['specialpage'][] = array(
-		'path' 	      =>  __FILE__,
-		'name'        => 'JBZVTranscriptionEditor',
-		'author'      => 'Richard Davis',
-		'url'         => 'http://www.transcribe-bentham.da.ulcc.ac.uk',
-		'version'     => '0.2',
-		'description' => new Message( 'jbzv-descr' )
-);
-
-$wgResourceModules['ext.JBZV' ] = array(
-										'localBasePath' => dirname( __FILE__ ) . '/css',
-										'styles'  => 'ext.jbzv.css',
-										);
-
-
-
+		$wikitext = 'The JBZV Transcription Editor is designed to add an iframe next to the edit form so that it can be transcribed using the edit box';
+		$output->addWikiText( $wikitext );
+	}
+}
 
 
 
