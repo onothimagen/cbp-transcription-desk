@@ -32,9 +32,10 @@ EOT;
 	exit( 1 );
 }
 
-class TEITags {
+class TEITagsHooks {
 
-	public function SetHooks ( Parser &$parser ){
+	public function ParserFirstCallInit ( Parser $parser ){
+		global $wgOut;
 
 		$parser->setHook( 'tei'    , array( $this , 'RenderTei' ) );
 		$parser->setHook( 'lb'     , array( $this , 'RenderLb' ));
@@ -48,6 +49,8 @@ class TEITags {
 		$parser->setHook( 'head'   , array( $this , 'RenderHead' ));
 		$parser->setHook( 'sic'    , array( $this , 'RenderSic' ));
 		$parser->setHook( 'foreign', array( $this , 'RenderForeign' ));
+
+		$wgOut->addModules( 'ext.TEITags' );
 
 		return true;
 
@@ -121,7 +124,6 @@ class TEITags {
 		}
 
 		if( $tag == 'hi' ){
-			var_dump($args);
 			$render = $args['rend'];
 			$tag 	.= ' ' . $render;
 		}

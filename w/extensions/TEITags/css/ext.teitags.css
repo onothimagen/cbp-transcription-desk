@@ -1,0 +1,34 @@
+/**
+ * Copyright (C) 2013 Richard Davis
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License Version 2, as
+* published by the Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+* @package MediaWiki
+* @subpackage Extensions
+* @author Richard Davis <r.davis@ulcc.ac.uk>
+* @author Ben Parish <b.parish@ulcc.ac.uk>
+* @copyright 2013 Richard Davis
+*/
+
+span.tei-del {text-decoration: line-through;}
+span.tei-add {vertical-align: baseline; font-size: 0.8em; position: relative; top: -0.4em; }
+span.tei-unclear {border-bottom: 1px dotted #000; }
+span.tei-unclear:after {content: "[?]";}
+span.tei-note {border: 1px solid #999; }
+span.tei-hi {text-decoration:underline; } /* N.b. <u> also works */
+span.tei-foreign { border-bottom: 1px dotted #0a0;  }
+span.tei-sic {border-bottom: 1px dotted #aa0; } 
+span.tei-head { display: block; font-size: large; }
+span.tei-gap:after {content: "[ . . . ]";}
+span.superscript {text-decoration: none; vertical-align: baseline; position: relative; top: -0.4em; }

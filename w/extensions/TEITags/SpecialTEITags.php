@@ -27,35 +27,26 @@
 if ( !defined( 'MEDIAWIKI' ) ) {
 	echo <<<EOT
 To install my extension, put the following line in LocalSettings.php:
-require_once( "\$IP/extensions/JBTEIToolbar/JBTEIToolbar.php" );
+require_once( "\$IP/extensions/TEITags/TEITags.php" );
 EOT;
 	exit( 1 );
 }
 
-$wgExtensionCredits['specialpage'][] = array(
-	'path'        =>  __FILE__,
-	'name'        => new Message( 'tei-tags' ),
-    'type'		  => 'parserhook',
-	'author'      => 'Richard Davis',
-	'url'         => 'http://dablog.ulcc.ac.uk/',
-	'version'     => '0.2',
-	'description' => new Message( 'teitags-descr' )
-);
 
-$wgAutoloadClasses[ 'TEITagsHooks' ]   = __DIR__ . '/TEITags.body.php';
-$wgAutoloadClasses[ 'SpecialTEITags' ] = __DIR__ . '/SpecialTEITags.php';
-$wgExtensionMessagesFiles[ 'TEITags' ] = __DIR__ . '/TEITags.i18n.php';
+class SpecialTEITags extends SpecialPage {
 
-$wgResourceModules['ext.TEITags' ] = array(
-		'localBasePath' => dirname( __FILE__ ) . '/css',
-		'styles'        => 'ext.teitags.css',
-);
+	function __construct() {
+		parent::__construct( $name       = 'TEI-Tags'
+						   , $listed	 = false
+						   , $includable = true  );
+	}
 
+	function execute( $par ) {
 
-$wgSpecialPages[ 'TEITags' ] = 'SpecialTEITags';
+		$output 	= $this->getOutput();
 
-$TEITagsHooks  = new TEITagsHooks;
+		$wikitext = new Message( 'teitags-descr' );
 
-$wgHooks['ParserFirstCallInit'][] = array( $TEITagsHooks, 'ParserFirstCallInit' );
-
-
+		$output->addWikiText( $wikitext );
+    }
+}
