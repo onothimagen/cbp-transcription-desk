@@ -32,11 +32,10 @@ EOT;
 	exit( 1 );
 }
 
-
 class SpecialTEITags extends SpecialPage {
 
 	function __construct() {
-		parent::__construct( $name       = 'TEI-Tags'
+		parent::__construct( $name       = 'tei-tags'
 						   , $listed	 = false
 						   , $includable = true  );
 	}

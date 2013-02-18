@@ -23,28 +23,30 @@
 * @copyright 2013 Richard Davis
 */
 
+
 # Alert the user that this is not a valid entry point to MediaWiki if they try to access the special pages file directly.
 if ( !defined( 'MEDIAWIKI' ) ) {
 	echo <<<EOT
 To install my extension, put the following line in LocalSettings.php:
-require_once( "\$IP/extensions/JBTEIToolbar/JBTEIToolbar.php" );
+require_once( "\$IP/extensions/TEITags/TEITags.php" );
 EOT;
 	exit( 1 );
 }
 
-$wgExtensionCredits['specialpage'][] = array(
-	'path'        =>  __FILE__,
-	'name'        => new Message( 'tei-tags' ),
-    'type'		  => 'parserhook',
-	'author'      => 'Richard Davis',
-	'url'         => 'http://dablog.ulcc.ac.uk/',
-	'version'     => '0.2',
-	'description' => new Message( 'teitags-descr' )
+$wgAutoloadClasses[ 'TEITagsHooks' ]   = __DIR__ . '/TEITags.body.php';
+//$wgAutoloadClasses[ 'SpecialTEITags' ] = __DIR__ . '/SpecialTEITags.php';
+$wgExtensionMessagesFiles[ 'TEITags' ] = __DIR__ . '/TEITags.i18n.php';
+
+$wgExtensionCredits[ 'teitags' ][] = array(
+		'path'        =>  __FILE__,
+		'name'        => 'TEITags',
+		'type'		  => 'parserhook',
+		'author'      => 'Richard Davis',
+		'url'         => 'http://dablog.ulcc.ac.uk/',
+		'version'     => '0.2',
+		'description' => new Message( 'teitags-descr' )
 );
 
-$wgAutoloadClasses[ 'TEITagsHooks' ]   = __DIR__ . '/TEITags.body.php';
-$wgAutoloadClasses[ 'SpecialTEITags' ] = __DIR__ . '/SpecialTEITags.php';
-$wgExtensionMessagesFiles[ 'TEITags' ] = __DIR__ . '/TEITags.i18n.php';
 
 $wgResourceModules['ext.TEITags' ] = array(
 		'localBasePath' => dirname( __FILE__ ) . '/css',
@@ -52,10 +54,9 @@ $wgResourceModules['ext.TEITags' ] = array(
 );
 
 
-$wgSpecialPages[ 'TEITags' ] = 'SpecialTEITags';
+//$wgSpecialPages[ 'TEITags' ] = 'SpecialTEITags';
 
 $TEITagsHooks  = new TEITagsHooks;
 
 $wgHooks['ParserFirstCallInit'][] = array( $TEITagsHooks, 'ParserFirstCallInit' );
-
 
