@@ -52,10 +52,6 @@ foreach ( $requiredGetVars as $getVar => $varName ){
 
 }
 
-
-
-
-
 ?>
 <head>
 <title>[ <?php echo $siteName; ?> - <?php echo $viewerTitle; ?> ]</title>

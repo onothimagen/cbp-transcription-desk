@@ -38,22 +38,16 @@ class JBZVHooks{
 	private $extractedTokens;
 
 	/**
-	 * Assigns globals passed to the Hook as parameters to properties
+	 * Assigns globals to properties
 	 * Creates default values when these have not been set
-	 *
-	 * @param array $wgJBZVTitleOptions
-	 * @param string $wgJBZVimagesRootDir
-	 * @param string $wgScriptPath
 	 */
-	private function assignGlobalsToProperties( $wgJBZVTitleOptions
-							                  , $wgJBZVimagesRootDir
-											  , $wgScriptPath){
+	private function assignGlobalsToProperties(){
 
-		global $wgLang;
+		global $wgJBZVTitleOptions, $wgScriptPath, $wgJBZVimagesRootDir, $wgLang;
 
 		$imagesRootDir = $wgJBZVimagesRootDir;
 
-		if( isset( $wgJBZVimagesRootDir ) === false ){
+		if( isset( $imagesRootDir ) === false ){
 			$imagesRootDir = $wgScriptPath . '/Zimages';
 		}
 
@@ -86,14 +80,11 @@ class JBZVHooks{
 
 	public function onEditPageShowEditFormInitial( EditPage $editPage, OutputPage &$output ) {
 
-		global $wgJBZVTitleOptions, $wgJBZVImagePath, $wgScriptPath;
-
-
 		if( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] !== 'edit' ){
 			return true;
 		}
 
-		$this->assignGlobalsToProperties( $wgJBZVTitleOptions, $wgJBZVImagePath, $wgScriptPath );
+		$this->assignGlobalsToProperties();
 
 		$this->loadViewer( $output );
 
@@ -108,13 +99,12 @@ class JBZVHooks{
 
 	public function onArticlePageDataAfter( WikiPage $article, $row ){
 		global $wgOut;
-		global $wgJBZVTitleOptions, $wgJBZVImagePath, $wgScriptPath;
 
 		if( isset( $_GET[ 'action' ] ) and $_GET[ 'action' ] === 'edit' ){
 			return true;
 		}
 
-		$this->assignGlobalsToProperties( $wgJBZVTitleOptions, $wgJBZVImagePath, $wgScriptPath );
+		$this->assignGlobalsToProperties();
 
 		$output = $wgOut;
 
