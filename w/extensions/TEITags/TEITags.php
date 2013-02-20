@@ -34,7 +34,6 @@ EOT;
 }
 
 $wgAutoloadClasses[ 'TEITagsHooks' ]   = __DIR__ . '/TEITags.body.php';
-//$wgAutoloadClasses[ 'SpecialTEITags' ] = __DIR__ . '/SpecialTEITags.php';
 $wgExtensionMessagesFiles[ 'TEITags' ] = __DIR__ . '/TEITags.i18n.php';
 
 $wgExtensionCredits[ 'teitags' ][] = array(
@@ -52,9 +51,6 @@ $wgResourceModules['ext.TEITags' ] = array(
 		'localBasePath' => dirname( __FILE__ ) . '/css',
 		'styles'        => 'ext.teitags.css',
 );
-
-
-//$wgSpecialPages[ 'TEITags' ] = 'SpecialTEITags';
 
 $TEITagsHooks  = new TEITagsHooks;
 
