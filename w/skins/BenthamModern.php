@@ -80,18 +80,22 @@ class BenthamModernTemplate extends QuickTemplate {
 		// Suppress warnings to prevent notices about missing indexes in $this->data
 		wfSuppressWarnings();
 
+		// This is needed to use Firebug Lite in IE 9
+		if( $_SERVER['SERVER_NAME'] == 'cbp-transcription-desk.local' ){
+		?>
+			<meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4" />
+		<?php
+		}
+
 		$this->html( 'headelement' );
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="<?php $this->text('xhtmldefaultnamespace') ?>" <?php
+		?>
+
+<?php
 	foreach($this->data['xhtmlnamespaces'] as $tag => $ns) {
 		?>xmlns:<?php echo "{$tag}=\"{$ns}\" ";
 	} ?>xml:lang="<?php $this->text('lang') ?>" lang="<?php $this->text('lang') ?>" dir="<?php $this->text('dir') ?>">
-	<head>
-		<meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
-		<?php $this->html('headlinks') ?>
-		<title><?php $this->text('pagetitle') ?></title>
+
 		<?php $this->html('csslinks') ?>
 		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
 
@@ -125,12 +129,6 @@ class BenthamModernTemplate extends QuickTemplate {
         #ca-talk { display: none !important; }
       </style>
     <?php } ?>
-
-
-	</head>
-<body<?php if($this->data['body_ondblclick']) { ?> ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>
-<?php if($this->data['body_onload'    ]) { ?> onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
- class="mediawiki <?php $this->text('dir') ?> <?php $this->text('pageclass') ?> <?php $this->text('skinnameclass') ?>">
 
 	<!-- heading -->
 	<div id="mw_header">
@@ -198,7 +196,7 @@ class BenthamModernTemplate extends QuickTemplate {
 		<?php if($this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#mw_portlets"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
 
 		<?php $this->html('bodytext') ?>
-		<div class='mw_clear'></div>
+		<div class=''></div>
 		<?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
 		<?php $this->html ('dataAfterContent') ?>
 	</div><!-- mw_contentholder -->
