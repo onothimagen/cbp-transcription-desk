@@ -44,15 +44,12 @@ $wgExtensionCredits['jbzv'][] = array(
 
 
 $wgAutoloadClasses[ 'JBZVHooks' ]    = __DIR__ . '/JBZV.body.php';
-$wgAutoloadClasses[ 'SpecialJBZV' ]  = __DIR__ . '/SpecialJBZV.php';
 $wgExtensionMessagesFiles[ 'JBZV' ]  = __DIR__ . '/JBZV.i18n.php';
 
 $wgResourceModules['ext.JBZV' ] = array(
 		'localBasePath' => dirname( __FILE__ ) . '/css',
 		'styles'  => 'ext.jbzv.css',
 );
-
-$wgSpecialPages[ 'JBZV' ]                   = 'SpecialJBZV';
 
 $JBZVHooks = new JBZVHooks( );
 

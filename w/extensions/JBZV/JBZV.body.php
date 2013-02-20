@@ -156,7 +156,7 @@ class JBZVHooks{
 
 		$siteName	   = $this->titleOptions[ 'site_name' ];
 
-		$iframeHTML = '<iframe id="zoomviewerframe" src="' .  $mediaWikiDir . '/extensions/JBZV/' . $viewerPath . '?image=' . $imageFilePath . '&lang=' . $lang . '&sitename=' . urlencode( $siteName ) . '"></iframe>';
+		$iframeHTML = '<iframe id="zoomviewerframe" src="' .  $mediaWikiDir . '/extensions/JBZV/' . $viewerPath . '?image=' . $imageFilePath . '&amp;lang=' . $lang . '&amp;sitename=' . urlencode( $siteName ) . '"></iframe>';
 
 		return $iframeHTML;
 

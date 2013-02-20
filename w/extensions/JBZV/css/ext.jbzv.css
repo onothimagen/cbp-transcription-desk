@@ -27,31 +27,8 @@
 	height: 660px;
 }
 
-/*
- * Re-organises the editor to the correct layout after it has loaded
- * so that it can accomadate the Zoom Viewer frame
- */
 
 
-.wikiEditor-ui {
-	width: 38%;
-	height: 661px;
-	clear: none;
-	margin-bottom: 10px;
-}
-
-.wikiEditor-ui-toolbar .group{
-	padding-right: 2px;
-}
-
-.wikiEditor-ui-toolbar .group img.tool{
-	padding: 1px;
-}
-
-#wpTextbox1{
-	width: 38%;
-	height: 661px;
-}
 
 	
 	
