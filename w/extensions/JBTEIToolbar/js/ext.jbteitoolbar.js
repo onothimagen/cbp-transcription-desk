@@ -497,6 +497,13 @@ var customizeToolbar = function() {
 
 	$('.wikiEditor-ui-top').insertBefore('#editform');
 	
+	/*
+	 * Reorganise editor to fit alongside zoom viewer
+	 */
+	
+	var $style_sheet = 'extensions/JBTEIToolbar/css/ext.jbteitoolbar.css';
+	
+	$("body").before("<link rel='stylesheet' href='" + $style_sheet + "' type='text/css' media='screen' />");
 
 };
 
@@ -516,18 +523,6 @@ if ( $.inArray( mw.config.get( 'wgAction' ), ['edit', 'submit'] ) !== -1 ) {
 
 
 
-/* Re-organises the elements to the correct layout after the wikiEditor has loaded */
-
-$(document).ready(function(){
-		
-	if (document.createStyleSheet){
-		document.createStyleSheet('extensions/JBTEIToolbar/css/ext.jbteitoolbar.css');
-	}
-	else {
-		$("head").append($("<link rel='stylesheet' href='extensions/JBTEIToolbar/css/ext.jbteitoolbar.css' type='text/css' media='screen' />"));
-	}
-
-});
 
 
 

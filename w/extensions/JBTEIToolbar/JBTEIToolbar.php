@@ -50,6 +50,7 @@ $wgExtensionCredits[ 'jbteitoolbar' ][] = array(
 $wgResourceModules['ext.JBTEIToolbar' ] = array(
 				'localBasePath' => dirname( __FILE__ ),
 				'scripts'       => 'js/ext.jbteitoolbar.js',
+				'styles'        => 'css/ext.jbteitoolbar.css',
 				'messages'      => array(  /* Label text */
 										  'toolbar-label-line-break'
 										 ,'toolbar-label-page-break'
@@ -84,13 +85,10 @@ $wgResourceModules['ext.JBTEIToolbar' ] = array(
 
 );
 
-$wgResourceModules['ext.JBTEIToolbar.css' ] = array(
-		'localBasePath' => dirname( __FILE__ ) . '/css',
-		'styles'        => 'ext.jbteitoolbar.css',
-);
 
 $JBTEIToolbarHooks 							 = new JBTEIToolbarHooks();
 
 $wgHooks['EditPage::showEditForm:initial'][] = array( $JBTEIToolbarHooks , 'editPageShowEditFormInitial' );
+
 
 
