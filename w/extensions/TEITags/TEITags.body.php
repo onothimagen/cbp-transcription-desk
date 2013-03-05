@@ -79,6 +79,11 @@ class TEITagsHooks {
 		return $this->TEITagsRenderer( 'add', $HookArgs );
 	}
 
+	public function RenderGap(){
+		$HookArgs = func_get_args();
+		return $this->TEITagsRenderer( 'gap', $HookArgs );
+	}
+
 	public function RenderUnclear(){
 		$HookArgs = func_get_args();
 		return $this->TEITagsRenderer( 'unclear', $HookArgs );
