@@ -11,39 +11,39 @@ $wgUsePathInfo = true;        # Enable use of pretty URLs
 
 # BP Enabled by default. We need to switch this off because the bentham modern template is not HTML 5
 # HTML Tidy will complain that script tags do not contain a 'type' attribute Html->inlineScript()
-$wgHtml5 					= false;
+$wgHtml5 = false;
 
 #############################################################
 # USER PERMISSIONS
 #############################################################
 
 # Disable for everyone.
-$wgGroupPermissions[ '*' ][ 'edit' ]     			= false;
+$wgGroupPermissions[ '*' ][ 'edit' ]              = false;
 
 # Disable for users, too: by default 'user' is allowed to edit, even if '*' is not.
-$wgGroupPermissions[ 'user' ][ 'edit' ]    			= false;
+$wgGroupPermissions[ 'user' ][ 'edit' ]           = false;
 
 # Make it so users with confirmed e-mail addresses are in the group.
-$wgAutopromote[ 'emailconfirmed' ] 				= APCOND_EMAILCONFIRMED;
+$wgAutopromote[ 'emailconfirmed' ]                = APCOND_EMAILCONFIRMED;
 
 # Hide group from user list.
-$wgImplicitGroups[] 							= 'emailconfirmed';
+$wgImplicitGroups[]                               = 'emailconfirmed';
 
 # Finally, set it to true for the desired group.
-$wgGroupPermissions[ 'emailconfirmed' ][ 'edit' ] 	= true;
+$wgGroupPermissions[ 'emailconfirmed' ][ 'edit' ] = true;
 
 #############################################################
 # PROTECT NAMESPACES FROM EDITING
 #############################################################
 
-$wgGroupPermissions[ '*' ]			[ 'edittype' ]		= false;
-$wgGroupPermissions[ '*' ]			[ 'edithelp' ]		= false;
-$wgGroupPermissions[ 'sysop' ]		[ 'edittype' ]		= true;
-$wgGroupPermissions[ 'sysop' ]		[ 'edithelp' ]		= true;
-$wgGroupPermissions[ 'user' ]		[ 'upload' ]  		= true;
+$wgGroupPermissions[ '*' ]     [ 'edittype' ] = false;
+$wgGroupPermissions[ '*' ]     [ 'edithelp' ] = false;
+$wgGroupPermissions[ 'sysop' ] [ 'edittype' ] = true;
+$wgGroupPermissions[ 'sysop' ] [ 'edithelp' ] = true;
+$wgGroupPermissions[ 'user' ]  [ 'upload'   ] = true;
 
-$wgNamespaceProtection[ NS_HELP ] 						= array( 'edithelp' );
-$wgNamespacesWithSubpages[ NS_HELP ] 					= true;
+$wgNamespaceProtection[ NS_HELP ]    = array( 'edithelp' );
+$wgNamespacesWithSubpages[ NS_HELP ] = true;
 
 
 #############################################################
@@ -68,7 +68,6 @@ set_include_path( implode( PATH_SEPARATOR, $path ) . PATH_SEPARATOR . get_includ
 
 require_once( 'BenthamModern.php' );
 
-
 #############################################################
 # EXTENSIONS
 #############################################################
@@ -76,7 +75,6 @@ require_once( 'BenthamModern.php' );
 ############################
 # Off the shelf
 ############################
-
 
 require_once( 'awc/forums/awc_forum.php' );
 
@@ -86,8 +84,6 @@ require_once( 'NoTitle/NoTitle.php' );
 require_once( 'Progressbar/Progressbar.php' );
 require_once( 'VideoFlash/VideoFlash.php' );
 require_once( 'RSSReader/RSSReader.php' );
-
-
 require_once( 'SocialProfile/SocialProfile.php' );
 
 
@@ -150,8 +146,6 @@ $wgNamespacesWithSubpages[102]               = true;
 $wgGroupPermissions['*']	['editproperty'] = false;
 $wgGroupPermissions['sysop']['editproperty'] = true;
 
-
-
 ############################
 # Bespoke
 ############################
@@ -162,12 +156,38 @@ require_once( 'JBZV/JBZV.php' );
 $wgJBZVimagesRootDir        = '/zimages';
 
 $wgJBZVTitleOptions = array(
-		  'site_name'		   => 'Transcribe Bentham'
-		, 'regx_pattern'        => '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
-		, 'dir_token_indexes'   => array( 1 )
-		, 'name_token_indexes'  => array( 1, 2, 3 )
-		, 'file_name_seperator' => '_'
+							  'site_name'           => 'Transcribe Bentham'
+							, 'regx_pattern'        => '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
+							, 'dir_token_indexes'   => array( 1 )
+							, 'name_token_indexes'  => array( 1, 2, 3 )
+							, 'file_name_seperator' => '_'
 );
 
 require_once( 'JBTEIToolbar/JBTEIToolbar.php' );
 require_once( 'TEITags/TEITags.php' );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
