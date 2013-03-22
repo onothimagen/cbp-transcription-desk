@@ -17,12 +17,14 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 # Unix:
-# $perl slicer.pl --input_file /data/incoming/070/070_001_001.jpg --output_path /web/root/zimages
+# slicer.pl --input_file /data/incoming/070/070_001_001.jpg --output_path /web/root/images
 #
 # Windows:
-# >perl slicer.pl --input_file D:/data/images/BOX_070/070_001_001.jpg --output_path D:/web/root/zimages
+# slicer.pl --input_file D:/data/images/BOX_070/070_001_001.jpg --output_path D:/web/root/images
 #
 ##########################################################################################################
+
+my $usage = "slicer.pl --input_file D:/data/images/BOX_070/070_001_001.jpg --output_path D:/web/root/images";
 
 use FindBin '$Bin';
 use Cwd 'abs_path';
