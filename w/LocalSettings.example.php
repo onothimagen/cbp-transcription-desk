@@ -101,8 +101,8 @@ require_once( 'ConfirmEdit/ConfirmEdit.php' );
 require_once( 'ConfirmEdit/ReCaptcha.php' );
 $wgCaptchaClass = 'ReCaptcha';
 
-$wgReCaptchaPublicKey = '6Lex4N0SAAAAANDT0w3twfkSnPejegz2lPaNNTzO';
-$wgReCaptchaPrivateKey = '6Lex4N0SAAAAAPFA5RMfam78MYTRFMjkUJ46uvc6';
+$wgReCaptchaPublicKey = '';
+$wgReCaptchaPrivateKey = '';
 
 #########################################################
 # Configure Extension (replaces GroupPermissionsManager)
