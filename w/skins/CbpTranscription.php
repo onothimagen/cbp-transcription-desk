@@ -236,8 +236,9 @@ class CbpTranscriptionTemplate extends QuickTemplate {
 
 	<!-- personal portlet -->
 	<div class="portlet" id="p-personal">
+
 <span id="p-personal-1">
-  <a href="/">Transcription Desk Home</a>
+  <a href="<?php echo htmlspecialchars( $this->data['nav_urls']['mainpage']['href'] ); ?>">Transcription Desk Home</a>
 </span>
 
 		<!-- <h5><?php $this->msg('personaltools') ?></h5> -->
