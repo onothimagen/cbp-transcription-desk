@@ -1104,11 +1104,12 @@ pre {
 
 #mw_header { 
 	padding: 0; margin: 0; height: 140px; 
-	background-color: #a19589; 
+	background-color: #8080ff; 
 	background-image: url(./logo-right.png);
 	background-repeat: no-repeat;
 	background-position: right 63px;
-	}
+}
+
 #mw_header h1 { 
 	margin: 2px 0px 0px 2px;
 	font-weight: bold;
