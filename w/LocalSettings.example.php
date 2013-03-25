@@ -63,12 +63,6 @@ $path = array( $transcription_extensions_path
 set_include_path( implode( PATH_SEPARATOR, $path ) . PATH_SEPARATOR . get_include_path() );
 
 #############################################################
-# SKIN
-#############################################################
-
-require_once( 'BenthamModern.php' );
-
-#############################################################
 # EXTENSIONS
 #############################################################
 
