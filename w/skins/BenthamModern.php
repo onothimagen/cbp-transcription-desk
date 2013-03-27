@@ -39,7 +39,6 @@ class SkinBenthamModern extends SkinTemplate {
 
 		parent::initPage( $out );
 
-		//$out->addModuleScripts( 'skins.bentham-modern' );
 	}
 
 
@@ -54,11 +53,9 @@ class SkinBenthamModern extends SkinTemplate {
 		$out->addStyle( 'bentham-modern/print.css', 'print' );
 		$out->addStyle( 'bentham-modern/rtl.css', 'screen', '', 'rtl' );
 	}
-
-
 }
 
-/**
+ /**
  * @todo document
  * @ingroup Skins
  */
@@ -82,19 +79,26 @@ class BenthamModernTemplate extends QuickTemplate {
 
 		// This is needed to use Firebug Lite in IE 9
 		if( $_SERVER['SERVER_NAME'] == 'cbp-transcription-desk.local' ){
-		?>
-			<meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4" />
-		<?php
+
+			$head = $this->data['headelement'];
+
+			$searchString = '</title>' . "\n" . '<meta';
+
+			$replaceString = '</title>' . "\n" . '<meta http-equiv="X-UA-Compatible" content="IE=8;FF=3;OtherUA=4" >' . "\n" . '<meta';
+
+			$this->data['headelement'] = str_replace( $searchString, $replaceString, $head );
+
 		}
+
 
 		$this->html( 'headelement' );
 
 		?>
 
-<?php
-	foreach($this->data['xhtmlnamespaces'] as $tag => $ns) {
-		?>xmlns:<?php echo "{$tag}=\"{$ns}\" ";
-	} ?>xml:lang="<?php $this->text('lang') ?>" lang="<?php $this->text('lang') ?>" dir="<?php $this->text('dir') ?>">
+		<?php
+		foreach($this->data['xhtmlnamespaces'] as $tag => $ns) {
+			?>xmlns:<?php echo "{$tag}=\"{$ns}\" ";
+		} ?>xml:lang="<?php $this->text('lang') ?>" lang="<?php $this->text('lang') ?>" dir="<?php $this->text('dir') ?>">
 
 		<?php $this->html('csslinks') ?>
 		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
@@ -103,7 +107,7 @@ class BenthamModernTemplate extends QuickTemplate {
 
 		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/common/wikibits.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"><!-- wikibits js --></script>
 		<!-- Head Scripts -->
-<?php $this->html('headscripts') ?>
+<?php 	$this->html('headscripts') ?>
 <?php	if($this->data['jsvarurl'  ]) { ?>
 		<script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"><!-- site js --></script>
 <?php	} ?>
@@ -130,7 +134,9 @@ class BenthamModernTemplate extends QuickTemplate {
       </style>
     <?php } ?>
 
-	<!-- heading -->
+
+
+<!-- heading -->
 	<div id="mw_header">
 <!-- removed h1 from here -->
 <h1>
@@ -235,7 +241,7 @@ class BenthamModernTemplate extends QuickTemplate {
 	<!-- personal portlet -->
 	<div class="portlet" id="p-personal">
 <span id="p-personal-1">
-  <a href="http://www.ucl.ac.uk/">UCL Home</a> » <a href="http://www.ucl.ac.uk/transcribe-bentham/">Transcribe Bentham</a> » <a href="../w">Transcription Desk</a>
+  <a href="http://www.ucl.ac.uk/">UCL Home</a> » <a href="http://www.ucl.ac.uk/transcribe-bentham/">Transcribe Bentham</a> » <a href="../td/Transcribe_Bentham">Transcription Desk</a>
 </span>
 
 		<!-- <h5><?php $this->msg('personaltools') ?></h5> -->
