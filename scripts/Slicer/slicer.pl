@@ -45,11 +45,11 @@ die "$input_file is not a JPEG file" unless ($input_file =~ /\.jpg$/);
 
 my $file_full_path = abs_path( $input_file );
 
-# e.g. /var/www/docroot/data/incoming/BOX_070/070_001_001.jpg
+# e.g. /www/docroot/data/incoming/BOX_070/070_001_001.jpg
 
 $file_full_path =~ s/\.jpg$//;
 
-# e.g. /var/www/docroot/data/incoming/BOX_070/070_001_001
+# e.g. .www/docroot/data/incoming/BOX_070/070_001_001
 
 my $full_path = $file_full_path;
 
