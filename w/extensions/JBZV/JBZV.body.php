@@ -48,7 +48,7 @@ class JBZVHooks{
 		$imagesRootDir = $wgJBZVimagesRootDir;
 
 		if( isset( $imagesRootDir ) === false ){
-			$imagesRootDir = $wgScriptPath . '/Zimages';
+			$imagesRootDir = $wgScriptPath . '/zimages';
 		}
 
 		if( isset( $wgJBZVTitleOptions ) === false ){
