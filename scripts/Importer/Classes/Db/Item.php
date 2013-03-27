@@ -93,9 +93,9 @@ class Item extends DbAbstract{
 	/*
 	 *
 	 */
-	public function GetJobItems(  $iJobQueueId
-								, $sStatus
-								, $sProcess ){
+	public function GetJobItems(  $iMetaDataId
+								, $sProcess
+								, $sStatus ){
 
 		$sSql = 'SELECT
 					*
@@ -104,19 +104,17 @@ class Item extends DbAbstract{
 				WHERE
 					job_queue_id = ?
 				AND
-					status       = ?
+					process      = ?
 				AND
-					process      = ?';
+					status       = ?';
 
-		$aBindArray = array( $iJobQueueId
-						   , $sStatus
-						   , $sProcess );
+		$aBindArray = array( $iMetaDataId
+						   , $sProcess
+						   , $sStatus );
 
-		$result = $this->Execute( $sSql, $aBindArray );
+		$rResult   = $this->Execute( $sSql, $aBindArray );
 
-		$aRows  = $this->GetResultSet( $result );
-
-		return $aRows;
+		return $rResult;
 
 	}
 
@@ -143,9 +141,6 @@ class Item extends DbAbstract{
 	}
 
 }
-
-
-
 
 
 

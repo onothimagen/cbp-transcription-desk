@@ -2,63 +2,57 @@
 
 namespace Classes;
 
+use Zend\Di\Di;
+
 use Classes\Mappers\CsvRowToMetaDataEntity as CsvRowToMetaDataEntityMapper;
-use Classes\Db\Item as ItemDb;
+
+use Classes\Db\JobQueue as JobQueueDb;
 use Classes\Db\MetaData as MetaDataDb;
+use Classes\Db\Item     as ItemDb;
 
-use \Classes\Entities\MetaData as MetaDataEntity;
-use \Classes\Entities\Item as ItemEntity;
+use Classes\Entities\MetaData as MetaDataEntity;
+use Classes\Entities\Item     as ItemEntity;
 
-require_once 'Helpers\Encoding.php';
+use Classes\Helpers\File as File;
+use Classes\Helpers\File as Logger;
 
-class ImportCsvIntoDbTask{
+use Classes\Exceptions\Importer as ImporterException;
 
-
-	/* @var ItemDb */
-	private $oItemDb;
-
-	/* @var MetaDataDb */
-	private $oMetaDataDb;
-
-	/* @var Helpers\File */
-	private $oFileHelper;
+class ImportCsvIntoDbTask extends TaskAbstract{
 
 
 	/* @var $oCsvRowToMetatDataEntityMapper CsvRowToMetaDataEntityMapper */
 	private $oCsvRowToMetatDataEntityMapper;
-
-
-	/* @var Helpers\Logger  */
-	private $oLogger;
 
 	private $sCsvFilePath;
 
 	private $iJobQueueId;
 
 	/* @var ItemEntity */
+	private $oMetaDataEntity;
+
+	/* @var ItemEntity */
 	private $oItemEntity;
 
-	public function __construct(
-								  MetaDataDb                   $oMetaDataDb
-			                    , ItemDb                       $oItemDb
-								, Helpers\File                 $oFileHelper
+	public function __construct(  Di						   $oDi
 								, CsvRowToMetaDataEntityMapper $oCsvRowToMetatDataEntityMapper
-								, Helpers\Logger               $oLogger
 								,                              $sCsvFilePath
 								,                              $iJobQueueId ){
 
-		$this->oMetaDataDb                    = $oMetaDataDb;
-		$this->oItemDb						  = $oItemDb;
-		$this->oFileHelper                    = $oFileHelper;
+		parent::__construct( $oDi );
+
 		$this->oCsvRowToMetatDataEntityMapper = $oCsvRowToMetatDataEntityMapper;
 
 		$this->sCsvFilePath                   = $sCsvFilePath;
 
-		$this->oLogger                        = $oLogger;
-
 		$this->iJobQueueId                    = $iJobQueueId;
 
+		$this->oMetaDataEntity				  = new MetaDataEntity();
+
 		$this->oItemEntity                    = new ItemEntity();
+
+
+
 
 	}
 
@@ -69,10 +63,9 @@ class ImportCsvIntoDbTask{
 
 		$sFilePath = $this->sCsvFilePath;
 
-		$hHandle   = $this->oFileHelper->GetFileHandle( $sFilePath );
+		$hHandle   = $this->oFile->GetFileHandle( $sFilePath );
 
 		$this->IterateCsvFileAndInsertRowsIntoDb( $hHandle );
-
 	}
 
 
@@ -80,8 +73,6 @@ class ImportCsvIntoDbTask{
 	 *
 	 */
 	private function IterateCsvFileAndInsertRowsIntoDb( $hHandle ){
-
-		$oMetadata   = new Entities\MetaData();
 
 		$iCurrentRow = 1;
 
@@ -109,12 +100,15 @@ class ImportCsvIntoDbTask{
 
 			$oMappedMetaDataEntity = $oCsvRowToMetaDataMapper->Map( $aAssocRow );
 
-			$oMappedMetaDataEntity->setJobQueueId( $this->iJobQueueId );
-
-			if( $oMappedMetaDataEntity instanceof Entities\MetaData ){
-				$oMappedMetaDataEntity = $this->oMetaDataDb->Insert( $oMappedMetaDataEntity );
+			if( $oMappedMetaDataEntity instanceof MetaDataEntity === false ){
+				throw new ImporterException( '$oMappedMetaDataEntity returned from mapper is not an instance of CsvRowToMetaDataEntityMapper' );
 			}
 
+			$oMappedMetaDataEntity->setJobQueueId( $this->iJobQueueId );
+
+			$oMappedMetaDataEntity = $this->oMetaDataDb->Insert( $oMappedMetaDataEntity );
+
+			var_dump($oMappedMetaDataEntity);
 
 			$this->InsertFolioItems( $oMappedMetaDataEntity );
 
@@ -123,10 +117,12 @@ class ImportCsvIntoDbTask{
 
 			// REMOVE !!!!
 			if( $iCurrentRow > 3){
-				exit;
+				return;
 			}
 
 		}
+
+		echo 'IterateCsvFileAndInsertRowsIntoDb completed' . "\n";
 	}
 
 
@@ -155,54 +151,12 @@ class ImportCsvIntoDbTask{
 
 		}
 
-		$this->oMetaDataDb->UpdateProcessStatus( $iMetaDataId, 'insert', 'completed' );
+		$this->oMetaDataDb->UpdateProcessStatus( $iMetaDataId, 'slice', 'queued' );
+
+		echo 'InsertFolioItems completed' . "<br />";
 
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+

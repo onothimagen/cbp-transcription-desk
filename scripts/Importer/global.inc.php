@@ -1,5 +1,9 @@
 <?php
 
+/*****************************************
+ * CONFIGURE AUTOLOADING
+*****************************************/
+
 $sImporterPath = dirname( __FILE__ );
 
 $sScriptPath   =  substr($sImporterPath, 0 , strrpos( $sImporterPath, DIRECTORY_SEPARATOR ) );
@@ -12,7 +16,6 @@ set_include_path( get_include_path() . PATH_SEPARATOR . $sIncludePath );
 require 'Zend/Loader/StandardAutoloader.php';
 
 $autoloader = new Zend\Loader\StandardAutoloader( array( 'autoregister_zf' => true ) );
-
 
 $sClassNameSpacePath = $sImporterPath . '/Classes';
 
@@ -75,11 +78,6 @@ $oMetaDataDb        = new Classes\Db\MetaData( $oAdapter );
 $oItemDb			= new Classes\Db\Item( $oAdapter );
 
 
-/*****************************************
- * CONFIGURE HELPERS
-*****************************************/
-
-$oFileHelper		= new Classes\Helpers\File();
 
 
 /*****************************************
@@ -100,6 +98,18 @@ $oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter'
 $oDi->instanceManager()->setParameters( 'Classes\Db\MetaData', array( 'oAdapter' => $oAdapter ));
 $oDi->instanceManager()->setParameters( 'Classes\Db\Item', array( 'oAdapter' => $oAdapter ));
 
+/*****************************************
+ * CONFIGURE TASKS
+*****************************************/
+
+require_once 'Classes/TaskAbstract.php'';
+
+
+/*****************************************
+ * CONFIGURE HELPERS
+*****************************************/
+
+$oFileHelper		= new Classes\Helpers\File();
 
 /*****************************************
  * SETUP FOR TESTING
@@ -107,8 +117,6 @@ $oDi->instanceManager()->setParameters( 'Classes\Db\Item', array( 'oAdapter' => 
 
 $oItemDb->Truncate();
 $oMetaDataDb->Truncate();
-
-
 
 
 

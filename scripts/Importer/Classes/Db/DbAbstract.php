@@ -22,10 +22,10 @@ abstract class DbAbstract {
 	protected function Execute( $sSql
 							  , $aBindArray = null ){
 
-		$statement = $this->oAdapter->createStatement( $sSql, $aBindArray);
+		$stmt = $this->oAdapter->createStatement( $sSql, $aBindArray);
 
 		try {
-			$results = $statement->execute();
+			$results = $stmt->execute();
 
 		} catch (\PDOException $e) {
 			throw new \Importer\Exception( 'PDO ErrorCode: ' . $e->getCode() . "\n" .
@@ -39,12 +39,13 @@ abstract class DbAbstract {
 	}
 
 	/*
-	 * @return ResultSet
+	 * @return Zend\Db\ResultSet\ResultSet
 	 */
 	protected function GetResultSet( $result ){
 		if ($result instanceof ResultInterface && $result->isQueryResult()) {
 			$resultSet = new ResultSet;
-			$resultSet->initialize( $result);
+			$resultSet->initialize( $result );
+
 			return $resultSet;
 		}
 

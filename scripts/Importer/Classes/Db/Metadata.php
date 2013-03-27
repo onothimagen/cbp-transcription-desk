@@ -3,6 +3,7 @@
 namespace Classes\Db;
 
 use \Classes\Entities\MetaData as MetaDataEntity;
+use \Zend\Db\ResultSet\ResultSet;
 
 class MetaData extends DbAbstract{
 
@@ -192,6 +193,7 @@ class MetaData extends DbAbstract{
 
 	/*
 	 * @param string $sJobQueueId
+	 * @return ResultSet
 	 */
 	public function GetJobMetaData( $sJobQueueId
 								  , $sProcess
@@ -203,7 +205,9 @@ class MetaData extends DbAbstract{
 					' . self::DBNAME . '
 				WHERE
 					job_queue_id = ?
+				AND
 					process      = ?
+				AND
 					status       = ?;';
 
 
@@ -213,26 +217,14 @@ class MetaData extends DbAbstract{
 							, $sStatus
 							);
 
-		$result = $this->Execute( $sSql, $aBindArray );
+		$rResult   = $this->Execute( $sSql, $aBindArray );
 
-		$aRows = $this->GetResultSet( $result );
 
-		return $aRows;
+		return $rResult;
 	}
 
 
-
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -5,142 +5,126 @@ namespace Classes\Entities;
 class Item{
 
 
-	private $iId;
-	private $iJobQueueId;
-	private $iMetadataId;
-	private $sItemNumber;
-	private $sProcess;
-	private $sStatus;
-	private $dUpdated;
-	private $dCompleted;
-	private $dCreated;
+	private $id;
+	private $metadata_id;
+	private $item_number;
+	private $process;
+	private $status;
+	private $updated;
+	private $completed;
+	private $created;
 
 
 	/**
 	 * @return int
 	 */
 	public function getId() {
-		return $this->iId;
+		return $this->id;
 	}
 
 	/**
-	 * @param int $iId;
+	 * @param int $id;
 	 */
-	public function setId( $iId ) {
-		$this->iId = $iId;
+	public function setId( $id ) {
+		$this->id = $id;
 	}
 
 	/**
-	 * @param string $sJobQueueId
+	 * @param string $metadata_id
 	 */
-	public function setJobQueueId( $iJobQueueId ) {
-		$this->iJobQueueId = $iJobQueueId;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getJobQueueId() {
-		return $this->iJobQueueId;
-	}
-
-
-	/**
-	 * @param string $sMetaDataId
-	 */
-	public function setMetaDataId( $sMetaDataId ) {
-		$this->sMetaDataId = $sMetaDataId;
+	public function setMetaDataId( $metadata_id ) {
+		$this->metadata_id = $metadata_id;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getMetaDataId() {
-		return $this->sMetaDataId;
+		return $this->metaDataId;
 	}
 
 	/**
-	 * @param string $sItemNumber
+	 * @param string $item_number
 	 */
-	public function setItemNumber( $sItemNumber ) {
-		$this->sItemNumber = $sItemNumber;
+	public function setItemNumber( $item_number ) {
+		$this->item_number = $item_number;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getItemNumber() {
-		return $this->sItemNumber;
+		return $this->item_number;
 	}
 
 	/**
-	 * @param string $sProcess
+	 * @param string $Process
 	 */
-	public function setProcess( $sProcess ) {
-		$this->sProcess = $sProcess;
+	public function setProcess( $process ) {
+		$this->process = $process;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getProcess() {
-		return $this->sProcess;
+		return $this->process;
 	}
 
 	/**
-	 * @param string $sStatus
+	 * @param string $status
 	 */
-	public function setStatus( $sStatus ) {
-		$this->sStatus = $sStatus;
+	public function setStatus( $status ) {
+		$this->status = $status;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getStatus() {
-		return $this->sStatus;
+		return $this->status;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getUpdated() {
-		return $this->dUpdated;
+		return $this->updated;
 	}
 
 	/**
-	 * @param string $dUpdated
+	 * @param string $updated
 	 */
-	public function setUpdated( $dUpdated ) {
-		$this->dUpdated = $dUpdated;
+	public function setUpdated( $updated ) {
+		$this->updated = $updated;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCompleted() {
-		return $this->dCompleted;
+		return $this->completed;
 	}
 
 	/**
-	 * @param field_type $dCompleted
+	 * @param field_type $completed
 	 */
-	public function setCompleted( $dCompleted ) {
-		$this->dCompleted = $dCompleted;
+	public function setCompleted( $completed ) {
+		$this->completed = $completed;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getCreated() {
-		return $this->dCreated;
+	public function getcreated() {
+		return $this->created;
 	}
 
 	/**
-	 * @param string $dCreated
+	 * @param string $created
 	 */
-	public function setCreated( $dCreated ) {
-		$this->dCreated = $dCreated;
+	public function setCreated( $created ) {
+		$this->created = $created;
 	}
 
 

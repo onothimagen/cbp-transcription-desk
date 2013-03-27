@@ -5,55 +5,55 @@ namespace Classes\Entities;
 
 class MetaData{
 
-	private $iId;
-	private $sBoxNumber;
-	private $sFolioNumber;
-	private $sSecondFolioNumber;
-	private $sCategory;
-	private $sRectoVerso;
-	private $sCreator;
-	private $sRecipient;
-	private $sPenner;
-	private $sMarginals;
-	private $sCorrections;
-	private $sDate_1;
-	private $sDate_2;
-	private $sDate_3;
-	private $sDate_4;
-	private $sDate_5;
-	private $sDate_6;
-	private $sEstimatedDate;
-	private $sInfoInMainHeadingField;
-	private $sMainHeading;
-	private $sSubHeadings;
-	private $sMarginalSummaryNumbering;
-	private $iNumberOfPages;
-	private $sPageNumbering;
-	private $sTitles;
-	private $sWatermarks;
-	private $sPaperProducer;
-	private $sPaperProducerInYear;
-	private $sNotesPublic;
-	private $iJobQueueId;
-	private $sProcess;
-	private $sStatus;
-	private $dUpdated;
-	private $dCompleted;
-	private $dCreated;
+  private $id;
+  private $box_number;
+  private $folio_number;
+  private $second_folio_number;
+  private $category;
+  private $recto_verso;
+  private $creator;
+  private $recipient;
+  private $penner;
+  private $marginals;
+  private $corrections;
+  private $date_1;
+  private $date_2;
+  private $date_3;
+  private $date_4;
+  private $date_5;
+  private $date_6;
+  private $estimated_date;
+  private $info_in_main_heading_field;
+  private $main_heading;
+  private $sub_headings;
+  private $marginal_summary_numbering;
+  private $number_of_pages;
+  private $page_numbering;
+  private $titles;
+  private $watermarks;
+  private $paper_producer;
+  private $paper_producer_in_year;
+  private $notes_public;
+  private $job_queue_id;
+  private $process;
+  private $status;
+  private $updated;
+  private $completed;
+  private $created;
 
 
 	/**
 	 * @return int
 	 */
 	public function getId() {
-		return $this->iId;
+		return $this->id;
 	}
 
 	/**
-	 * @param int $sBoxNumber
+	 * @param int $id
 	 */
-	public function setId( $iId ) {
-		$this->iId = $iId;
+	public function setId( $id ) {
+		$this->id = $id;
 		return $this;
 	}
 
@@ -61,478 +61,479 @@ class MetaData{
 	 * @return string
 	 */
 	public function getBoxNumber() {
-		return $this->sBoxNumber;
+		return $this->box_number;
 	}
 
 	/**
-	 * @param string $sBoxNumber
+	 * @param string $box_number
 	 */
-	public function setBoxNumber( $sBoxNumber ) {
-		$this->sBoxNumber = $sBoxNumber;
+	public function setBoxNumber( $box_number ) {
+		$this->box_number = $box_number;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getFolioNumber() {
-		return $this->sFolioNumber;
+		return $this->folio_number;
 	}
 
 	/**
-	 * @param string $sFolioNumber
+	 * @param string $folio_number
 	 */
-	public function setFolioNumber( $sFolioNumber ) {
-		$this->sFolioNumber = $sFolioNumber;
+	public function setFolioNumber( $folio_number ) {
+		$this->folio_number = $folio_number;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getSecondFolioNumber() {
-		return $this->sSecondFolioNumber;
+		return $this->second_folio_number;
 	}
 
 	/**
-	 * @param string $sSecondFolioNumber
+	 * @param string $second_folio_number
 	 */
-	public function setSecondFolioNumber( $sSecondFolioNumber ) {
-		$this->sSecondFolioNumber = $sSecondFolioNumber;
+	public function setSecondFolioNumber( $second_folio_number ) {
+		$this->second_folio_number = $second_folio_number;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCategory() {
-		return $this->sCategory;
+		return $this->category;
 	}
 
 	/**
-	 * @param string $sCategory
+	 * @param string $category
 	 */
-	public function setCategory( $sCategory ) {
-		$this->sCategory = $sCategory;
+	public function setCategory( $category ) {
+		$this->category = $category;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getRectoVerso() {
-		return $this->sRectoVerso;
+		return $this->recto_verso;
 	}
 
 	/**
-	 * @param string $sRectoVerso
+	 * @param string $recto_verso
 	 */
-	public function setRectoVerso( $sRectoVerso ) {
-		$this->sRectoVerso = $sRectoVerso;
+	public function setRectoVerso( $recto_verso ) {
+		$this->recto_verso = $recto_verso;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCreator() {
-		return $this->sCreator;
+		return $this->creator;
 	}
 
 	/**
-	 * @param string $sCreator
+	 * @param string $creator
 	 */
-	public function setCreator( $sCreator ) {
-		$this->sCreator = $sCreator;
+	public function setcreator( $creator ) {
+		$this->creator = $creator;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getRecipient() {
-		return $this->sRecipient;
+		return $this->recipient;
 	}
 
 	/**
-	 * @param string $sRecipient
+	 * @param string $recipient
 	 */
-	public function setRecipient( $sRecipient ) {
-		$this->sRecipient = $sRecipient;
+	public function setrecipient( $recipient ) {
+		$this->recipient = $recipient;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getPenner() {
-		return $this->sPenner;
+		return $this->penner;
 	}
 
 	/**
-	 * @param string $sPenner
+	 * @param string $penner
 	 */
-	public function setPenner( $sPenner ) {
-		$this->sPenner = $sPenner;
+	public function setPenner( $penner ) {
+		$this->Penner = $penner;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getMarginals() {
-		return $this->sMarginals;
+		return $this->marginals;
 	}
 
 	/**
-	 * @param string $sMarginals
+	 * @param string $marginals
 	 */
-	public function setMarginals( $sMarginals ) {
-		$this->sMarginals = $sMarginals;
+	public function setMarginals( $marginals ) {
+		$this->marginals = $marginals;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCorrections() {
-		return $this->sCorrections;
+		return $this->corrections;
 	}
 
 	/**
-	 * @param string $sCorrections
+	 * @param string $corrections
 	 */
-	public function setCorrections( $sCorrections ) {
-		$this->sCorrections = $sCorrections;
+	public function setcorrections( $corrections ) {
+		$this->corrections = $corrections;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_1() {
-		return $this->sDate_1;
+		return $this->date_1;
 	}
 
 	/**
-	 * @param string $sDate_1
+	 * @param string $date_1
 	 */
-	public function setDate_1( $sDate_1 ) {
-		$this->sDate_1 = $sDate_1;
+	public function setDate_1( $date_1 ) {
+		$this->date_1 = $date_1;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_2() {
-		return $this->sDate_2;
+		return $this->date_2;
 	}
 
 	/**
-	 * @param string $sDate_2
+	 * @param string $date_2
 	 */
-	public function setDate_2( $sDate_2 ) {
-		$this->sDate_2 = $sDate_2;
+	public function setDate_2( $date_2 ) {
+		$this->date_2 = $date_2;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_3() {
-		return $this->sDate_3;
+		return $this->date_3;
 	}
 
 	/**
-	 * @param string $sDate_3
+	 * @param string $date_3
 	 */
-	public function setDate_3( $sDate_3 ) {
-		$this->sDate_3 = $sDate_3;
+	public function setDate_3( $date_3 ) {
+		$this->date_3 = $date_3;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_4() {
-		return $this->sDate_4;
+		return $this->date_4;
 	}
 
 	/**
-	 * @param string $sDate_4
+	 * @param string $date_4
 	 */
-	public function setDate_4( $sDate_4 ) {
-		$this->sDate_4 = $sDate_4;
+	public function setDate_4( $date_4 ) {
+		$this->date_4 = $date_4;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_5() {
-		return $this->sDate_5;
+		return $this->date_5;
 	}
 
 	/**
-	 * @param string $sDate_5
+	 * @param string $date_5
 	 */
-	public function setDate_5( $sDate_5 ) {
-		$this->sDate_5 = $sDate_5;
+	public function setDate_5( $date_5 ) {
+		$this->date_5 = $date_5;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getDate_6() {
-		return $this->sDate_6;
+		return $this->date_6;
 	}
 
 	/**
-	 * @param string $sDate_6
+	 * @param string $date_6
 	 */
-	public function setDate_6( $sDate_6)  {
-		$this->sDate_6 = $sDate_6;
+	public function setDate_6( $date_6)  {
+		$this->date_6 = $date_6;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getEstimatedDate() {
-		return $this->sEstimatedDate;
+		return $this->estimated_date;
 	}
 
 	/**
-	 * @param string $sEstimatedDate
+	 * @param string $estimated_date
 	 */
-	public function setEstimatedDate( $sEstimatedDate ) {
-		$this->sEstimatedDate = $sEstimatedDate;
+	public function setEstimatedDate( $estimated_date ) {
+		$this->estimated_date = $estimated_date;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getInfoInMainHeadingField() {
-		return $this->sInfoInMainHeadingField;
+		return $this->info_in_main_heading_field;
 	}
 
 	/**
-	 * @param string $sInfoInMainHeadingField
+	 * @param string $info_in_main_heading_field
 	 */
-	public function setInfoInMainHeadingField( $sInfoInMainHeadingField ) {
-		$this->sInfoInMainHeadingField = $sInfoInMainHeadingField;
+	public function setInfoInMainHeadingField( $info_in_main_heading_field ) {
+		$this->info_in_main_heading_field = $info_in_main_heading_field;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getMainHeading() {
-		return $this->sMainHeading;
+		return $this->main_heading;
 	}
 
 	/**
-	 * @param string $sMainHeading
+	 * @param string $main_heading
 	 */
-	public function setMainHeading( $sMainHeading ) {
-		$this->sMainHeading = $sMainHeading;
+	public function setMainHeading( $main_heading ) {
+		$this->main_heading = $main_heading;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getSubHeadings() {
-		return $this->sSubHeadings;
+		return $this->sub_headings;
 	}
 
 	/**
-	 * @param string $sSubHeadings
+	 * @param string $sub_headings
 	 */
-	public function setSubHeadings( $sSubHeadings ) {
-		$this->sSubHeadings = $sSubHeadings;
+	public function setSubHeadings( $sub_headings ) {
+		$this->sub_headings = $sub_headings;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getMarginalSummaryNumbering() {
-		return $this->sMarginalSummaryNumbering;
+		return $this->marginal_summary_numbering;
 	}
 
 	/**
-	 * @param string $sMarginalSummaryNumbering
+	 * @param string $marginal_summary_numbering
 	 */
-	public function setMarginalSummaryNumbering( $sMarginalSummaryNumbering ) {
-		$this->sMarginalSummaryNumbering = $sMarginalSummaryNumbering;
+	public function setMarginalSummaryNumbering( $marginal_summary_numbering ) {
+		$this->marginal_summary_numbering = $marginal_summary_numbering;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getNumberOfPages() {
-		return $this->iNumberOfPages;
+		return $this->number_of_pages;
 	}
 
 	/**
-	 * @param string $iNumberOfPages
+	 * @param string $number_of_pages
 	 */
-	public function setNumberOfPages( $iNumberOfPages ) {
-		$this->iNumberOfPages = $iNumberOfPages;
+	public function setNumberOfPages( $number_of_pages ) {
+		$this->number_of_pages = $number_of_pages;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getPageNumbering() {
-		return $this->sPageNumbering;
+		return $this->page_numbering;
 	}
 
 	/**
-	 * @param string $sPageNumbering
+	 * @param string $page_numbering
 	 */
-	public function setPageNumbering( $sPageNumbering ) {
-		$this->sPageNumbering = $sPageNumbering;
+	public function setPageNumbering( $page_numbering ) {
+		$this->page_numbering = $page_numbering;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getTitles() {
-		return $this->sTitles;
+		return $this->titles;
 	}
 
 	/**
-	 * @param string $sTitles
+	 * @param string $titles
 	 */
-	public function setTitles( $sTitles ) {
-		$this->sTitles = $sTitles;
+	public function setTitles( $titles ) {
+		$this->titles = $titles;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getWatermarks() {
-		return $this->sWatermarks;
+		return $this->watermarks;
 	}
 
 	/**
-	 * @param string $sWatermarks
+	 * @param string $watermarks
 	 */
-	public function setWatermarks( $sWatermarks ) {
-		$this->sWatermarks = $sWatermarks;
+	public function setWatermarks( $watermarks ) {
+		$this->watermarks = $watermarks;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getPaperProducer() {
-		return $this->sPaperProducer;
+		return $this->paper_producer;
 	}
 
 	/**
-	 * @param string $sPaperProducer
+	 * @param string $paper_producer
 	 */
-	public function setPaperProducer( $sPaperProducer ) {
-		$this->sPaperProducer = $sPaperProducer;
+	public function setPaperProducer( $paper_producer ) {
+		$this->paper_producer = $paper_producer;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getPaperProducerInYear() {
-		return $this->sPaperProducerInYear;
+		return $this->paper_producer_in_year;
 	}
 
 	/**
-	 * @param string $sPaperProducerInYear
+	 * @param string $paper_producer_in_year
 	 */
-	public function setPaperProducerInYear( $sPaperProducerInYear ) {
-		$this->sPaperProducerInYear = $sPaperProducerInYear;
+	public function setPaperProducerInYear( $paper_producer_in_year ) {
+		$this->paper_producer_in_year = $paper_producer_in_year;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getNotesPublic() {
-		return $this->sNotesPublic;
+		return $this->notes_public;
 	}
 
 	/**
-	 * @param string $sNotesPublic
+	 * @param string $notes_public
 	 */
-	public function setNotesPublic( $sNotesPublic ) {
-		$this->sNotesPublic = $sNotesPublic;
+	public function setNotesPublic( $notes_public ) {
+		$this->notes_public = $notes_public;
 	}
 
 
 	/**
-	 * @param string $sJobQueueId
+	 * @param string $job_queue_id
 	 */
-	public function setJobQueueId( $iJobQueueId ) {
-		$this->iJobQueueId = $iJobQueueId;
+	public function setJobQueueId( $job_queue_id ) {
+		$this->job_queue_id = $job_queue_id;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getJobQueueId() {
-		return $this->iJobQueueId;
+		return $this->job_queue_id;
 	}
 
 	/**
-	 * @param string $sProcess
+	 * @param string $process
 	 */
-	public function setProcess( $sProcess ) {
-		$this->sProcess = $sProcess;
+	public function setProcess( $process ) {
+		$this->process = $process;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getProcess() {
-		return $this->sProcess;
+		return $this->process;
 	}
 
 	/**
-	 * @param string $sStatus
+	 * @param string $status
 	 */
-	public function setStatus( $sStatus ) {
-		$this->sStatus = $sStatus;
+	public function setStatus( $status ) {
+		$this->status = $status;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getStatus() {
-		return $this->sStatus;
+		return $this->status;
 	}
 
 
 	/**
-	 * @param string $sStatus
+	 * @param string $created
 	 */
-	public function setCreated( $sCreated ) {
-		$this->sStatus = $sCreated;
+	public function setCreated( $created ) {
+		$this->created = $created;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getCreated() {
-		return $this->sCreated;
+		return $this->created;
+	}
+
+	/**
+	 * @param string $updated
+	 */
+	public function setUpdated( $updated ) {
+		$this->updated = $updated;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getUpdated() {
-		return $this->dUpdated;
+		return $this->updated;
 	}
 
-	/**
-	 * @param string $dUpdated
-	 */
-	public function setUpdated( $dUpdated ) {
-		$this->dUpdated = $dUpdated;
-	}
 
 	/**
 	 * @return string
 	 */
 	public function getCompleted() {
-		return $this->dCompleted;
+		return $this->completed;
 	}
 
 	/**
-	 * @param field_type $dCompleted
+	 * @param field_type $completed
 	 */
-	public function setCompleted( $dCompleted ) {
-		$this->dCompleted = $dCompleted;
+	public function setCompleted( $completed ) {
+		$this->completed = $completed;
 	}
 
 
@@ -546,3 +547,4 @@ class MetaData{
 	}
 
 }
+

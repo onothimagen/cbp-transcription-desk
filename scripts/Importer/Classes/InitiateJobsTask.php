@@ -2,17 +2,16 @@
 
 namespace Classes;
 
-use Classes\Db\JobQueue as JobQueueDb;
+use Zend\Di\Di;
+
 use Classes\Entities\JobQueue as JobQueueEntity;
 
-class InitiateJobsTask{
+class InitiateJobsTask extends TaskAbstract{
 
-	private $oJobQueueDb;
-	private $oJobQueueEntity;
 
-	public function __construct(  JobQueueDb $oJobQueueDb ){
+	public function __construct( Di $oDi ){
 
-		$this->oJobQueueDb     = $oJobQueueDb;
+		parent::__construct( $oDi );
 
 	}
 
@@ -25,7 +24,7 @@ class InitiateJobsTask{
 
 		$bHaveAllProcessesEnded  = $oJobQueueDb->HaveAllProcessesEnded();
 
-		$oJobQueueEntity   = new JobQueueEntity;
+		$oJobQueueEntity         = new JobQueueEntity;
 
 		$oJobQueueEntity->setUserId( 1 );
 
@@ -42,7 +41,6 @@ class InitiateJobsTask{
 		}
 
 		$iJoBQueueId = $oJobQueueDb->Insert( $oJobQueueEntity );
-
 
 		return $iJoBQueueId;
 
