@@ -102,7 +102,7 @@ class Item extends DbAbstract{
 				FROM
 					' . self::DBNAME . '
 				WHERE
-					job_queue_id = ?
+					metadata_id = ?
 				AND
 					process      = ?
 				AND

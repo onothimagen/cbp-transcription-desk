@@ -40,9 +40,9 @@ class InitiateJobsTask extends TaskAbstract{
 			$oJobQueueEntity->setStatus( 'started' );
 		}
 
-		$iJoBQueueId = $oJobQueueDb->Insert( $oJobQueueEntity );
+		$iJobQueueId = $oJobQueueDb->Insert( $oJobQueueEntity );
 
-		return $iJoBQueueId;
+		return $iJobQueueId;
 
 	}
 

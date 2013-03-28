@@ -25,6 +25,10 @@ $autoloader->registerNamespace( 'Classes'
 
 $autoloader->register();
 
+/*****************************************
+ * CONFIGURE LOGGER
+ *****************************************/
+
 switch ( $_SERVER['HTTP_HOST'] ){
 	case 'www.transcribe-bentham.da.ulcc.ac.uk':
 		$sConfigSection = 'production';
@@ -39,49 +43,36 @@ switch ( $_SERVER['HTTP_HOST'] ){
 		break;
 }
 
-/*****************************************
- * CONFIGURE LOGGER
- *****************************************/
 
 $oConfig       = new Zend\Config\Reader\Ini();
 
 $oConfig->setNestSeparator( ' : ' );
 
-$aData         = $oConfig->fromFile( 'config.ini.php' );
+$aConfig        = $oConfig->fromFile( 'config.ini.php' );
 
-$sLogLocation  = $aData[ $sConfigSection ]['common']['loglocation'];
-
+$aSectionConfig = $aConfig[ $sConfigSection ][ 'common' ];
 
 $oInfoLogger		= new Zend\Log\Logger;
 $oExceptionLogger	= new Zend\Log\Logger;
 
 
-$oLogger	   = new Classes\Helpers\Logger(   $oInfoLogger
-											 , $oExceptionLogger
-											 , $sLogLocation );
-
 /*****************************************
- * CONFIGURE ADAPTERS
+ * CONFIGURE ADAPTER
 *****************************************/
 
 $aDbConfig	= array(
-					 'driver'	=> $aData['common']['database.adapter']
-					,'host'     => $aData['common']['database.params.host']
-					,'username' => $aData[ $sConfigSection ]['common']['database.params.username']
-					,'password'	=> $aData[ $sConfigSection ]['common']['database.params.password']
-					,'dbname'   => $aData[ $sConfigSection ]['common']['database.params.dbname']
+					 'driver'	=> $aConfig[ 'common' ][ 'database.adapter' ]
+					,'host'     => $aConfig[ 'common' ] ['database.params.host' ]
+					,'username' => $aSectionConfig[ 'database.params.username' ]
+					,'password'	=> $aSectionConfig[ 'database.params.password' ]
+					,'dbname'   => $aSectionConfig[ 'database.params.dbname' ]
 					);
 
 $oAdapter = new Zend\Db\Adapter\Adapter( $aDbConfig );
 
-$oMetaDataDb        = new Classes\Db\MetaData( $oAdapter );
-$oItemDb			= new Classes\Db\Item( $oAdapter );
-
-
-
 
 /*****************************************
- * CONFIGURE DI
+ * CONFIGURE DIC
 *****************************************/
 
 
@@ -90,33 +81,40 @@ $oDi = new Zend\Di\Di();
 $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 										    							'oInfoLogger'      => $oInfoLogger
 																   	  , 'oExceptionLogger' => $oExceptionLogger
-																	  , 'sLogLocation'     => $sLogLocation
+																	  , 'aSectionConfig'   => $aSectionConfig
 									 							  )
 									 );
 
 $oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ));
 $oDi->instanceManager()->setParameters( 'Classes\Db\MetaData', array( 'oAdapter' => $oAdapter ));
-$oDi->instanceManager()->setParameters( 'Classes\Db\Item', array( 'oAdapter' => $oAdapter ));
+$oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ));
 
 /*****************************************
- * CONFIGURE TASKS
+ * TASKS
 *****************************************/
 
-require_once 'Classes/TaskAbstract.php'';
+require_once 'Classes/TaskAbstract.php';
 
-
-/*****************************************
- * CONFIGURE HELPERS
-*****************************************/
-
-$oFileHelper		= new Classes\Helpers\File();
 
 /*****************************************
  * SETUP FOR TESTING
 *****************************************/
 
+$oMetaDataDb = new Classes\Db\MetaData( $oAdapter );
+$oItemDb     = new Classes\Db\Item( $oAdapter );
+
+$oFile       = new Classes\Helpers\File();
+
 $oItemDb->Truncate();
 $oMetaDataDb->Truncate();
+
+$sImageDir = $aSectionConfig[ 'path.image.export' ] . '\001';
+
+if( file_exists( $sImageDir ) ){
+	$oFile->DeleteDirectory( $sImageDir );
+}
+
+
 
 
 

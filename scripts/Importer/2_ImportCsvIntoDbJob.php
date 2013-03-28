@@ -24,26 +24,23 @@ if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
 
 require_once 'global.inc.php';
 
-$sCsvFilePath                   = $aData[ $sConfigSection ]['common']['csvfilepath'];
-
 $oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToMetaDataEntity();
 
-$oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oMetaDataDb
-														 , $oItemDb
-														 , $oFileHelper
+$oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
 											             , $oCsvRowToMetatDataEntityMapper
-														 , $oLogger
-														 , $sCsvFilePath
-														 , $iJoBQueueId );
+														 , $aSectionConfig
+														 , $iJobQueueId );
+
+
 
 try {
 	$oImportCsvIntoDbTask->Execute();
 } catch ( Exception $e ) {
+
 	// Write to log
 }
 
 /* Import of the MetaData and Items was successfuk so start slicing the images */
-
 require '3_SliceImagesJob.php';
 
 
@@ -55,5 +52,32 @@ if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
 
 }
 
-?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

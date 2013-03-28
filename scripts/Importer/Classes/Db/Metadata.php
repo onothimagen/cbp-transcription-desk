@@ -224,7 +224,69 @@ class MetaData extends DbAbstract{
 	}
 
 
+	/*
+	* @param integer $iJobQueueId
+	* @param string $sProcess
+	* @param string $sStatus
+	* @return ResultSet
+	*/
+	public function GetJobMetaDataItems(  $iJobQueueId
+										, $sProcess
+										, $sStatus ){
+
+		$sSql = 'SELECT
+					  cbp_items.id as item_id
+					, cbp_metadata.box_number
+					, cbp_metadata.folio_number
+					, cbp_items.item_number
+				FROM
+					cbp_metadata
+				LEFT JOIN
+					cbp_items
+				ON
+				    cbp_metadata.id           = cbp_items.metadata_id
+				WHERE
+					cbp_metadata.job_queue_id = ?
+				AND
+					cbp_items.process         = ?
+				AND
+					cbp_items.status          = ?;';
+
+
+		$aBindArray = array(
+							  $iJobQueueId
+							, $sProcess
+							, $sStatus
+		);
+
+		$rResult   = $this->Execute( $sSql, $aBindArray );
+
+		return $rResult;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

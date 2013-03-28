@@ -4,7 +4,8 @@ namespace Classes\Helpers;
 
 class Logger {
 
-	private $sLogLocation;
+	private $sLogPath;
+	private $sAdminEmail;
 	private $sFolderLocation;
 	private $sLogName;
 	private $sErrorLogName;
@@ -23,11 +24,12 @@ class Logger {
 
 	public function __construct(  \Zend\Log\Logger	$oInfoLogger
 								 ,\Zend\Log\Logger	$oExceptionLogger
-								 ,                  $sLogLocation ){
+								 ,                  $aSectionConfig ){
 
 		$this->oInfoLogger		= $oInfoLogger;
 		$this->oExceptionLogger	= $oExceptionLogger;
-		$this->sLogLocation     = $sLogLocation;
+		$this->sLogPath         = $aSectionConfig[ 'path.logs' ];
+		$this->sAdminEmail      = $aSectionConfig[ 'admin.email' ];
 
 	}
 
@@ -35,7 +37,7 @@ class Logger {
 
 		$sContext = strtolower( $sContext );
 
-		$sRootFolder 		= $this->sLogLocation;
+		$sRootFolder 		= $this->sLogPath;
 		$sFolderLocation 	= $sRootFolder . $sContext;
 
 		if( !is_dir( $sFolderLocation ) ){
@@ -78,7 +80,7 @@ class Logger {
 
     private function MailException ( $sExceptionText ){
     	if( substr( strtoupper( PHP_OS ), 0, 3 ) !== 'WIN' ){
-			mail( 'admin@onlineshopper.co.uk', 'Exception', $sExceptionText );
+			mail( $this->sAdminEmail, 'Exception', $sExceptionText );
     	}
     }
 

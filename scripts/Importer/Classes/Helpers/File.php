@@ -207,6 +207,25 @@ class File {
 
 	}
 
+	public function DeleteDirectory( $sDirectory ) {
+
+	    $aFiles = scandir( $sDirectory );
+
+		foreach ( $aFiles as $sFile ){
+			if ( $sFile != '.' && $sFile != '..'){
+
+				$sPath = $sDirectory . '/' . $sFile;
+
+				if( is_dir( $sPath ) ){
+					$this->DeleteDirectory( $sPath );
+				}
+
+				unlink( $sPath );
+			}
+		}
+		rmdir( $sDirectory );
+	}
+
 	public function EmptyDirectory( $sDirectory ){
 
 		$aFiles = scandir( $sDirectory );

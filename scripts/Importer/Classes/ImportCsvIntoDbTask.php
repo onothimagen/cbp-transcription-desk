@@ -36,20 +36,20 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	public function __construct(  Di						   $oDi
 								, CsvRowToMetaDataEntityMapper $oCsvRowToMetatDataEntityMapper
-								,                              $sCsvFilePath
+								,                              $aSectionConfig
 								,                              $iJobQueueId ){
 
 		parent::__construct( $oDi );
 
 		$this->oCsvRowToMetatDataEntityMapper = $oCsvRowToMetatDataEntityMapper;
 
-		$this->sCsvFilePath                   = $sCsvFilePath;
+		$this->sCsvFilePath    = $aSectionConfig[ 'path.csv.import' ];
 
-		$this->iJobQueueId                    = $iJobQueueId;
+		$this->iJobQueueId     = $iJobQueueId;
 
-		$this->oMetaDataEntity				  = new MetaDataEntity();
+		$this->oMetaDataEntity = new MetaDataEntity();
 
-		$this->oItemEntity                    = new ItemEntity();
+		$this->oItemEntity     = new ItemEntity();
 
 
 
@@ -107,8 +107,6 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 			$oMappedMetaDataEntity->setJobQueueId( $this->iJobQueueId );
 
 			$oMappedMetaDataEntity = $this->oMetaDataDb->Insert( $oMappedMetaDataEntity );
-
-			var_dump($oMappedMetaDataEntity);
 
 			$this->InsertFolioItems( $oMappedMetaDataEntity );
 

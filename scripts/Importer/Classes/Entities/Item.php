@@ -40,7 +40,7 @@ class Item{
 	 * @return string
 	 */
 	public function getMetaDataId() {
-		return $this->metaDataId;
+		return $this->metadata_id;
 	}
 
 	/**

@@ -25,13 +25,12 @@ if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
 
 require_once  'global.inc.php';
 
-$oJobQueue         = new Db\JobQueue( $oAdapter );
-
-$oInitiateJobsTask = new InitiateJobsTask( $oJobQueue );
+$oInitiateJobsTask = new InitiateJobsTask( $oDi );
 
 
 try {
-	$iJoBQueueId = $oInitiateJobsTask->Execute();
+	$iJobQueueId = $oInitiateJobsTask->Execute();
+
 } catch (Exception $e) {
  // Write to log
 }
