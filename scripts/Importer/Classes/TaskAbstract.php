@@ -14,6 +14,7 @@ use Classes\Helpers\Logger;
 use Classes\Entities\JobQueue as JobQueueEntity;
 use Classes\Entities\MetaData as MetaDataEntity;
 use Classes\Entities\Item     as ItemEntity;
+use Classes\Helpers\MwXml;
 
 abstract class TaskAbstract{
 
@@ -39,6 +40,8 @@ abstract class TaskAbstract{
 
 		$this->oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
 		$this->oMetaDataDb = $oDi->get( 'Classes\Db\MetaData' );
+
+		/* @var ItemDb */
 		$this->oItemDb     = $oDi->get( 'Classes\Db\Item' );
 
 		$this->oFile       = $oDi->get( 'Classes\Helpers\File' );
@@ -56,7 +59,8 @@ abstract class TaskAbstract{
 												, File           $oFile
 												, Logger         $oLogger
 												, MetaDataEntity $oMetaDataEntity
-												, ItemEntity     $oItemEntity){
+												, ItemEntity     $oItemEntity
+												){
 
 		$this->oJobQueueDb = $oJobQueueDb;
 		$this->oMetaDataDb = $oMetaDataDb;
@@ -67,6 +71,7 @@ abstract class TaskAbstract{
 
 		$this->oMetaDataEntity = $oMetaDataEntity;
 		$this->oItemEntity     = $oItemEntity;
+
 
 	}
 }

@@ -5,41 +5,43 @@ namespace Classes\Entities;
 
 class MetaData{
 
-  private $id;
-  private $box_number;
-  private $folio_number;
-  private $second_folio_number;
-  private $category;
-  private $recto_verso;
-  private $creator;
-  private $recipient;
-  private $penner;
-  private $marginals;
-  private $corrections;
-  private $date_1;
-  private $date_2;
-  private $date_3;
-  private $date_4;
-  private $date_5;
-  private $date_6;
-  private $estimated_date;
-  private $info_in_main_heading_field;
-  private $main_heading;
-  private $sub_headings;
-  private $marginal_summary_numbering;
-  private $number_of_pages;
-  private $page_numbering;
-  private $titles;
-  private $watermarks;
-  private $paper_producer;
-  private $paper_producer_in_year;
-  private $notes_public;
-  private $job_queue_id;
-  private $process;
-  private $status;
-  private $updated;
-  private $completed;
-  private $created;
+  private $id                           = '';
+  private $box_number                   = '';
+  private $folio_number                 = '';
+  private $second_folio_number          = '';
+  private $category                     = '';
+  private $recto_verso                  = '';
+  private $creator                      = '';
+  private $recipient                    = '';
+  private $penner                       = '';
+  private $marginals                    = '';
+  private $corrections                  = '';
+  private $date_1                       = '';
+  private $date_2                       = '';
+  private $date_3                       = '';
+  private $date_4                       = '';
+  private $date_5                       = '';
+  private $date_6                       = '';
+  private $estimated_date               = '';
+  private $info_in_main_heading_field   = '';
+  private $main_heading                 = '';
+  private $sub_headings                 = '';
+  private $marginal_summary_numbering   = '';
+  private $number_of_pages              = '';
+  private $page_numbering               = '';
+  private $titles                       = '';
+  private $watermarks                   = '';
+  private $paper_producer               = '';
+  private $paper_producer_in_year       = '';
+  private $notes_public                 = '';
+  private $job_queue_id                 = '';
+  private $process                      = '';
+  private $status                       = '';
+  private $updated                      = '';
+  private $completed                    = '';
+  private $created                      = '';
+  private $item_id                      = '';
+  private $item_number                  = '';
 
 
 	/**
@@ -534,6 +536,34 @@ class MetaData{
 	 */
 	public function setCompleted( $completed ) {
 		$this->completed = $completed;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getItemId() {
+		return $this->item_id;
+	}
+
+	/**
+	 * @param field_type $item_id
+	 */
+	public function setItemId( $item_id ) {
+		$this->item_id = $item_id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getItemNumber() {
+		return $this->item_number;
+	}
+
+	/**
+	 * @param field_type $item_number
+	 */
+	public function setItemNumber( $item_number ) {
+		$this->item_number = $item_number;
 	}
 
 

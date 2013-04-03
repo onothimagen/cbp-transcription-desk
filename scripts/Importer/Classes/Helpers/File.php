@@ -17,10 +17,10 @@ class File {
 			throw new \Classes\Exceptions\Importer( '$sData passed to Write() is empty' );
 		}
 
-		$bBytesWritten		= file_put_contents( $sFile, $sData );
+		$bBytesWritten = file_put_contents( $sFile, $sData );
 
 		if ( $bBytesWritten !== true ) {
-			throw new \Classes\Exceptions\Importer( 'Cannot write to $sData to ' . $sFile );
+			throw new \Classes\Exceptions\Importer( 'Cannot write $sData to ' . $sFile );
 		}
 
 		if( file_exists( $sFile ) === false ){
@@ -220,7 +220,9 @@ class File {
 					$this->DeleteDirectory( $sPath );
 				}
 
-				unlink( $sPath );
+				if ( file_exists( $sPath ) ){
+					unlink( $sPath );
+				}
 			}
 		}
 		rmdir( $sDirectory );

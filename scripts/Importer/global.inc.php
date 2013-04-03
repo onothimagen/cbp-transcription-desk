@@ -85,6 +85,8 @@ $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 									 							  )
 									 );
 
+$oDi->instanceManager()->setParameters( 'Classes\Helpers\MwXml', array( 'aSectionConfig'   => $aSectionConfig ) );
+
 $oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ));
 $oDi->instanceManager()->setParameters( 'Classes\Db\MetaData', array( 'oAdapter' => $oAdapter ));
 $oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ));
@@ -112,6 +114,13 @@ $sImageDir = $aSectionConfig[ 'path.image.export' ] . '\001';
 
 if( file_exists( $sImageDir ) ){
 	$oFile->DeleteDirectory( $sImageDir );
+}
+
+$sXML      = $aSectionConfig[ 'path.xml.export' ];
+
+if( file_exists( $sXML ) ){
+	unlink( $sXML );
+
 }
 
 

@@ -57,11 +57,19 @@ class Item extends DbAbstract{
 
 	}
 
-	public function UpdateProcessStatus(  $iItemId
-										, $sProcess
-										, $sStatus ){
 
-		$sCompleted = NULL;
+
+	/*
+	 *
+	*/
+	public function UpdateJobProcessStatusByItemId(
+											  $iItemId
+											, $sProcess
+											, $sStatus
+											, $sWhereProcess
+											, $sWhereStatus ){
+
+		$sCompleted = 'NULL';
 
 		if ( $sProcess === 'verify' and $sStatus === 'completed' ){
 			$sCompleted = 'NOW()';
@@ -71,24 +79,30 @@ class Item extends DbAbstract{
 					' . self::DBNAME . '
 
 				SET
-					  process = ?
-					, status  = ?
-				    , updated = NOW()
+					  process   = ?
+					, status    = ?
+				    , updated   = NOW()
 				    , completed = ' . $sCompleted . '
 				WHERE
-					id = ?
-				';
+				    process      = ?
+				AND
+				    status       = ?
+				AND
+				    id           = ?';
 
 
 		$aBindArray = array (
-							  $sProcess
-							, $sStatus
-				            , $iItemId
-							);
+							   $sProcess
+							 , $sStatus
+							 , $sWhereProcess
+							 , $sWhereStatus
+						     , $iItemId
+		);
 
 		return  $this->Execute( $sSql, $aBindArray );
 
 	}
+
 
 	/*
 	 *

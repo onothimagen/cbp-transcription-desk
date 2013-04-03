@@ -114,7 +114,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 
 			// REMOVE !!!!
-			if( $iCurrentRow > 3){
+			if( $iCurrentRow > 5){
 				return;
 			}
 
@@ -149,9 +149,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		}
 
-		$this->oMetaDataDb->UpdateProcessStatus( $iMetaDataId, 'slice', 'queued' );
-
-		echo 'InsertFolioItems completed' . "<br />";
+		//echo 'InsertFolioItems completed' . "<br />";
 
 	}
 

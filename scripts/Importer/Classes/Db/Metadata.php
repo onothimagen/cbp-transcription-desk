@@ -111,8 +111,8 @@ class MetaData extends DbAbstract{
 									,?
 									,?
 									,?
-									,\'import\'
-									,\'completed\'
+									,\'slice\'
+									,\'queued\'
 									,NOW()
 									,NOW()
 								)';
@@ -156,9 +156,13 @@ class MetaData extends DbAbstract{
 	}
 
 
-	public function UpdateProcessStatus(  $iId
-										, $sProcess
-										, $sStatus ){
+	public function UpdateProcessStatusByJobQueueId(
+												  $iJobQueueId
+												, $sProcess
+												, $sStatus
+												, $sWhereProcess
+												, $sWhereStatus
+												){
 
 		$sCompleted = 'NULL';
 
@@ -175,14 +179,20 @@ class MetaData extends DbAbstract{
 				    , updated = NOW()
 				    , completed = ' . $sCompleted . '
 				WHERE
-					id = ?
+				    process      = ?
+				AND
+				    status       = ?
+				AND
+					 job_queue_id = ?
 				';
 
 
 		$aBindArray = array (
 							  $sProcess
 							, $sStatus
-				            , $iId
+							, $sWhereProcess
+							, $sWhereStatus
+				            , $iJobQueueId
 							);
 		$this->Execute( $sSql, $aBindArray );
 
@@ -235,12 +245,41 @@ class MetaData extends DbAbstract{
 										, $sStatus ){
 
 		$sSql = 'SELECT
-					  cbp_items.id as item_id
-					, cbp_metadata.box_number
-					, cbp_metadata.folio_number
-					, cbp_items.item_number
+					  cbp_metadata.id
+					, box_number
+					, folio_number
+					, second_folio_number
+					, category
+					, recto_verso
+					, creator
+					, recipient
+					, penner
+					, marginals
+					, corrections
+					, date_1
+					, date_2
+					, date_3
+					, date_4
+					, date_5
+					, date_6
+					, estimated_date
+					, info_in_main_heading_field
+					, main_heading
+					, sub_headings
+					, marginal_summary_numbering
+					, number_of_pages
+					, page_numbering
+					, titles
+					, watermarks
+					, paper_producer
+					, paper_producer_in_year
+					, notes_public
+					, job_queue_id
+					, cbp_items.id as item_id
+					, item_number
+
 				FROM
-					cbp_metadata
+					' . self::DBNAME . '
 				LEFT JOIN
 					cbp_items
 				ON
@@ -250,7 +289,11 @@ class MetaData extends DbAbstract{
 				AND
 					cbp_items.process         = ?
 				AND
-					cbp_items.status          = ?;';
+					cbp_items.status          = ?
+				ORDER BY
+					box_number ASC
+				  , folio_number ASC
+				  , item_number ASC;';
 
 
 		$aBindArray = array(

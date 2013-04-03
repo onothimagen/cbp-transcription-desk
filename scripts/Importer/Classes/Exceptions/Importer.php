@@ -2,7 +2,7 @@
 
 namespace Classes\Exceptions;
 
-class Importer extends Exception {
+class Importer extends \Exception {
 
 
 	protected $aBacktrace;

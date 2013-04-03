@@ -2,7 +2,7 @@
 
 namespace Classes;
 
-if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
+if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) and 1===2 ){
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
@@ -44,7 +44,7 @@ try {
 require '3_SliceImagesJob.php';
 
 
-if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
+if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) and 1===2 ){
 	?>
 </body>
 </html>

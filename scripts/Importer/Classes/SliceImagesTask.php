@@ -6,11 +6,13 @@ use Zend\Di\Di;
 
 use Zend\Db\ResultSet\ResultSet;
 
-use Classes\Entities\MetaDataItem as MetaDataItemEntity;
+use Classes\Db\MetaData as MetaDataDb;
+use Classes\Db\Item as ItemDb;
+use Classes\Entities\MetaData as MetaDataEntity;
 
 class SliceImagesTask  extends TaskAbstract{
 
-	/* @var $oMetaDataItemEntity MetaDataItemEntity */
+	/* @var $oMetaDataItemEntity MetaDataEntity */
 	private $oMetaDataItemEntity;
 
 	private $sSlicerPath;
@@ -57,22 +59,64 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$rMetaData = $this->GetAllMetaDataItemsToSlice();
 
-		/* @var $oMetaDataItemEntity MetaDataItemEntity */
-		while ( $oMetaDataItemEntity = $rMetaData->getResource()->fetchObject( 'Classes\Entities\MetaDataItem' ) ){
+		/* @var $oMetaDataItemEntity MetaDataEntity */
+		while ( $oMetaDataItemEntity = $rMetaData->getResource()->fetchObject( 'Classes\Entities\MetaData' ) ){
 
-			$iMetaDataId  = $oMetaDataItemEntity->getItemId();
+			$iItemId  	  = $oMetaDataItemEntity->getItemId();
 
-			$sBoxNumber   = $oMetaDataItemEntity->getBoxNumber();
+			echo $iItemId . '<p />';
 
-			$sFolioNumber = $oMetaDataItemEntity->getFolioNumber();
+			$sImagePath = $this->ConstructImagePath( $oMetaDataItemEntity );
 
-			$sItemNumber  = $oMetaDataItemEntity->getItemNumber();
+			try {
+				//$this->SliceImage( $sImagePath );
 
-			$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
+				$this->oItemDb->UpdateJobProcessStatusByItemId(
+															  $iItemId
+															, 'export'
+															, 'queued'
+															, 'slice'
+															, 'queued'
+															);
+			} catch (Exception $e) {
+				// Write to log
+			}
 
-			$this->SliceImage( $sImagePath );
+
 
 		}
+
+
+
+		$this->oMetaDataDb->UpdateProcessStatusByJobQueueId(
+														  $this->iJobQueueId
+														, 'export'
+														, 'queued'
+														, 'slice'
+														, 'queued'
+														);
+
+	}
+
+	private function ConstructImagePath( MetaDataEntity $oEntity ){
+
+		$sBoxNumber   = $oEntity->getBoxNumber();
+
+		$sFolioNumber = $oEntity->getFolioNumber();
+
+		$sItemNumber  = $oEntity->getItemNumber();
+
+		$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
+
+		$sRootPath      = $this->sImageImportPath;
+
+		$sFullImagePath = $sRootPath . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
+
+		if( file_exists( $sFullImagePath ) === false ){
+			throw new \Classes\Exceptions\Importer( $sFullImagePath . 'passed to SliceImage() does not exist' );
+		}
+
+		return $sFullImagePath;
 
 	}
 
@@ -81,17 +125,13 @@ class SliceImagesTask  extends TaskAbstract{
 	 */
 	private function SliceImage( $sImagePath ){
 
-		$sRootPath      = $this->sImageImportPath;
-
-		$sFullImagePath = $sRootPath . DIRECTORY_SEPARATOR . $sImagePath;
-
 		$sSlicerPath    = $this->sSlicerPath;
 
-		$sCommand       = 'perl ' . $sSlicerPath . ' --input_file ' . $sFullImagePath . '.jpg --output_path ' . $this->sImageExportPath;
+		$sCommand       = 'perl ' . $sSlicerPath . ' --input_file ' . $sImagePath . ' --output_path ' . $this->sImageExportPath;
 
 		$sCommand       = str_replace('\\', '/', $sCommand );
 
-		echo $sCommand . '< p >';
+		//echo $sCommand . '< p />';
 
 		ob_start();
 		passthru( $sCommand );

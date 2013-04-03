@@ -2,7 +2,7 @@
 
 namespace Classes;
 
-if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
+if( isset ($_SERVER[ 'SCRIPT_FILENAME' ])  and 1===2 ){
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
@@ -35,7 +35,9 @@ try {
 	// Write to log
 }
 
-if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
+require '4_ExportXmlJob.php';
+
+if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) and 1===2 ){
 	?>
 </body>
 </html>
