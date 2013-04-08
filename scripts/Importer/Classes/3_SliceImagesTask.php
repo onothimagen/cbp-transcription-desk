@@ -179,7 +179,7 @@ class SliceImagesTask  extends TaskAbstract{
 
 			try {
 				$sImagePath = $this->ConstructImagePath( $oBoxEntity, $oFolioEntity, $oItemEntity );
-				//$this->SliceImage( $sImagePath );
+				$this->SliceImage( $sImagePath );
 
 			} catch ( ImporterException $oException ) {
 				$this->HandleError( $oException, $oItemEntity );

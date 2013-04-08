@@ -58,14 +58,7 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		//$this->FlagProcessAsStarted();
-
-
-		// Needs to be compound
-
-		//$this->UpdateJobProcessStatus();
-
-		//$this->FlagProcessAsCompleted();
+		$this->ImportXmlIntoMw();
 
 	}
 
