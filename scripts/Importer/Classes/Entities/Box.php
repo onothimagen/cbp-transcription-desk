@@ -24,39 +24,40 @@
 
 namespace Classes\Entities;
 
-class Item extends EntityAbstract{
+class Box extends EntityAbstract{
 
 
-	private $folio_id;
-	private $item_number;
+	private $job_queue_id;
+	private $box_number;
+
 
 
 	/**
-	 * @param string $folio_id
+	 * @return string
 	 */
-	public function setFolioId( $folio_id ) {
-		$this->folio_id = $folio_id;
+	public function getJobQueueId() {
+		return $this->job_queue_id;
+	}
+
+	/**
+	 * @param string $job_queue_id
+	 */
+	public function setJobQueueId( $job_queue_id ) {
+		$this->job_queue_id = $job_queue_id;
+	}
+
+	/**
+	 * @param string $box_number
+	 */
+	public function setBoxNumber( $box_number ) {
+		$this->box_number = $box_number;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getFolioId() {
-		return $this->folio_id;
-	}
-
-	/**
-	 * @param string $item_number
-	 */
-	public function setItemNumber( $item_number ) {
-		$this->item_number = $item_number;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getItemNumber() {
-		return $this->item_number;
+	public function getBoxNumber() {
+		return $this->box_number;
 	}
 
 

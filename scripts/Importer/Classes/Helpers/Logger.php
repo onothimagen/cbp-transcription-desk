@@ -1,6 +1,33 @@
 <?php
 
+/**
+ * Copyright (C) Ben Parish
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @package CBP Transcription
+ * @subpackage Importer
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
+ * @copyright 2013  Ben Parish
+ */
+
 namespace Classes\Helpers;
+
+use Classes\Exceptions\Importer as ImporterException;
+
+use Zend\Log\Logger         as ZendLogger;
+use Zend\Log\Writer\Stream  as Stream;
 
 class Logger {
 
@@ -12,19 +39,15 @@ class Logger {
 
 	const LINE_WIDTH = 80;
 
-	/*
-	 * @var Zend_Log
-	 */
+	/* @var ZendLogger */
 	private $oInfoLogger;
 
-	/*
-	 * @var Zend_Log
-	 */
+	/* @var ZendLogger */
 	private $oExceptionLogger;
 
-	public function __construct(  \Zend\Log\Logger	$oInfoLogger
-								 ,\Zend\Log\Logger	$oExceptionLogger
-								 ,                  $aSectionConfig ){
+	public function __construct(   ZendLogger $oInfoLogger
+								 , ZendLogger $oExceptionLogger
+								 ,            $aSectionConfig ){
 
 		$this->oInfoLogger		= $oInfoLogger;
 		$this->oExceptionLogger	= $oExceptionLogger;
@@ -42,7 +65,7 @@ class Logger {
 
 		if( !is_dir( $sFolderLocation ) ){
 			if( !mkdir( $sFolderLocation, 0, true )) {
-			    throw new Exceptions_Importer( 'Failed to create ' . $sFolderLocation );
+			    throw new ImporterException( 'Failed to create ' . $sFolderLocation );
 			}
 		}
 
@@ -57,8 +80,8 @@ class Logger {
 			touch( $this->sErrorLogName );
 		}
 
-		$oInfoWriter			= new \Zend\Log\Writer\Stream( $this->sLogName );
-		$oExceptionWriter 		= new \Zend\Log\Writer\Stream( $this->sErrorLogName );
+		$oInfoWriter			= new Stream( $this->sLogName );
+		$oExceptionWriter 		= new Stream( $this->sErrorLogName );
 
 		$this->oInfoLogger->addWriter( $oInfoWriter );
 
@@ -67,7 +90,7 @@ class Logger {
 	}
 
 
-	public function LogException( Exception $oException ){
+	public function LogException( ImporterException $oException ){
 		$sExceptionText = "\r\n" . $this->ComposeSectionHeader()
 		                . 'Exception Logged : '     .$this->CreateFormattedDate() . "\r\n"
 		                . $oException->getMessage() . "\r\n"
@@ -75,11 +98,11 @@ class Logger {
 
 		$this->MailException( $sExceptionText );
 
-		$this->oExceptionLogger->log( $sExceptionText . "\r\n" , Zend\Log\Logger::INFO );
+		$this->oExceptionLogger->log( ZendLogger::ERR, $sExceptionText . "\r\n" );
     }
 
     private function MailException ( $sExceptionText ){
-    	if( substr( strtoupper( PHP_OS ), 0, 3 ) !== 'WIN' ){
+    	if( $this->sAdminEmail !== '' ){
 			mail( $this->sAdminEmail, 'Exception', $sExceptionText );
     	}
     }
@@ -100,12 +123,12 @@ class Logger {
                   . $sName . ' : ' . $this->CreateFormattedDate() . "\r\n"
                   . $this->ComposeSectionHeader();
 
-        $this->oInfoLogger->log( $sLogText . "\r\n" , Zend\Log\Logger::INFO );
+        $this->oInfoLogger->log( ZendLogger::INFO, $sLogText . "\r\n" );
     }
 
 
     public function Log( $sLogData ){
-    	$this->oInfoLogger->log( $sLogData . "\r\n" , Zend\Log\Logger::INFO );
+    	$this->oInfoLogger->log( $sLogData . "\r\n" , ZendLogger::INFO );
     }
 
 
@@ -113,3 +136,41 @@ class Logger {
         return $sLogName . '/' . date( 'Y-m-d' ) . $sExtension;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

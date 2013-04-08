@@ -1,5 +1,28 @@
 <?php
 
+/**
+ * Copyright (C) University College London
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @package CBP Transcription
+ * @subpackage Importer
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
+ * @copyright 2013  University College London
+ */
+
+
 /*****************************************
  * CONFIGURE AUTOLOADING
 *****************************************/
@@ -87,9 +110,11 @@ $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 
 $oDi->instanceManager()->setParameters( 'Classes\Helpers\MwXml', array( 'aSectionConfig'   => $aSectionConfig ) );
 
-$oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ));
-$oDi->instanceManager()->setParameters( 'Classes\Db\MetaData', array( 'oAdapter' => $oAdapter ));
-$oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ));
+$oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Box'     , array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Folio'   , array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\ErrorLog', array( 'oAdapter' => $oAdapter ) );
 
 /*****************************************
  * TASKS
@@ -98,32 +123,40 @@ $oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter'
 require_once 'Classes/TaskAbstract.php';
 
 
-/*****************************************
- * SETUP FOR TESTING
-*****************************************/
+if( $sConfigSection === 'development' ){
 
-$oMetaDataDb = new Classes\Db\MetaData( $oAdapter );
-$oItemDb     = new Classes\Db\Item( $oAdapter );
+	/*****************************************
+	 * SETUP FOR TESTING
+	*****************************************/
 
-$oFile       = new Classes\Helpers\File();
+	$oJobQueueDb  = new Classes\Db\JobQueue( $oAdapter );
+	$oBoxDb       = new Classes\Db\Box( $oAdapter );
+	$oFolioDb     = new Classes\Db\Folio( $oAdapter );
+	$oItemDb      = new Classes\Db\Item( $oAdapter );
+	$oErrorLogDb  = new Classes\Db\ErrorLog( $oAdapter );
 
-$oItemDb->Truncate();
-$oMetaDataDb->Truncate();
+	$oFile    = new Classes\Helpers\File();
 
-$sImageDir = $aSectionConfig[ 'path.image.export' ] . '\001';
+	$oJobQueueDb->Truncate();
+	$oBoxDb->Truncate();
+	$oFolioDb->Truncate();
+	$oItemDb->Truncate();
+	$oErrorLogDb->Truncate();
 
-if( file_exists( $sImageDir ) ){
-	$oFile->DeleteDirectory( $sImageDir );
+	$sImageDir = $aSectionConfig[ 'path.image.export' ] . '\001';
+
+	if( file_exists( $sImageDir ) ){
+		$oFile->DeleteDirectory( $sImageDir );
+	}
+
+	$sXML      = $aSectionConfig[ 'path.xml.export' ];
+
+	if( file_exists( $sXML ) ){
+		$oFile->EmptyDirectory( $sXML );
+
+	}
+
 }
-
-$sXML      = $aSectionConfig[ 'path.xml.export' ];
-
-if( file_exists( $sXML ) ){
-	unlink( $sXML );
-
-}
-
-
 
 
 

@@ -22,43 +22,10 @@
  * @copyright 2013  University College London
  */
 
-namespace Classes\Entities;
-
-class Item extends EntityAbstract{
-
-
-	private $folio_id;
-	private $item_number;
-
-
-	/**
-	 * @param string $folio_id
-	 */
-	public function setFolioId( $folio_id ) {
-		$this->folio_id = $folio_id;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFolioId() {
-		return $this->folio_id;
-	}
-
-	/**
-	 * @param string $item_number
-	 */
-	public function setItemNumber( $item_number ) {
-		$this->item_number = $item_number;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getItemNumber() {
-		return $this->item_number;
-	}
-
-
+if( isset ($_SERVER[ 'SCRIPT_FILENAME' ]) ){
+	?>
+</body>
+</html>
+<?php
 
 }

@@ -1,5 +1,27 @@
 <?php
 
+/**
+ * Copyright (C) University College London
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @package CBP Transcription
+ * @subpackage Importer
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
+ * @copyright 2013  University College London
+ */
+
 namespace Classes\Db;
 
 use Classes\Entities\Item as ItemEntity;
@@ -7,14 +29,14 @@ use Classes\Entities\Item as ItemEntity;
 class Item extends DbAbstract{
 
 
-	const DBNAME = 'cbp_items';
-
-	public function Truncate(){
-
-		$sSql = 'TRUNCATE TABLE ' . self::DBNAME . ';';
-
-		$this->Execute( $sSql );
+	/*
+	 *
+	*/
+	public function __construct( $oAdapter ){
+		parent::__construct( $oAdapter );
+		$this->sDbname = 'cbp_items';
 	}
+
 
 	/*
 	 *
@@ -22,30 +44,34 @@ class Item extends DbAbstract{
 	public function Insert ( ItemEntity  $oItemEntity ){
 
 		$sSql = 'INSERT INTO
-					' . self::DBNAME . '
+					' . $this->sDbname . '
 							(
-							    metadata_id
+							    folio_id
 							  , item_number
 
 							  , process
-							  , status
+							  , process_status
 
+							  , process_start_time
+							  , process_end_time
 							  , updated
-							  , created
 							)
 				VALUES
 							(
 							    ?
 							  , ?
 
-							  , \'slice\'
-							  , \'queued\'
+							  , \'import\'
+							  , \'completed\'
 
-							  , NULL
-							  , NULL
-							);';
+							  , NOW()
+							  , NOW()
+							  , NOW()
+							)
+							ON DUPLICATE KEY UPDATE
+								id = LAST_INSERT_ID( id );';
 
-		$aBindArray = array(  $oItemEntity->getMetaDataId()
+		$aBindArray = array(  $oItemEntity->getFolioId()
 							, $oItemEntity->getItemNumber()
 							);
 
@@ -58,71 +84,25 @@ class Item extends DbAbstract{
 	}
 
 
-
-	/*
-	 *
-	*/
-	public function UpdateJobProcessStatusByItemId(
-											  $iItemId
-											, $sProcess
-											, $sStatus
-											, $sWhereProcess
-											, $sWhereStatus ){
-
-		$sCompleted = 'NULL';
-
-		if ( $sProcess === 'verify' and $sStatus === 'completed' ){
-			$sCompleted = 'NOW()';
-		}
-
-		$sSql = 'UPDATE
-					' . self::DBNAME . '
-
-				SET
-					  process   = ?
-					, status    = ?
-				    , updated   = NOW()
-				    , completed = ' . $sCompleted . '
-				WHERE
-				    process      = ?
-				AND
-				    status       = ?
-				AND
-				    id           = ?';
-
-
-		$aBindArray = array (
-							   $sProcess
-							 , $sStatus
-							 , $sWhereProcess
-							 , $sWhereStatus
-						     , $iItemId
-		);
-
-		return  $this->Execute( $sSql, $aBindArray );
-
-	}
-
-
 	/*
 	 *
 	 */
-	public function GetJobItems(  $iMetaDataId
+	public function GetJobItems(  $iFolioId
 								, $sProcess
 								, $sStatus ){
 
 		$sSql = 'SELECT
 					*
 				FROM
-					' . self::DBNAME . '
+					' . $this->sDbname . '
 				WHERE
-					metadata_id = ?
+					folio_id    = ?
 				AND
-					process      = ?
+					process        = ?
 				AND
-					status       = ?';
+					process_status = ?';
 
-		$aBindArray = array( $iMetaDataId
+		$aBindArray = array( $iFolioId
 						   , $sProcess
 						   , $sStatus );
 
@@ -135,14 +115,14 @@ class Item extends DbAbstract{
 	/*
 	 * @return boolean
 	 */
-	public function HaveAllProcessesEnded(){
+	public function HasProcessesEnded(){
 
 		$sSql = 'SELECT
 					*
 				FROM
-					' . self::DBNAME . '
+					' . $this->sDbname . '
 				WHERE
-					completed	= NULL;';
+					process_end_time = NULL;';
 
 		$result = $this->Execute( $sSql );
 

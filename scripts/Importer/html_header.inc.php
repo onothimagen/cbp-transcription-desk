@@ -22,43 +22,20 @@
  * @copyright 2013  University College London
  */
 
-namespace Classes\Entities;
+if( isset ( $_SERVER[ 'SCRIPT_FILENAME' ]) ){
 
-class Item extends EntityAbstract{
-
-
-	private $folio_id;
-	private $item_number;
-
-
-	/**
-	 * @param string $folio_id
-	 */
-	public function setFolioId( $folio_id ) {
-		$this->folio_id = $folio_id;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFolioId() {
-		return $this->folio_id;
-	}
-
-	/**
-	 * @param string $item_number
-	 */
-	public function setItemNumber( $item_number ) {
-		$this->item_number = $item_number;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getItemNumber() {
-		return $this->item_number;
-	}
-
-
+?>
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+	    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+	<link rel="icon" href="./favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+	<title><?php echo $sJobName; ?></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+<?php
 
 }
+

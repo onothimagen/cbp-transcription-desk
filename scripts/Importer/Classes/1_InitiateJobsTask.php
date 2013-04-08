@@ -24,28 +24,50 @@
 
 namespace Classes;
 
-$sJobName = 'Initiate Jobs';
+use Zend\Di\Di;
 
-require_once 'html_header.inc.php';
+use Classes\Entities\JobQueue as JobQueueEntity;
 
-require_once 'global.inc.php';
+use Classes\Db\JobQueue as JobQueueDb;
 
-require_once 'Classes\1_InitiateJobsTask.php';
-
-$oInitiateJobsTask = new InitiateJobsTask( $oDi );
+class InitiateJobsTask extends TaskAbstract{
 
 
-try {
-	$iJobQueueId = $oInitiateJobsTask->Execute();
+	public function __construct( Di $oDi ){
 
-} catch (Exception $e) {
- // Write to log
+		parent::__construct( $oDi );
+
+	}
+
+	/*
+	 * @return integer
+	 */
+	public function Execute(){
+
+		$oJobQueueDb             = $this->oJobQueueDb;
+
+		$bHaveAllProcessesEnded  = $oJobQueueDb->HaveAllProcessesEnded();
+
+		$oJobQueueEntity         = new JobQueueEntity;
+
+		$oJobQueueEntity->setUserId( 1 );
+
+		/*
+		 * If there are jobs still queued then add to the queue and exit
+		* TODO: We need a daemon to execute queued jobs
+		*/
+
+		if( $bHaveAllProcessesEnded === false){
+			$oJobQueueEntity->setStatus( 'queued' );
+			exit;
+		}else{
+			$oJobQueueEntity->setStatus( 'started' );
+		}
+
+		$iJobQueueId = $oJobQueueDb->Insert( $oJobQueueEntity );
+
+		return $iJobQueueId;
+
+	}
+
 }
-
-echo 'Job ' . $iJobQueueId . ' started <br />';
-
-/* Initiation of the Job was successful so start import of the CSV */
-
-require '2_ImportCsvIntoDbJob.php';
-
-require_once 'footer.inc.php';

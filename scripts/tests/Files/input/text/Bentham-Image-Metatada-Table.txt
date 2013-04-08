@@ -3,4 +3,5 @@ Box number|Folio number|Second folio number|Category|Recto/Verso|Creator|Recipie
 001|002||Text sheet|Recto|||Jeremy Bentham|Jeremy Bentham|Jeremy Bentham|||||||1800||Annuity Notes|3o / Abstract / War Loans|6|1|F129||M<…> 1798||1798||2
 098|001||Text sheet|Recto|||Jeremy Bentham|Jeremy Bentham||||||||1777|Method of treating each head of Offence|Penal Code||Not numbered|2|/ B6 / B8||[GR with crown motif] ProPatria [Britannia motif]||||31609
 098|002||Text sheet|Recto|||Jeremy Bentham|||||||||1777||Penal Code|Duels||1|F13 / F14||C & I HONIG|FR2; FR3||In French|31610
+098|002||Text sheet|Recto|||Jeremy Bentham|||||||||1777||Penal Code|Duels||1|F13 / F14||C & I HONIG|FR2; FR3||In French|31610
 

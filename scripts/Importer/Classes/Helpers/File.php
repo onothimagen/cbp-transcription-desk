@@ -1,5 +1,27 @@
 <?php
 
+/**
+ * Copyright (C) Ben Parish
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @package CBP Transcriptions
+ * @subpackage Importer
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
+ * @copyright 2013  Ben Parish
+ */
+
 namespace Classes\Helpers;
 
 class File {
@@ -78,7 +100,9 @@ class File {
 
 	}
 
-
+	/*
+	 *
+	 */
 	public function WriteDataToFile(  $sSourceLocation
 									 ,$sTargetLocation
 									 ,$sData ){
@@ -95,7 +119,9 @@ class File {
 
 	}
 
-
+	/*
+	 *
+	 */
 	public function WriteDataToTargetFile( 	 $sSourceLocation
 											,$sTargetLocation
 											,$sData ){
@@ -104,11 +130,7 @@ class File {
 			return true;
 		}
 
-		if( file_exists( $sSourceLocation ) === false ){
-			throw new \Classes\Exceptions\Importer( $sSourceLocation . ' passed to WriteDataToTargetFile() does not exist' );
-		}
-
-		// If x and y borders are the same length so just do a copy
+		$this->CheckExists( $sSourceLocation );
 
 		if( $sData === false ){
 			$bCopyResult = copy( $sSourceLocation, $sTargetLocation );
@@ -123,7 +145,9 @@ class File {
 
 	}
 
-
+	/*
+	 *
+	 */
 	public function CopyFilesOver( $sSrcDirectory, $sTargetDirectory ){
 
 		$aFiles = scandir( $sSrcDirectory );
@@ -146,7 +170,9 @@ class File {
 
 	}
 
-
+	/*
+	 *
+	 */
 	public function MoveFilesOver( $sSrcDirectory, $sTargetDirectory ){
 
 		$aFiles = scandir( $sSrcDirectory );
@@ -169,6 +195,9 @@ class File {
 
 	}
 
+	/*
+	 *
+	 */
 	public function CompressAndArchiveDirectory( $sDirectoryToBeArchived, $sArchiveLocation ){
 
 		$sDate	= date('Y-m-d');
@@ -193,7 +222,10 @@ class File {
 
 	}
 
-	private function ServerOS(){
+	/*
+	 *
+	 */
+	public function ServerOS(){
 
 		$sys = strtoupper( PHP_OS );
 
@@ -207,6 +239,10 @@ class File {
 
 	}
 
+
+	/*
+	 *
+	 */
 	public function DeleteDirectory( $sDirectory ) {
 
 	    $aFiles = scandir( $sDirectory );
@@ -228,6 +264,9 @@ class File {
 		rmdir( $sDirectory );
 	}
 
+	/*
+	 *
+	 */
 	public function EmptyDirectory( $sDirectory ){
 
 		$aFiles = scandir( $sDirectory );
@@ -252,11 +291,7 @@ class File {
 	*/
 	public function GetFileHandle( $sFilePath ){
 
-		$bFileExists = file_exists( $sFilePath );
-
-		if( $bFileExists === false ){
-			throw new \Classes\Exceptions\Importer( $sFilePath . ' does not exist<p />' );
-		}
+		$this->CheckExists( $sFilePath );
 
 		$hHandle = fopen( $sFilePath, 'r' );
 
@@ -265,6 +300,19 @@ class File {
 		}
 
 		return $hHandle;
+
+	}
+
+	/*
+	 *
+	 */
+	public function CheckExists( $sFilePath ){
+
+		$bFileExists = file_exists( $sFilePath );
+
+		if( $bFileExists === false ){
+			throw new \Classes\Exceptions\Importer( $sFilePath . ' does not exist<p />' );
+		}
 
 	}
 

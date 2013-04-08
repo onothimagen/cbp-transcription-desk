@@ -22,43 +22,29 @@
  * @copyright 2013  University College London
  */
 
-namespace Classes\Entities;
+namespace Classes;
 
-class Item extends EntityAbstract{
+$sJobName = 'Import XML into MW';
 
+require_once 'html_header.inc.php';
 
-	private $folio_id;
-	private $item_number;
+require_once 'global.inc.php';
 
+require_once 'Classes\5_ImportXmlIntoMwJobTask.php';
 
-	/**
-	 * @param string $folio_id
-	 */
-	public function setFolioId( $folio_id ) {
-		$this->folio_id = $folio_id;
-	}
+$oImportXmlIntoMwTask = new ImportXmlIntoMwJobTask( $oDi
+												  , $aSectionConfig
+												  , $iJobQueueId );
 
-	/**
-	 * @return string
-	 */
-	public function getFolioId() {
-		return $this->folio_id;
-	}
-
-	/**
-	 * @param string $item_number
-	 */
-	public function setItemNumber( $item_number ) {
-		$this->item_number = $item_number;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getItemNumber() {
-		return $this->item_number;
-	}
-
-
-
+try {
+	$oImportXmlIntoMwTask->Execute();
+} catch ( Exception $e ) {
+	// Write to log
 }
+
+echo 'Importing XML into MW completed <br />';
+
+//require_once '6_VerifyPages.php';
+
+
+require_once 'footer.inc.php';

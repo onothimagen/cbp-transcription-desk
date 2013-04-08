@@ -1,9 +1,31 @@
 <?php
 
+/**
+ * Copyright (C) University College London
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2, as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @package CBP Transcription
+ * @subpackage Importer
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
+ * @copyright 2013  University College London
+ */
+
 
 namespace Classes\Helpers;
 
-use Classes\Entities\MetaData as MetaDataEntity;
+use Classes\Entities\Folio as FolioEntity;
 
 
 class MwXml{
@@ -162,7 +184,7 @@ class MwXml{
 	/*
 	 * @return DOMDocument
 	 */
-	public function CreatePageElement(  MetaDataEntity $oEntity
+	public function CreatePageElement(  FolioEntity $oEntity
 									  , \DOMDocument   $oDomDocument
 									  ,                $sText ){
 
@@ -231,10 +253,10 @@ class MwXml{
 	/*
 	 *
 	 */
-	public function CreateMetaDataText(
-										  MetaDataEntity $oNextEntity
-										, MetaDataEntity $oEntity
-										, MetaDataEntity $oPrevEntity
+	public function CreateFolioText(
+										  FolioEntity $oNextEntity
+										, FolioEntity $oEntity
+										, FolioEntity $oPrevEntity
 										){
 
 		$sIdentifier = $this->CreateItemPath( $oEntity );
@@ -272,7 +294,7 @@ class MwXml{
 						, 'paper_producer'              => $oEntity->getPaperProducer()
 						, 'paper_produced_in_year'      => $oEntity->getPaperProducerInYear()
 						, 'notes_public'                => $oEntity->getNotesPublic()
-						, 'id_number'                   => $oEntity->getItemId()
+						, 'id_number'                   => $oEntity->getItemNumber()
 						, 'image_number'                => $oEntity->getItemNumber()
 						, 'identifier'                  => $sIdentifier
 						, 'next'                        => $sNext
@@ -295,7 +317,7 @@ class MwXml{
 	/*
 	 *
 	 */
-	public function CreatePageText( MetaDataEntity $oEntity ){
+	public function CreatePageText( FolioEntity $oEntity ){
 
 		$sItemPath = $this->CreateItemPath( $oEntity );
 
@@ -318,7 +340,7 @@ TEXTBLOCK;
 	/*
 	 *
 	 */
-	private function CreateItemPath( MetaDataEntity $oEntity ){
+	private function CreateItemPath( FolioEntity $oEntity ){
 
 		$sPrefix      = $this->sPagePrefix;
 
