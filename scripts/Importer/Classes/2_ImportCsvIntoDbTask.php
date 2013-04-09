@@ -34,6 +34,7 @@ use Classes\Db\Folio    as FolioDb;
 use Classes\Db\Item     as ItemDb;
 use Classes\Db\ErrorLog as ErrorLogDb;
 
+use Classes\Entities\JobQueue as JobQueueEntity;
 use Classes\Entities\Box      as BoxEntity;
 use Classes\Entities\Folio    as FolioEntity;
 use Classes\Entities\Item     as ItemEntity;
@@ -69,7 +70,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	public function __construct(  Di				  $oDi
 								, CsvRowToFolioEntity $oCsvRowToFolioEntityMapper
 								,                     $aSectionConfig
-								,                     $iJobQueueId ){
+								, JobQueueEntity      $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
@@ -77,7 +78,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->sCsvFilePath = $aSectionConfig[ 'path.csv.import' ];
 
-		$this->iJobQueueId  = $iJobQueueId;
+		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
 		$this->oBoxEntity   = new BoxEntity();
 

@@ -32,9 +32,10 @@ use Classes\Db\Box   as BoxDb;
 use Classes\Db\Folio as FolioDb;
 use Classes\Db\Item  as ItemDb;
 
-use Classes\Entities\Box   as BoxEntity;
-use Classes\Entities\Folio as FolioEntity;
-use Classes\Entities\Item  as ItemEntity;
+use Classes\Entities\JobQueue as JobQueueEntity;
+use Classes\Entities\Box      as BoxEntity;
+use Classes\Entities\Folio    as FolioEntity;
+use Classes\Entities\Item     as ItemEntity;
 
 use Classes\Helpers\File   as FileHelper;
 
@@ -53,9 +54,9 @@ class SliceImagesTask  extends TaskAbstract{
 	private $iJobQueueId;
 
 
-	public function __construct( Di $oDi
-								,   $aSectionConfig
-								,   $iJobQueueId ){
+	public function __construct(  Di             $oDi
+								,                $aSectionConfig
+								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
@@ -64,7 +65,7 @@ class SliceImagesTask  extends TaskAbstract{
 		$this->sArchivePath     = $aSectionConfig[ 'path.archive' ];
 		$this->sSlicerPath      = $aSectionConfig[ 'path.slicer'];
 
-		$this->iJobQueueId      = $iJobQueueId;
+		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
 		$this->sProcess         = 'slice';
 
@@ -113,8 +114,11 @@ class SliceImagesTask  extends TaskAbstract{
 			$this->oBoxDb->UpdateProcessStatus( $iBoxId, 'slice', 'started' );
 
 			try {
+
 				$this->SliceFolios( $oBoxEntity );
+
 			} catch ( ImporterException $oException ) {
+
 				$this->HandleError( $oException, $oBoxEntity );
 			}
 
@@ -171,14 +175,15 @@ class SliceImagesTask  extends TaskAbstract{
 			$iItemId = $oItemEntity->getId();
 
 			$this->oItemDb->UpdateProcessStatus(
-													$iItemId
-													, 'slice'
-													, 'started'
-													);
-
-
+												$iItemId
+												, 'slice'
+												, 'started'
+												);
 			try {
+
 				$sImagePath = $this->ConstructImagePath( $oBoxEntity, $oFolioEntity, $oItemEntity );
+
+				// During development Comment this out to skip actual slicing
 				$this->SliceImage( $sImagePath );
 
 			} catch ( ImporterException $oException ) {
@@ -186,13 +191,11 @@ class SliceImagesTask  extends TaskAbstract{
 			}
 
 			$this->oItemDb->UpdateProcessStatus(
-													$iItemId
-													, 'slice'
-													, 'completed'
-													);
+												$iItemId
+												, 'slice'
+												, 'completed'
+												);
 		}
-
-
 
 	}
 
@@ -218,7 +221,7 @@ class SliceImagesTask  extends TaskAbstract{
 		$sFullImagePath = $sRootPath . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
 
 		if( file_exists( $sFullImagePath ) === false ){
-			throw new \Classes\Exceptions\Importer( $sFullImagePath . ' passed to SliceImage() does not exist' );
+			throw new ImporterException( $sFullImagePath . ' passed to SliceImage() does not exist' );
 		}
 
 		return $sFullImagePath;
@@ -236,14 +239,21 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$sCommand       = str_replace('\\', '/', $sCommand );
 
-		//echo $sCommand . '< p />';
-
 		ob_start();
 		passthru( $sCommand );
-		$perlreturn = ob_get_contents();
+		$sPerlOutput = ob_get_contents();
 		ob_end_clean();
 
-		//echo $perlreturn;
+		// Strip out verbose statements and excess carriage returns in Windows
+		if( $this->oFile->ServerOS() == 'WIN' ){
+			$sPerlOutput = str_replace( "        1 file(s) moved.\r\n", '', $sPerlOutput );
+		}
+
+		if( strpos( strtolower( $sPerlOutput ), 'Error' ) === true ){
+			throw new ImporterException( 'Slicer failed when executing command ' . $sCommand . ', Output returned: ' . $sPerlOutput );
+		}
+
+		echo $sPerlOutput . '<p />';
 
 	}
 
@@ -257,6 +267,7 @@ class SliceImagesTask  extends TaskAbstract{
 										, 'import'
 										, 'completed'
 										  );
+
 	}
 
 

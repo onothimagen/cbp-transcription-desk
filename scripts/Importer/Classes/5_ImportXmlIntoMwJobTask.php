@@ -24,7 +24,10 @@
 
 namespace Classes;
 
-use Classes\Helpers\File as FileHelper;
+use Zend\Di\Di;
+
+use Classes\Helpers\File      as FileHelper;
+use Classes\Entities\JobQueue as JobQueueEntity;
 
 
 class ImportXmlIntoMwJobTask extends TaskAbstract{
@@ -35,17 +38,22 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 	private $iJobQueueId;
 
-	public function __construct(  $oDi
-								, $aSectionConfig
-								, $iJobQueueId ){
+	private $oJobQueueEntity;
+
+
+	public function __construct(  Di             $oDi
+								,                $aSectionConfig
+								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
-		$this->sXMLExportPath   = $aSectionConfig[ 'path.xml.export' ];
+		$this->sXMLExportPath  = $aSectionConfig[ 'path.xml.export' ];
 
-		$this->sMwImporterPath	= $aSectionConfig[ 'path.mw.importer' ];
+		$this->sMwImporterPath = $aSectionConfig[ 'path.mw.importer' ];
 
-		$this->iJobQueueId      = $iJobQueueId;
+		$this->oJobQueueEntity = $oJobQueueEntity;
+
+		$this->iJobQueueId     = $oJobQueueEntity->getId();
 
 		$this->sProcess        = 'import_mw';
 
@@ -58,7 +66,13 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		$this->ImportXmlIntoMw();
+		try {
+			$this->ImportXmlIntoMw();
+		} catch ( ImporterException $oException ) {
+			$this->HandleError( $oException, $this->oJobQueueEntity );
+
+		}
+
 
 	}
 
@@ -84,7 +98,11 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 		$sPhpOutput = ob_get_contents();
 		ob_end_clean();
 
-		echo $sPhpOutput;
+		echo $sPhpOutput . '<p />';
+
+		if(strpos( $sPhpOutput, 'Done!') === false ){
+			throw new ImporterException( 'Done! was not returned by MW\'s importDump.php utility. Output returned: ' . $sPhpOutput );
+		}
 
 
 	}

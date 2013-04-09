@@ -34,16 +34,21 @@ require_once 'Classes\3_SliceImagesTask.php';
 
 $oSliceImagesTask = new SliceImagesTask(  $oDi
 										, $aSectionConfig
-										, $iJobQueueId );
+										, $oJobQueueEntity );
 
+echo 'Image slicing started <br />';
 
 try {
 	$oSliceImagesTask->Execute();
 } catch ( Exception $e ) {
-	// Write to log
+
+	/* @var $oJobQueueDb JobQueue */
+	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
+
+	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
 }
 
-echo 'Image slicing completed <br />';
+echo 'Image slicing completed <p />';
 
 require '4_ExportXmlJob.php';
 

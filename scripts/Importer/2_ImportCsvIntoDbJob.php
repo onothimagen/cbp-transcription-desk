@@ -41,7 +41,9 @@ $oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToFolioEntity();
 $oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
 											             , $oCsvRowToMetatDataEntityMapper
 														 , $aSectionConfig
-														 , $iJobQueueId );
+														 , $oJobQueueEntity );
+
+echo 'Import from CSV started <br />';
 
 try {
 	$oImportCsvIntoDbTask->Execute();
@@ -54,7 +56,8 @@ try {
 
 }
 
-echo 'Import from CSV completed <br />';
+echo 'Import from CSV completed <p />';
+
 
 /* Import of the Folio and Items was successful so start slicing the images */
 require '3_SliceImagesJob.php';

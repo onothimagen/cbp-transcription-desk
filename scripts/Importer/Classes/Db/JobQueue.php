@@ -88,7 +88,9 @@ class JobQueue extends DbAbstract{
 
 		$oJobQueueId = $this->oAdapter->getDriver()->getLastGeneratedValue();
 
-		return $oJobQueueId;
+		$oJobQueueEntity->setId( $oJobQueueId );
+
+		return $oJobQueueEntity;
 
 	}
 

@@ -125,36 +125,7 @@ require_once 'Classes/TaskAbstract.php';
 
 if( $sConfigSection === 'development' ){
 
-	/*****************************************
-	 * SETUP FOR TESTING
-	*****************************************/
-
-	$oJobQueueDb  = new Classes\Db\JobQueue( $oAdapter );
-	$oBoxDb       = new Classes\Db\Box( $oAdapter );
-	$oFolioDb     = new Classes\Db\Folio( $oAdapter );
-	$oItemDb      = new Classes\Db\Item( $oAdapter );
-	$oErrorLogDb  = new Classes\Db\ErrorLog( $oAdapter );
-
-	$oFile    = new Classes\Helpers\File();
-
-	$oJobQueueDb->Truncate();
-	$oBoxDb->Truncate();
-	$oFolioDb->Truncate();
-	$oItemDb->Truncate();
-	$oErrorLogDb->Truncate();
-
-	$sImageDir = $aSectionConfig[ 'path.image.export' ] . '\001';
-
-	if( file_exists( $sImageDir ) ){
-		$oFile->DeleteDirectory( $sImageDir );
-	}
-
-	$sXML      = $aSectionConfig[ 'path.xml.export' ];
-
-	if( file_exists( $sXML ) ){
-		$oFile->EmptyDirectory( $sXML );
-
-	}
+ require 'test_scripts.inc.php';
 
 }
 

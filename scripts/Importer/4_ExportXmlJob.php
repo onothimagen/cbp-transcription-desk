@@ -34,16 +34,21 @@ require_once 'Classes\4_ExportXMLTask.php';
 
 $oExportXmlTask = new ExportXMLTask( $oDi
 								   , $aSectionConfig
-								   , $iJobQueueId );
+								   , $oJobQueueEntity );
 
+echo 'XML export started <br />';
 
 try {
 	$oExportXmlTask->Execute();
 } catch ( Exception $e ) {
-	// Write to log
+
+	/* @var $oJobQueueDb JobQueue */
+	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
+
+	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
 }
 
-echo 'XML export completed <br />';
+echo 'XML export completed <p />';
 
 require_once '5_ImportXmlIntoMwJob.php';
 

@@ -26,6 +26,7 @@ namespace Classes;
 
 use Zend\Di\Di;
 
+
 use Classes\Entities\JobQueue as JobQueueEntity;
 
 use Classes\Db\JobQueue as JobQueueDb;
@@ -40,7 +41,7 @@ class InitiateJobsTask extends TaskAbstract{
 	}
 
 	/*
-	 * @return integer
+	 * @return JobQueueEntity
 	 */
 	public function Execute(){
 
@@ -64,9 +65,9 @@ class InitiateJobsTask extends TaskAbstract{
 			$oJobQueueEntity->setStatus( 'started' );
 		}
 
-		$iJobQueueId = $oJobQueueDb->Insert( $oJobQueueEntity );
+		$oJobQueueEntity = $oJobQueueDb->Insert( $oJobQueueEntity );
 
-		return $iJobQueueId;
+		return $oJobQueueEntity;
 
 	}
 

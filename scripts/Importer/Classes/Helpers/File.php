@@ -24,6 +24,8 @@
 
 namespace Classes\Helpers;
 
+use Classes\Exceptions\Importer as ImporterException;
+
 class File {
 
 	/*
@@ -32,21 +34,21 @@ class File {
 	public function Write( $sFile, $sData ){
 
 		if( trim( $sFile ) === '' ){
-			throw new \Classes\Exceptions\Importer( '$sFile passed to Write() is empty' );
+			throw new ImporterException( '$sFile passed to Write() is empty' );
 		}
 
 		if( trim( $sData ) === '' ){
-			throw new \Classes\Exceptions\Importer( '$sData passed to Write() is empty' );
+			throw new ImporterException( '$sData passed to Write() is empty' );
 		}
 
 		$bBytesWritten = file_put_contents( $sFile, $sData );
 
 		if ( $bBytesWritten !== true ) {
-			throw new \Classes\Exceptions\Importer( 'Cannot write $sData to ' . $sFile );
+			throw new ImporterException( 'Cannot write $sData to ' . $sFile );
 		}
 
 		if( file_exists( $sFile ) === false ){
-			throw new \Classes\Exceptions\Importer( 'Failed to create $sFile: ' . $sFile );
+			throw new ImporterException( 'Failed to create $sFile: ' . $sFile );
 		}
 
 	}
@@ -65,13 +67,13 @@ class File {
 		// Create empty file to hold uncompressed data
 		$hOutPutFile = fopen( $sDecompressedFileName, 'wb' );
 		if( $hOutPutFile === false ){
-			throw new \Classes\Exceptions\Importer( 'fopen() failed to open ' . $sDecompressedFileName );
+			throw new ImporterException( 'fopen() failed to open ' . $sDecompressedFileName );
 		}
 
 		// Read from the source file, uncompress, and write to output file
 		$hInputFile = gzopen( $sCompressedFileName, 'rb' );
 		if( $hInputFile === false ){
-			throw new \Classes\Exceptions\Importer( 'gzopen() failed to open ' . $sCompressedFileName );
+			throw new ImporterException( 'gzopen() failed to open ' . $sCompressedFileName );
 		}
 
 
@@ -79,12 +81,12 @@ class File {
 
 			$sReadData = gzread( $hInputFile, $sBufferSize );
 			if( $sReadData === false ){
-				throw new \Classes\Exceptions\Importer( 'gzread() failed to read ' . $sCompressedFileName );
+				throw new ImporterException( 'gzread() failed to read ' . $sCompressedFileName );
 			}
 
 		    $bWriteResult = fwrite( $hOutPutFile, $sReadData );
 		    if( $bWriteResult === false ){
-		    	throw new \Classes\Exceptions\Importer( 'fwrite() failed to write data to  ' . $sDecompressedFileName );
+		    	throw new ImporterException( 'fwrite() failed to write data to  ' . $sDecompressedFileName );
 		    }
 		}
 
@@ -94,7 +96,7 @@ class File {
 		gzclose( $hInputFile );
 
 		if( file_exists( $sDecompressedFileName ) === false ){
-			throw new \Classes\Exceptions\Importer( 'Failed to decompress to ' . $sDecompressedFileName );
+			throw new ImporterException( 'Failed to decompress to ' . $sDecompressedFileName );
 		}
 		return $sDecompressedFileName;
 
@@ -135,7 +137,7 @@ class File {
 		if( $sData === false ){
 			$bCopyResult = copy( $sSourceLocation, $sTargetLocation );
 			if( $bCopyResult == false ){
-				throw new \Classes\Exceptions\Importer( 'Unable to copy ' . $sSourceLocation . ' to ' . $sTargetLocation );
+				throw new ImporterException( 'Unable to copy ' . $sSourceLocation . ' to ' . $sTargetLocation );
 			}
 			return true;
 		}
@@ -217,7 +219,7 @@ class File {
 		$results	= system( $sScript, $sRetval );
 
 		if( !file_exists( $sArchiveLocation ) ){
-			throw new \Classes\Exceptions\Importer( ' Failed to create ArchiveLocation: ' . $sArchiveLocation );
+			throw new ImporterException( ' Failed to create ArchiveLocation: ' . $sArchiveLocation );
 		}
 
 	}
@@ -261,7 +263,9 @@ class File {
 				}
 			}
 		}
-		rmdir( $sDirectory );
+		if( is_dir( $sDirectory )){
+			rmdir( $sDirectory );
+		}
 	}
 
 	/*
@@ -296,7 +300,7 @@ class File {
 		$hHandle = fopen( $sFilePath, 'r' );
 
 		if( $hHandle === false ){
-			throw new \Classes\Exceptions\Importer( 'Cannot open ' . $sFilePath );
+			throw new ImporterException( 'Cannot open ' . $sFilePath );
 		}
 
 		return $hHandle;
@@ -311,7 +315,7 @@ class File {
 		$bFileExists = file_exists( $sFilePath );
 
 		if( $bFileExists === false ){
-			throw new \Classes\Exceptions\Importer( $sFilePath . ' does not exist<p />' );
+			throw new ImporterException( $sFilePath . ' does not exist<p />' );
 		}
 
 	}

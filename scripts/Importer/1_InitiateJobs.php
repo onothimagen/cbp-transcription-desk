@@ -36,16 +36,50 @@ $oInitiateJobsTask = new InitiateJobsTask( $oDi );
 
 
 try {
-	$iJobQueueId = $oInitiateJobsTask->Execute();
+	$oJobQueueEntity = $oInitiateJobsTask->Execute();
 
 } catch (Exception $e) {
  // Write to log
 }
 
-echo 'Job ' . $iJobQueueId . ' started <br />';
+echo 'Job ' . $oJobQueueEntity->getId() . ' started <br />';
 
 /* Initiation of the Job was successful so start import of the CSV */
 
 require '2_ImportCsvIntoDbJob.php';
 
 require_once 'footer.inc.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

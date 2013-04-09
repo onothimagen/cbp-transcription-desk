@@ -53,10 +53,10 @@ sub slice {
 #
 ###############################################################################
 
-	if ($#_ > 1) { $retVal = "slice: Too many arguements (I only take one, two tops, thanks)"; return $retVal; }
+	if ($#_ > 1) { $retVal = "Error: slice() Too many arguements (I only take one, two tops, thanks)"; return $retVal; }
 	my $sourceImg = $_[0];
 
-	unless (-e $sourceImg) { $retVal = "slice: Source image '$sourceImg' unfound"; return $retVal; }
+	unless (-e $sourceImg) { $retVal = "Error: slice() Source image '$sourceImg' unfound"; return $retVal; }
 
 	my @suffixen = (".png",".jpg",".tif");
 	my ($srcName, $srcPath, $srcSuffix) = fileparse($sourceImg, @suffixen);
@@ -67,7 +67,7 @@ sub slice {
 	if (-d "$srcPath/$slice") { 
 		eval { rmtree("$srcPath/$slice") };
 		if ($@) {
-			$retVal = "slice: Couldn't remove existing $srcPath/$slice: $@";
+			$retVal = "Error: slice() Couldn't remove existing $srcPath/$slice: $@";
 			return $retVal;
 		}
 	}
@@ -79,16 +79,16 @@ sub slice {
 
 	if ($_[1]) {
 		$outputPath = $_[1];
-		unless (-d $outputPath) { $retVal = "slice: $outputPath does not look like a directory"; return $retVal; }
+		unless (-d $outputPath) { $retVal = "Error: slice() $outputPath does not look like a directory"; return $retVal; }
 		$outputPath = $outputPath.$slice;
 	} else {
-		chdir $srcPath or die "slice: chdir $srcPath died:$!\n";
+		chdir $srcPath or die "Error: slice() chdir $srcPath died:$!\n";
 		$outputPath = "./$slice";
 	}
 
 	eval { mkpath($outputPath) };
 	if ($@) {
-		$retVal = "slice: Couldn't create $outputPath: $@";
+		$retVal = "Error: slice() Couldn't create $outputPath: $@";
 		return $retVal;
 	}
 
@@ -217,7 +217,7 @@ sub slice {
 
 	eval { mkdir ($tileGroup) };
 	if ($@) {
-		$retVal = "slice: Cannot create $tileGroup: $@";
+		$retVal = "Error: slice() Cannot create $tileGroup: $@";
 		return $retVal;
 	}
 	
@@ -264,7 +264,7 @@ sub slice {
 				
 				@moveCMD = ("$sysMove", $arg1, $arg2);
 				
-				system(@moveCMD) == 0 or return "slice: @moveCMD failed: $?";
+				system(@moveCMD) == 0 or return "Error: slice() @moveCMD failed: $?";
 				
 				if ($dirTotal == 256) {
 					$tileGroupNum++;
@@ -272,7 +272,7 @@ sub slice {
 					
 					eval { mkdir ($tileGroup) };
 					if ($@) {
-						$retVal = "slice: Cannot create $tileGroup: $@";
+						$retVal = "Error: slice() Cannot create $tileGroup: $@";
 						return $retVal;
 					}
 					$dirTotal = 0;
@@ -284,11 +284,11 @@ sub slice {
 	#assuming everyting else went well, create the XML and
 	#call it a day
 
-	open (XML, ">$outputPath/ImageProperties.xml") or return "slice: couldn't creat $outputPath/ImageProperties.xml: $!";
+	open (XML, ">$outputPath/ImageProperties.xml") or return "Error: slice() couldn't creat $outputPath/ImageProperties.xml: $!";
 	print XML "<IMAGE_PROPERTIES WIDTH=\"$xmlWidth\" HEIGHT=\"$xmlHeight\" NUMTILES=\"$numTiles\" VERSION=\"1.8\" TILESIZE=\"$tileSize\" />";
 	close XML;
 
-	chdir $importantCWD or die "Couldn't chdir back where we started in $importantCWD: $!";
+	chdir $importantCWD or die "Error: Couldn't chdir back where we started in $importantCWD: $!";
 
 	return '';
 }

@@ -38,10 +38,10 @@ my $output_path = '';
 $result = GetOptions (  'input_file=s'  => \$input_file
 		      		  , 'output_path=s' => \$output_path );
 		      		  
-unless ( -e $input_file )  { die( "The input file $input_file does not exist\n" ); }		      		  
-unless ( -d $output_path ) { die( "The output path $output_path does not exist\n" ); }		      		
+unless ( -e $input_file )  { die( "Error: The input file $input_file does not exist\n" ); }		      		  
+unless ( -d $output_path ) { die( "Error: The output path $output_path does not exist\n" ); }		      		
 
-die "$input_file is not a JPEG file" unless ($input_file =~ /\.jpg$/);
+die "Error: $input_file is not a JPEG file" unless ($input_file =~ /\.jpg$/);
 
 my $file_full_path = abs_path( $input_file );
 
@@ -55,7 +55,7 @@ my $full_path = $file_full_path;
 
 # For example
 
-$full_path =~ m/.+(\d\d\d)\/(\d\d\d_\d\d\d_\d\d\d)$/ || die( "The input file $full_path is not in the correct format. It must contain a string in the following format: ddd/ddd_ddd_ddd e.g. /168/168_002_001" );
+$full_path =~ m/.+(\d\d\d)\/(\d\d\d_\d\d\d_\d\d\d)$/ || die( "Error: The input file $full_path is not in the correct format. It must contain a string in the following format: ddd/ddd_ddd_ddd e.g. /168/168_002_001" );
 
 my $box       = $1; # e.g. 070
 my $file_name = $2; # e.g. 070_001_001
@@ -72,7 +72,7 @@ print "Creating directory $output_path\n";
 
 mkdir $output_path;
 
-unless ( -d $output_path ) { die( "Failed to create the output path $output_path\n" ); }	
+unless ( -d $output_path ) { die( "Error: Failed to create the output path $output_path\n" ); }	
 
 my $tmp_output_path    = $output_path . 'slice';
 
@@ -87,11 +87,11 @@ print "Processing $file_full_path\n";
 $fault = slice( $input_file, $output_path );
 warn $fault if $fault;
 
-unless ( -d $tmp_output_path ) { die( "slice failed to create $tmp_output_path\n" ); }
+unless ( -d $tmp_output_path ) { die( "Error: slice failed to create $tmp_output_path\n" ); }
 
 print "moving $tmp_output_path to $target_output_path\n";
 
-rename(  $tmp_output_path, $target_output_path ) || die ( "Error in renaming $tmp_output_path to $target_output_path\n" );
+rename(  $tmp_output_path, $target_output_path ) || die ( "Error: Renaming $tmp_output_path to $target_output_path failed\n" );
 
 
 

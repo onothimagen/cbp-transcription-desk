@@ -34,15 +34,22 @@ require_once 'Classes\5_ImportXmlIntoMwJobTask.php';
 
 $oImportXmlIntoMwTask = new ImportXmlIntoMwJobTask( $oDi
 												  , $aSectionConfig
-												  , $iJobQueueId );
+												  , $oJobQueueEntity );
+
+echo 'Importing XML into MW started <br />';
 
 try {
+
 	$oImportXmlIntoMwTask->Execute();
 } catch ( Exception $e ) {
-	// Write to log
+
+	/* @var $oJobQueueDb JobQueue */
+	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
+
+	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
 }
 
-echo 'Importing XML into MW completed <br />';
+echo 'Importing XML into MW completed <p />';
 
 //require_once '6_VerifyPages.php';
 

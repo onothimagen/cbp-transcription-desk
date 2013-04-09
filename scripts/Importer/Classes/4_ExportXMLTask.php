@@ -6,7 +6,8 @@ use Zend\Di\Di;
 
 use Zend\Db\ResultSet\ResultSet;
 
-use Classes\Entities\Folio as FolioEntity;
+use Classes\Entities\JobQueue as JobQueueEntity;
+use Classes\Entities\Folio    as FolioEntity;
 
 use Classes\Db\Box   as BoxDb;
 use Classes\Db\Folio as FolioDb;
@@ -36,9 +37,9 @@ class ExportXMLTask extends TaskAbstract{
 	private $oMwXml;
 
 
-	public function __construct( Di $oDi
-								,   $aSectionConfig
-								,   $iJobQueueId ){
+	public function __construct(  Di             $oDi
+								,                $aSectionConfig
+								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
@@ -47,7 +48,7 @@ class ExportXMLTask extends TaskAbstract{
 		$this->sImageExportPath = $aSectionConfig[ 'path.image.export' ];
 		$this->sArchivePath     = $aSectionConfig[ 'path.archive' ];
 
-		$this->iJobQueueId      = $iJobQueueId;
+		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
 		/* @var MwXml */
 		$this->oMwXml           = $oDi->get( 'Classes\Helpers\MwXml' );
@@ -64,7 +65,7 @@ class ExportXMLTask extends TaskAbstract{
 	public function Execute(){
 
 
-		$this->oDomDocument         = $this->oMwXml->InitialiseDocument();
+		$this->oDomDocument      = $this->oMwXml->InitialiseDocument();
 
 		$aFolioCollection        = $this->GetFolioItems();
 
