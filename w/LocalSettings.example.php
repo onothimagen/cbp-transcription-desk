@@ -33,17 +33,52 @@ $wgImplicitGroups[]                               = 'emailconfirmed';
 $wgGroupPermissions[ 'emailconfirmed' ][ 'edit' ] = true;
 
 #############################################################
-# PROTECT NAMESPACES FROM EDITING
+# DEFINE NAMESPACES AND PROTECT FROM EDITING
 #############################################################
 
-$wgGroupPermissions[ '*' ]     [ 'edittype' ] = false;
-$wgGroupPermissions[ '*' ]     [ 'edithelp' ] = false;
-$wgGroupPermissions[ 'sysop' ] [ 'edittype' ] = true;
-$wgGroupPermissions[ 'sysop' ] [ 'edithelp' ] = true;
-$wgGroupPermissions[ 'user' ]  [ 'upload'   ] = true;
+
+define("NS_METADATA", 100);
+define("NS_METADATA_TALK", 101);
+
+$wgExtraNamespaces[NS_METADATA]      = 'Metadata';
+$wgExtraNamespaces[NS_METADATA_TALK] = 'Metadata_talk';
+$wgNamespaceProtection[NS_METADATA]  = array( 'editmetadata' ); #permission "editmetaata" required to edit the Metadata namespace
+
+$wgGroupPermissions['sysop']['editmetadata'] = true;      #permission "editmetadata" granted to users in the "sysop" group
+
+#Set default searching
+$wgNamespacesToBeSearchedDefault = array(
+										NS_MAIN           => true,
+										NS_TALK           => false,
+										NS_USER           => false,
+										NS_USER_TALK      => false,
+										NS_PROJECT        => false,
+										NS_PROJECT_TALK   => false,
+										NS_IMAGE          => false,
+										NS_IMAGE_TALK     => false,
+										NS_MEDIAWIKI      => false,
+										NS_MEDIAWIKI_TALK => false,
+										NS_TEMPLATE       => false,
+										NS_TEMPLATE_TALK  => false,
+										NS_HELP           => false,
+										NS_HELP_TALK      => false,
+										NS_CATEGORY       => false,
+										NS_CATEGORY_TALK  => false,
+										NS_METADATA       => true,
+										NS_METADATA_TALK  => false
+										);
 
 $wgNamespaceProtection[ NS_HELP ]    = array( 'edithelp' );
 $wgNamespacesWithSubpages[ NS_HELP ] = true;
+
+$wgNamespaceProtection[NS_HELP] = array('edithelp');
+$wgNamespacesWithSubpages[NS_HELP] = true;
+
+$wgNamespaceProtection[104]     = array('edittype');
+$wgNamespacesWithSubpages[104]  = true;
+
+$wgNamespaceProtection[102]     = array('editproperty');
+$wgNamespacesWithSubpages[102]  = true;
 
 
 #############################################################
@@ -108,6 +143,12 @@ efConfigureSetup();
 // Array of editable settings. If this is a non-empty array only the settings in this array will be allowed to be modified
 $wgConfigureEditableSettings = array();
 
+$wgGroupPermissions[ '*' ]     [ 'edittype' ]		= false;
+$wgGroupPermissions[ '*' ]     [ 'edithelp' ]		= false;
+$wgGroupPermissions[ 'sysop' ] [ 'edittype' ]		= true;
+$wgGroupPermissions[ 'sysop' ] [ 'edithelp' ]		= true;
+$wgGroupPermissions[ 'user' ]  [ 'upload' ]  		= true;
+
 ############################
 # UserMerge/delete Extension
 ############################
@@ -127,16 +168,8 @@ require_once( 'DataValues/DataValues.php' );
 require_once( 'Validator/Validator.php' );
 
 require_once( 'SemanticMediaWiki/SemanticMediaWiki.php' );
-enableSemantics('http://w02.benpro.wf.ulcc.ac.uk');
+enableSemantics('http://www.ac.uk');
 
-$wgNamespaceProtection[104] 	         = array('edittype');
-$wgNamespacesWithSubpages[104] 	         = true;
-
-$wgGroupPermissions['*']	['edittype'] = false;
-$wgGroupPermissions['sysop']['edittype'] = true;
-
-$wgNamespaceProtection[102]                  = array('editproperty');
-$wgNamespacesWithSubpages[102]               = true;
 $wgGroupPermissions['*']	['editproperty'] = false;
 $wgGroupPermissions['sysop']['editproperty'] = true;
 
