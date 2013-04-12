@@ -26,9 +26,12 @@ namespace Classes;
 
 use Zend\Di\Di;
 
+use Classes\Db\Box            as BoxDb;
+
 use Classes\Helpers\File      as FileHelper;
 use Classes\Entities\JobQueue as JobQueueEntity;
 
+use Classes\Exceptions\Importer as ImporterException;
 
 class ImportXmlIntoMwJobTask extends TaskAbstract{
 
@@ -36,26 +39,26 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 	private $sMwImporterPath;
 
-	private $iJobQueueId;
-
 	private $oJobQueueEntity;
 
 
 	public function __construct(  Di             $oDi
-								,                $aSectionConfig
+								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
-		$this->sXMLExportPath  = $aSectionConfig[ 'path.xml.export' ];
+		$this->sXMLExportPath  = $aConfig[ 'path.xml.export' ];
 
-		$this->sMwImporterPath = $aSectionConfig[ 'path.mw.importer' ];
+		$this->sMwImporterPath = $aConfig[ 'path.mw.importer' ];
 
 		$this->oJobQueueEntity = $oJobQueueEntity;
 
 		$this->iJobQueueId     = $oJobQueueEntity->getId();
 
 		$this->sProcess        = 'import_mw';
+
+		$this->sPreviousProcess = 'export';
 
 	}
 
@@ -67,12 +70,28 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 	public function Execute(){
 
 		try {
+			$sProcess = $this->sProcess;
+			$iJobQueueId = $this->iJobQueueId;
+			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
+			$this->CheckPaths();
 			$this->ImportXmlIntoMw();
+			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
 		} catch ( ImporterException $oException ) {
 			$this->HandleError( $oException, $this->oJobQueueEntity );
 
 		}
 
+
+	}
+
+
+	/*
+	 *
+	*/
+	private function CheckPaths(){
+
+		$this->oFile->CheckExists( 'XMLExportPath', $this->sXMLExportPath );
+		$this->oFile->CheckExists( 'MwImporterPath', $this->sMwImporterPath );
 
 	}
 
@@ -85,7 +104,9 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 		$sXmlFileName = $this->sXMLExportPath . DIRECTORY_SEPARATOR . $this->iJobQueueId . '.xml';
 
-		$sPhpPath = 'php';
+		$this->oFile->CheckExists( 'XmlFileName', $sXmlFileName );
+
+		$sPhpPath     = 'php';
 
 		if( $this->oFile->ServerOS() == 'WIN' ){
 			$sPhpPath = 'php-cgi';

@@ -35,16 +35,18 @@ class Folio extends DbAbstract{
 	 */
 	public function __construct( $oAdapter ){
 		parent::__construct( $oAdapter );
-		$this->sDbname = 'cbp_folios';
+		$this->sTableName = 'cbp_folios';
 	}
 
 	/*
-	 * @return
+	 * @return FolioEntity;
 	 */
 	public function Insert( FolioEntity $oFolioEntity ){
 
+		$iInsertId = $this->oAdapter->getDriver()->getLastGeneratedValue();
+
 		$sSql = 'INSERT INTO
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 								(
 									  id_number
 									, box_id
@@ -116,8 +118,7 @@ class Folio extends DbAbstract{
 									, NOW()
 									, NOW()
 								)
-							ON DUPLICATE KEY UPDATE
-								updated = VALUES(updated);';
+							ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id);';
 
 		$aBindArray = array (  (int) $oFolioEntity->getIdNumber()
 								 , $oFolioEntity->getBoxId()
@@ -152,14 +153,7 @@ class Folio extends DbAbstract{
 
 		$Result = $this->Execute( $sSql, $aBindArray );
 
-
 		$iInsertId = $this->oAdapter->getDriver()->getLastGeneratedValue();
-
-		// Duplicate found
-
-		if( $iInsertId === '0' ){
-			return false;
-		}
 
 		$oFolioEntity->setId( (int) $iInsertId );
 
@@ -181,7 +175,7 @@ class Folio extends DbAbstract{
 		$sSql = 'SELECT
 					*
 				FROM
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				WHERE
 					box_id  = ?
 				AND
@@ -204,9 +198,9 @@ class Folio extends DbAbstract{
 
 
 
-	
-	
-	
+
+
+
 }
 
 

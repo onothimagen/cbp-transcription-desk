@@ -34,7 +34,7 @@ class Item extends DbAbstract{
 	*/
 	public function __construct( $oAdapter ){
 		parent::__construct( $oAdapter );
-		$this->sDbname = 'cbp_items';
+		$this->sTableName = 'cbp_items';
 	}
 
 
@@ -44,7 +44,7 @@ class Item extends DbAbstract{
 	public function Insert ( ItemEntity  $oItemEntity ){
 
 		$sSql = 'INSERT INTO
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 							(
 							    folio_id
 							  , item_number
@@ -94,7 +94,7 @@ class Item extends DbAbstract{
 		$sSql = 'SELECT
 					*
 				FROM
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				WHERE
 					folio_id    = ?
 				AND
@@ -120,7 +120,7 @@ class Item extends DbAbstract{
 		$sSql = 'SELECT
 					*
 				FROM
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				WHERE
 					process_end_time = NULL;';
 

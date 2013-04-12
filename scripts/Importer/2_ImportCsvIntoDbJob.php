@@ -34,7 +34,7 @@ require_once 'html_header.inc.php';
 
 require_once 'global.inc.php';
 
-require_once 'Classes\2_ImportCsvIntoDbTask.php';
+require_once 'Classes/2_ImportCsvIntoDbTask.php';
 
 $oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToFolioEntity();
 
@@ -45,23 +45,12 @@ $oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
 
 echo 'Import from CSV started <br />';
 
-try {
-	$oImportCsvIntoDbTask->Execute();
-} catch ( ImporterException $oException ) {
-
-	/* @var $oJobQueueDb JobQueue */
-	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
-
-	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
-
-}
+$oImportCsvIntoDbTask->Execute();
 
 echo 'Import from CSV completed <p />';
 
-
 /* Import of the Folio and Items was successful so start slicing the images */
 require '3_SliceImagesJob.php';
-
 
 require_once 'footer.inc.php';
 

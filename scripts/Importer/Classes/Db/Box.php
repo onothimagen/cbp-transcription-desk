@@ -26,12 +26,14 @@ namespace Classes\Db;
 
 use Classes\Entities\Box as BoxEntity;
 
+use Classes\Exceptions\Importer as ImporterException;
+
 class Box extends DbAbstract{
 
 
 	public function __construct( $oAdapter ){
 		parent::__construct( $oAdapter );
-		$this->sDbname = 'cbp_boxes';
+		$this->sTableName = 'cbp_boxes';
 	}
 
 	/*
@@ -40,7 +42,7 @@ class Box extends DbAbstract{
 	public function Insert ( BoxEntity $oBoxEntity ){
 
 		$sSql = 'INSERT INTO
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 							(
 							    job_queue_id
 							  , box_number
@@ -100,7 +102,7 @@ class Box extends DbAbstract{
 					 , created
 
 				FROM
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				WHERE
 					job_queue_id   = ?
 				AND
@@ -169,7 +171,7 @@ class Box extends DbAbstract{
 					, item_number
 
 				FROM
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				LEFT JOIN
 				    cbp_folios
 				ON
@@ -199,6 +201,162 @@ class Box extends DbAbstract{
 		$rResult   = $this->Execute( $sSql, $aBindArray );
 
 		return $rResult;
+	}
+
+
+	/*
+	 *
+	*/
+	public function FlagJobProcessAsStarted(
+											  $iJobQueueId
+											, $sProcess
+									       ){
+
+		$aProcessList = array(
+							  'export'    => 'slice'
+							, 'import_mw' => 'export'
+							, 'verify'    => 'import_mw' );
+
+		if( array_key_exists( $sProcess, $aProcessList ) === false ) {
+			throw new ImporterException( 'Process ' . $sProcess . ' passed to FlagJobProcessAsStarted() is not a valid process' );
+		}
+
+		$sPreviousProcess = $aProcessList[ $sProcess];
+
+
+		$sSql = 'UPDATE
+					cbp_boxes
+				 JOIN
+					cbp_folios
+				 ON
+					cbp_boxes.id = cbp_folios.box_id
+				 JOIN
+					cbp_items
+				 ON
+					cbp_folios.id = cbp_items.folio_id
+				 SET
+ 					  cbp_boxes.process            = ?
+					, cbp_boxes.process_status     = "started"
+					, cbp_boxes.process_start_time = NOW()
+					, cbp_boxes.process_end_time   = NULL
+				    , cbp_boxes.updated            = NOW()
+
+					, cbp_folios.process           = ?
+					, cbp_folios.process_status    = "started"
+					, cbp_folios.process_start_time = NOW()
+					, cbp_folios.process_end_time  = NULL
+				    , cbp_folios.updated           = NOW()
+
+					, cbp_items.process            = ?
+					, cbp_items.process_status     = "started"
+					, cbp_items.process_start_time = NOW()
+					, cbp_items.process_end_time   = NULL
+				    , cbp_items.updated            = NOW()
+				 WHERE
+					cbp_boxes.job_queue_id         = ?
+				 AND
+					cbp_boxes.process              = ?
+				 AND
+					cbp_boxes.process_status       = "completed"
+				 AND
+					cbp_folios.process             = ?
+				 AND
+					cbp_folios.process_status      = "completed"
+				 AND
+					cbp_items.process              = ?
+				 AND
+					cbp_items.process_status       = "completed"';
+
+
+		$aBindArray = array (
+							  $sProcess
+							, $sProcess
+							, $sProcess
+							, $iJobQueueId
+							, $sPreviousProcess
+							, $sPreviousProcess
+							, $sPreviousProcess
+							);
+
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
+
+	}
+
+
+
+	/*
+	 *
+	*/
+	public function FlagJobProcessAsCompleted(
+			$iJobQueueId
+			, $sProcess
+	){
+
+		$aProcessList = array( 'export', 'import_mw', 'verify' );
+
+		if( in_array( $sProcess, $aProcessList ) === false ) {
+			throw new ImporterException( 'Process ' . $sProcess . ' passed to FlagJobProcessAsCompleted() is not a valid process' );
+		}
+
+		$sJobEndTime = 'NULL';
+
+		if ( $sProcess === 'verify'){
+			$sJobEndTime = 'NOW()';
+		}
+
+
+		$sSql = 'UPDATE
+					cbp_boxes
+				 JOIN
+					cbp_folios
+				 ON
+					cbp_boxes.id = cbp_folios.box_id
+				 JOIN
+					cbp_items
+				 ON
+					cbp_folios.id = cbp_items.folio_id
+				 SET
+					  cbp_boxes.process_status    = "completed"
+					, cbp_boxes.process_end_time  = NOW()
+				    , cbp_boxes.updated           = NOW()
+
+					, cbp_folios.process_status   = "completed"
+					, cbp_folios.process_end_time = NOW()
+				    , cbp_folios.updated          = NOW()
+
+					, cbp_items.process_status    = "completed"
+					, cbp_items.process_end_time  = NOW()
+				    , cbp_items.updated           = NOW()
+				 WHERE
+					cbp_boxes.job_queue_id         = ?
+				 AND
+					cbp_boxes.process              = ?
+				 AND
+					cbp_boxes.process_status       = "started"
+				 AND
+					cbp_folios.process             = ?
+				 AND
+					cbp_folios.process_status      = "started"
+				 AND
+					cbp_items.process              = ?
+				 AND
+					cbp_items.process_status       = "started"';
+
+
+		$aBindArray = array (
+							  $iJobQueueId
+							, $sProcess
+							, $sProcess
+							, $sProcess );
+
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
+
 	}
 
 

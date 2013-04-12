@@ -23,12 +23,12 @@
  */
 
 
-namespace Classes\Helpers;
+namespace Classes\Mappers;
 
-use Classes\Entities\Folio as FolioEntity;
+use Classes\Entities\Folio as FolioItemEntity;
 
 
-class MwXml{
+class JobItemsToMwXml{
 
 	private $sPagePrefix;
 
@@ -39,6 +39,13 @@ class MwXml{
 	private $sSiteName;
 	private $sHomePageName;
 	private $sPagePath;
+
+	/* @var DOMDocument */
+	private $oDocument;
+
+	private $oNextEntity;
+	private $oEntity;
+	private $oPrevEntity;
 
 	private $aNameSpaces = array(
 							  '-2'  => 'Media'
@@ -74,119 +81,68 @@ class MwXml{
 							, '121707' => 'Forum'
 							);
 
-	public function __construct( array $aSectionConfig ){
+	public function __construct( array $aConfig ){
 
-		$this->sPagePrefix    = $aSectionConfig[ 'page_prefix' ];
+		$this->sPagePrefix    = $aConfig[ 'page_prefix' ];
 
 
-		$this->sVersion       = $aSectionConfig[ 'version' ];
-		$this->sExportVersion = $aSectionConfig[ 'export_version' ];
+		$this->sVersion       = $aConfig[ 'version' ];
+		$this->sExportVersion = $aConfig[ 'export_version' ];
 
-		$this->sWebHost       = $aSectionConfig[ 'webhost' ];
-		$this->sSiteName      = $aSectionConfig[ 'site_name' ];
-		$this->sHomePageName  = $aSectionConfig[ 'home_page_name' ];
-		$this->sPagePath      = $aSectionConfig[ 'page_path' ];
+		$this->sWebHost       = $aConfig[ 'webhost' ];
+		$this->sSiteName      = $aConfig[ 'site_name' ];
+		$this->sHomePageName  = $aConfig[ 'home_page_name' ];
+		$this->sPagePath      = $aConfig[ 'page_path' ];
+
+		$this->oDocument      = $this->InitialiseDocument();
 
 	}
+
+
+
+
+
+	public function CreateItemPages(  FolioItemEntity $oNextEntity
+									, FolioItemEntity $oEntity
+									, FolioItemEntity $oPrevEntity ){
+
+		$this->oNextEntity = $oNextEntity;
+		$this->oEntity     = $oEntity;
+		$this->oPrevEntity = $oPrevEntity;
+
+		// Create MetaData Text
+
+		$sMetaDataText  = $this->CreateMetaDataText();
+
+		$oFolioTextNode = $this->CreatePageElement( $sMetaDataText );
+
+		// Create Page Text
+
+		$oPageText      = $this->CreatePageText();
+
+		$oPageTextNode  = $this->CreatePageElement( $oPageText );
+
+	}
+
+	public function GetDocument(){
+		return $this->oDocument;
+	}
+
 
 	/*
 	 * @return DOMDocument
 	 */
-	public function InitialiseDocument(){
+	private function CreatePageElement( $sText ){
 
-		$oDomDocument = new \DOMDocument( '1.0', 'utf-8' );
+		$oEntity = $this->oEntity;
 
-		$sNameSpace   = 'http://www.mediawiki.org/xml/export-' . $this->sExportVersion . '/';
+		$sItemPath = $this->CreateItemPath( $oEntity );
 
-		$oRootNode = $oDomDocument->createElementNS( $sNameSpace, 'mediawiki' );
-
-		$oDomDocument->appendChild( $oRootNode );
-
-		$oRootNode->setAttributeNS( 'http://www.w3.org/2000/xmlns/' ,'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance' );
-
-		$oRootNode->setAttribute( 'xsi:schemaLocation', $sNameSpace . ' http://www.mediawiki.org/xml/export-' . $this->sExportVersion . '.xsd');
-
-		$oRootNode->setAttribute( 'version', $this->sExportVersion );
-
-		$oRootNode->setAttribute( 'xml:lang', 'en');
-
-
-
-		$sSiteInfoElement    = $oDomDocument->createElement( 'siteinfo' );
-
-		$oRootNode->appendChild( $sSiteInfoElement );
-
-
-
-		$oElement            = $oDomDocument->createElement( 'sitename' );
-
-		$oElement->nodeValue = $this->sSiteName;
-
-		$sSiteInfoElement->appendChild( $oElement );
-
-
-
-		$oElement            = $oDomDocument->createElement( 'base' );
-
-		$sBase = 'http://' . $this->sWebHost . '/' . $this->sPagePath . '/' . $this->sHomePageName;
-
-		// This is a hack because it does not like  $oDomDocument->createElement( 'base' );
-
-		$oElement            = $oDomDocument->createElement('base');
-
-		$oElement->nodeValue = $sBase;
-
-
-		$sSiteInfoElement->appendChild( $oElement );
-
-
-
-		$oElement            = $oDomDocument->createElement( 'generator' );
-
-		$oElement->nodeValue = 'MediaWiki ' . $this->sVersion;
-
-		$sSiteInfoElement->appendChild( $oElement );
-
-
-
-		$oElement            = $oDomDocument->createElement( 'case' );
-
-		$oElement->nodeValue = 'first-letter';
-
-		$sSiteInfoElement->appendChild( $oElement );
-
-
-		$sNameSpaceElement = $oDomDocument->createElement( 'namespaces' );
-
-		$sSiteInfoElement->appendChild( $sNameSpaceElement );
-
-
-		foreach ( $this->aNameSpaces as $key => $value ){
-
-			$oElement = $oDomDocument->createElement( 'namespace' );
-
-			$oElement->nodeValue = $value;
-
-			$oElement->setAttribute( 'key', $key );
-
-			$oElement->setAttribute( 'case', 'first-letter' );
-
-			$sNameSpaceElement->appendChild( $oElement );
-
+		if( strpos( $sText, '{{Infobox Folio New' ) !== false ){
+			$sItemPath = 'Metadata:' . $sItemPath;
 		}
 
-
-		return $oDomDocument;
-
-
-	}
-
-	/*
-	 * @return DOMDocument
-	 */
-	public function CreatePageElement(  FolioEntity $oEntity
-									  , \DOMDocument   $oDomDocument
-									  ,                $sText ){
+		$oDomDocument = $this->oDocument;
 
 		$oRootNodes   = $oDomDocument->getElementsByTagName( 'mediawiki' );
 
@@ -199,8 +155,6 @@ class MwXml{
 
 
 		$oElement  = $oDomDocument->createElement( 'title' );
-
-		$sItemPath = $this->CreateItemPath( $oEntity );
 
 		$oElement->nodeValue = $sItemPath;
 
@@ -253,15 +207,14 @@ class MwXml{
 	/*
 	 *
 	 */
-	public function CreateFolioText(
-										  FolioEntity $oNextEntity
-										, FolioEntity $oEntity
-										, FolioEntity $oPrevEntity
-										){
+	private function CreateMetaDataText(){
+
+		$oEntity     = $this->oEntity;
 
 		$sIdentifier = $this->CreateItemPath( $oEntity );
-		$sNext       = $this->CreateItemPath( $oNextEntity );
-		$sPrev       = $this->CreateItemPath( $oPrevEntity );
+		$sNext       = $this->CreateItemPath( $this->oNextEntity );
+		$sPrev       = $this->CreateItemPath( $this->oPrevEntity );
+
 
 		$sText       = '{{Infobox Folio New' . "\n";
 
@@ -317,9 +270,9 @@ class MwXml{
 	/*
 	 *
 	 */
-	public function CreatePageText( FolioEntity $oEntity ){
+	private function CreatePageText(){
 
-		$sItemPath = $this->CreateItemPath( $oEntity );
+		$sItemPath = $this->CreateItemPath( $this->oEntity );
 
 		$sText     = <<<TEXTBLOCK
 '[{{fullurl:$sItemPath|action=edit}} Click Here To Edit]'''
@@ -340,7 +293,7 @@ TEXTBLOCK;
 	/*
 	 *
 	 */
-	private function CreateItemPath( FolioEntity $oEntity ){
+	private function CreateItemPath( FolioItemEntity $oEntity ){
 
 		$sPrefix      = $this->sPagePrefix;
 
@@ -353,6 +306,98 @@ TEXTBLOCK;
 		return $sItemPath;
 
 	}
+
+
+
+	/*
+	 * @return DOMDocument
+	*/
+	private function InitialiseDocument(){
+
+		$oDomDocument = new \DOMDocument( '1.0', 'utf-8' );
+
+		$sNameSpace   = 'http://www.mediawiki.org/xml/export-' . $this->sExportVersion . '/';
+
+		$oRootNode = $oDomDocument->createElementNS( $sNameSpace, 'mediawiki' );
+
+		$oDomDocument->appendChild( $oRootNode );
+
+		$oRootNode->setAttributeNS( 'http://www.w3.org/2000/xmlns/' ,'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance' );
+
+		$oRootNode->setAttribute( 'xsi:schemaLocation', $sNameSpace . ' http://www.mediawiki.org/xml/export-' . $this->sExportVersion . '.xsd');
+
+		$oRootNode->setAttribute( 'version', $this->sExportVersion );
+
+		$oRootNode->setAttribute( 'xml:lang', 'en');
+
+
+
+		$sSiteInfoElement    = $oDomDocument->createElement( 'siteinfo' );
+
+		$oRootNode->appendChild( $sSiteInfoElement );
+
+
+
+		$oElement            = $oDomDocument->createElement( 'sitename' );
+
+		$oElement->nodeValue = $this->sSiteName;
+
+		$sSiteInfoElement->appendChild( $oElement );
+
+
+
+		$oElement            = $oDomDocument->createElement( 'base' );
+
+		$sBase = 'http://' . $this->sWebHost . '/' . $this->sPagePath . '/' . $this->sHomePageName;
+
+		$oElement->nodeValue = $sBase;
+
+
+		$sSiteInfoElement->appendChild( $oElement );
+
+
+
+		$oElement            = $oDomDocument->createElement( 'generator' );
+
+		$oElement->nodeValue = 'MediaWiki ' . $this->sVersion;
+
+		$sSiteInfoElement->appendChild( $oElement );
+
+
+
+		$oElement            = $oDomDocument->createElement( 'case' );
+
+		$oElement->nodeValue = 'first-letter';
+
+		$sSiteInfoElement->appendChild( $oElement );
+
+
+		$sNameSpaceElement = $oDomDocument->createElement( 'namespaces' );
+
+		$sSiteInfoElement->appendChild( $sNameSpaceElement );
+
+
+		foreach ( $this->aNameSpaces as $key => $value ){
+
+			$oElement = $oDomDocument->createElement( 'namespace' );
+
+			$oElement->nodeValue = $value;
+
+			$oElement->setAttribute( 'key', $key );
+
+			$oElement->setAttribute( 'case', 'first-letter' );
+
+			$sNameSpaceElement->appendChild( $oElement );
+
+		}
+
+
+		return $oDomDocument;
+
+
+	}
+
+
 
 }
 

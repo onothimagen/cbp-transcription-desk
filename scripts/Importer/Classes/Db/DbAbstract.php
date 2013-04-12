@@ -29,9 +29,11 @@ use Zend\Db\Adapter\Driver\Pdo\Result;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Adapter;
 
+use Classes\Exceptions\Importer as ImporterException;
+
 abstract class DbAbstract {
 
-	protected $sDbname;
+	protected $sTableName;
 
 	/*
 	 * @var $oAdapter Adapter
@@ -55,9 +57,9 @@ abstract class DbAbstract {
 			$results = $stmt->execute();
 
 		} catch (\PDOException $e) {
-			throw new \Importer\Exception( 'PDO ErrorCode: ' . $e->getCode() . "\n" .
-										   'PDO ErrorInfo: ' . $e->errorInfo[1] . "\n" .
-										   'Parameters: ' 	 . serialize( $aBindArray )
+			throw new ImporterException( 'PDO ErrorCode: ' . $e->getCode() . "\n" .
+										 'PDO ErrorInfo: ' . $e->errorInfo[1] . "\n" .
+										 'Parameters: '    . serialize( $aBindArray )
 										 );
 
 		}
@@ -67,8 +69,7 @@ abstract class DbAbstract {
 
 	public function Truncate(){
 
-		$sSql = 'TRUNCATE TABLE ' . $this->sDbname . ';';
-
+		$sSql = 'TRUNCATE TABLE ' . $this->sTableName . ';';
 		$this->Execute( $sSql );
 	}
 
@@ -76,7 +77,9 @@ abstract class DbAbstract {
 										  $iId
 										, $sProcess
 										, $sStatus
-								){
+										){
+
+		$sTime = '';
 
 		if( $sStatus === 'started' ){
 			$sTime = ', process_start_time = NOW(), process_end_time   = NULL';
@@ -87,7 +90,7 @@ abstract class DbAbstract {
 		}
 
 		$sSql = 'UPDATE
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 				SET
 					    process        = ?
 					  , process_status = ?
@@ -108,19 +111,6 @@ abstract class DbAbstract {
 
 	}
 
-
-	/*
-	 * @return ResultSet
-	 */
-	protected function GetResultSet( Result  $result ){
-		if ( $result instanceof ResultInterface && $result->isQueryResult() ) {
-			$resultSet = new ResultSet;
-			$resultSet->initialize( $result );
-
-			return $resultSet;
-		}
-
-	}
 
 
 }

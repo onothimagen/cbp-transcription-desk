@@ -24,24 +24,23 @@
 
 namespace Classes;
 
-$sJobName = 'Import XML into MW';
+$sJobName = 'Verify Pages';
 
 require_once 'html_header.inc.php';
 
 require_once 'global.inc.php';
 
-require_once 'Classes/5_ImportXmlIntoMwJobTask.php';
+require_once 'Classes/6_VerifyPagesTask.php';
 
-$oImportXmlIntoMwTask = new ImportXmlIntoMwJobTask( $oDi
-												  , $aSectionConfig
-												  , $oJobQueueEntity );
+$oVerifyPagesTask = new VerifyPagesTask(  $oDi
+										, $aSectionConfig
+										, $oJobQueueEntity );
 
-echo 'Importing XML into MW started <br />';
+echo 'Verifying items have been imported into MW started <br />';
 
-$oImportXmlIntoMwTask->Execute();
+$oVerifyPagesTask->Execute();
 
-echo 'Importing XML into MW completed <p />';
-
-require_once '6_VerifyPages.php';
+echo 'Verifying items have been imported into MW completed <p />';
 
 require_once 'footer.inc.php';
+

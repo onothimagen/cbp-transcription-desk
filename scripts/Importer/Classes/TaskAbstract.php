@@ -35,13 +35,16 @@ use Classes\Db\ErrorLogDb as ErrorLogDb;
 use Classes\Helpers\File   as FileHelper;
 use Classes\Helpers\Logger as Logger;
 
-use Classes\Entities\JobQueue         as JobQueueEntity;
-use Classes\Entities\Box             as BoxEntity;
-use Classes\Entities\Folio           as FolioEntity;
-use Classes\Entities\Item            as ItemEntity;
+use Classes\Entities\JobQueue as JobQueueEntity;
+use Classes\Entities\Box      as BoxEntity;
+use Classes\Entities\Folio    as FolioEntity;
+use Classes\Entities\Item     as ItemEntity;
+use Classes\Entities\ErrorLog as ErrorLogEntity;
 use Classes\Entities\EntityAbstract;
 
 use Classes\Helpers\MwXml;
+
+use Classes\Exceptions\Importer as ImporterException;
 
 abstract class TaskAbstract{
 
@@ -71,6 +74,10 @@ abstract class TaskAbstract{
 
 	protected $sProcess;
 
+	protected $sPreviousProcess;
+
+	protected $iJobQueueId;
+
 	protected function __construct( Di $oDi ){
 
 		$this->oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
@@ -98,13 +105,28 @@ abstract class TaskAbstract{
 	*/
 	protected function HandleError( \Exception $oException, EntityAbstract $oEntity ){
 
+		// Create entry in error log
+
+		$sErrorString = $this->CreateExceptionString( $oException );
+
+		$oErrorLogEntity = new ErrorLogEntity();
+
+		$oErrorLogEntity->setJobQueueId( $this->iJobQueueId );
+		$oErrorLogEntity->setProcess( $this->sProcess );
+		$oErrorLogEntity->setError( $sErrorString );
+
+		$this->oErrorLogDb->Insert( $oErrorLogEntity );
+
 		$this->oLogger->LogException( $oException );
 
 		$iId = $oEntity->getId();
 
-		$oErrorLogEntity = new ErrorLogEntity();
 
 		switch( true ){
+			case $oEntity instanceof JobQueueEntity:
+				$oErrorLogEntity->setJobQueueId( $iId );
+				$this->oJobQueueDb->UpdateJobStatus( $iId, 'error' );
+				break;
 			case $oEntity instanceof BoxEntity:
 				$oErrorLogEntity->setBoxId( $iId );
 				$this->oBoxDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
@@ -114,23 +136,15 @@ abstract class TaskAbstract{
 				$this->oFolioDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
 				break;
 			case $oEntity instanceof ItemEntity:
-				$oErrorLogEntity->sItemId( $iId );
+				$oErrorLogEntity->setItemId( $iId );
 				$this->oItemDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
 				break;
-
 		}
 
-		$sErrorString = $this->CreateExceptionString( $oException );
-
-		$oErrorLogEntity->setJobQueueId( $this->iJobQueueId );
-		$oErrorLogEntity->setProcess( $this->sProcess );
-		$oErrorLogEntity->setError( $sErrorString );
-
-		$this->oErrorLogDb->Insert( $oErrorLogEntity );
-
-
-		// Escalate to the JobQueue
-		throw new ImporterException( $sErrorString );
+		// Escalate to the JobQueue but we don't want to bubble higher than the job queue
+		if(($oEntity instanceof JobQueueEntity) === false ){
+			throw new ImporterException( $sErrorString );
+		}
 
 	}
 
@@ -138,8 +152,141 @@ abstract class TaskAbstract{
 	/*
 	 *
 	*/
+	protected function ProcessBoxes(){
+
+		$rBoxes = $this->GetBoxes( $this->sPreviousProcess, 'completed' );
+
+		/* @var $oBoxEntity BoxEntity */
+		while ( $oBoxEntity = $rBoxes->getResource()->fetchObject( 'Classes\Entities\Box' ) ){
+
+			$iBoxId = $oBoxEntity->getId();
+
+			$this->oBoxDb->UpdateProcessStatus( $iBoxId, $this->sProcess, 'started' );
+
+			try {
+
+				$this->ProcessFolios( $oBoxEntity );
+
+			} catch ( ImporterException $oException ) {
+
+				$this->HandleError( $oException, $oBoxEntity );
+			}
+
+			$this->oBoxDb->UpdateProcessStatus( $iBoxId, $this->sProcess, 'completed' );
+
+		}
+
+	}
+
+
+	/*
+	 *
+	*/
+
+	protected function ProcessFolios( BoxEntity $oBoxEntity ){
+
+		$iBoxId = $oBoxEntity->getId();
+
+		$rFolios = $this->GetFolios( $iBoxId, $this->sPreviousProcess, 'completed' );
+
+		/* @var $oFolioEntity FolioEntity */
+		while ( $oFolioEntity = $rFolios->getResource()->fetchObject( 'Classes\Entities\Folio' ) ){
+
+			$iFolioId = $oFolioEntity->getId();
+
+			$this->oFolioDb->UpdateProcessStatus( $iFolioId,  $this->sProcess, 'started' );
+
+			try {
+				$this->ProcessItems( $oBoxEntity, $oFolioEntity );
+			} catch ( ImporterException $oException ) {
+				$this->HandleError( $oException, $oFolioEntity );
+			}
+
+			$this->oFolioDb->UpdateProcessStatus( $iFolioId, $this->sProcess, 'completed' );
+
+		}
+
+	}
+
+
+	/*
+	 *
+	*/
+
+	protected function ProcessItems( BoxEntity $oBoxEntity, FolioEntity $oFolioEntity ){
+
+		$iFolioId = $oFolioEntity->getId();
+
+		$rItems = $this->GetItems( $iFolioId, $this->sPreviousProcess, 'completed' );
+
+		/* @var $oItemEntity ItemEntity */
+		while ( $oItemEntity = $rItems->getResource()->fetchObject( 'Classes\Entities\Item' ) ){
+
+			$iItemId = $oItemEntity->getId();
+
+			$this->oItemDb->UpdateProcessStatus( $iItemId, $this->sProcess, 'started');
+			try {
+
+				$sItemTitle = $this->ConstructPath( $oBoxEntity, $oFolioEntity, $oItemEntity );
+
+				// During development Comment this out to skip actual slicing
+				$this->Process( $sItemTitle );
+
+			} catch ( ImporterException $oException ) {
+				$this->HandleError( $oException, $oItemEntity );
+			}
+
+			$this->oItemDb->UpdateProcessStatus( $iItemId, $this->sProcess, 'completed' );
+		}
+
+	}
+
+
+
+	/*
+	 *
+	*/
+	protected function GetBoxes( $sProcess, $sStatus ){
+
+		return $this->oBoxDb->GetBoxes(
+										  $this->iJobQueueId
+										, $sProcess
+										, $sStatus
+		);
+
+	}
+
+
+	/*
+	 *
+	*/
+	protected function GetFolios( $iBoxId, $sProcess, $sStatus ){
+
+		return $this->oFolioDb->GetFolios(
+										  $iBoxId
+										, $sProcess
+										, $sStatus
+		);
+	}
+
+	/*
+	 *
+	*/
+	protected function GetItems( $iFolioId, $sProcess, $sStatus ){
+
+		return $this->oItemDb->GetJobItems(
+										  $iFolioId
+										, $sProcess
+										, $sStatus
+		);
+	}
+
+
+	/*
+	 *
+	*/
 	protected function PseudoSetterForAutoComplete(
-													JobQueueDb  $oJobQueueDb
+													  JobQueueDb  $oJobQueueDb
 													, BoxDb       $oBoxDb
 													, FolioDb     $oFolioDb
 													, ItemDb      $oItemDb

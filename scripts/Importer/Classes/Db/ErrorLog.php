@@ -34,7 +34,7 @@ class ErrorLog extends DbAbstract{
 	*/
 	public function __construct( $oAdapter ){
 		parent::__construct( $oAdapter );
-		$this->sDbname = 'cbp_error_log';
+		$this->sTableName = 'cbp_error_log';
 	}
 
 	/*
@@ -43,7 +43,7 @@ class ErrorLog extends DbAbstract{
 	public function Insert ( ErrorLogEntity $oErrorLogEntity ){
 
 		$sSql = 'INSERT INTO
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 									(
 									   job_queue_id
 									 , box_id

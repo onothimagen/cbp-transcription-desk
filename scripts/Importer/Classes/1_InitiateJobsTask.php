@@ -38,6 +38,8 @@ class InitiateJobsTask extends TaskAbstract{
 
 		parent::__construct( $oDi );
 
+		$this->sProcess     = 'initiation';
+
 	}
 
 	/*

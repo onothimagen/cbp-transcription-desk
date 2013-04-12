@@ -24,7 +24,8 @@
 
 namespace Classes\Db;
 
-use Classes\Entities\JobQueue as JobQueueEntity;
+use Classes\Entities\JobQueue   as JobQueueEntity;
+use Classes\Exceptions\Importer as ImporterException;
 
 class JobQueue extends DbAbstract{
 
@@ -34,7 +35,7 @@ class JobQueue extends DbAbstract{
 	*/
 	public function __construct( $oAdapter ){
 		parent::__construct( $oAdapter );
-		$this->sDbname = 'cbp_job_queue';
+		$this->sTableName = 'cbp_job_queue';
 	}
 
 
@@ -63,9 +64,9 @@ class JobQueue extends DbAbstract{
 		}
 
 		$sSql = 'INSERT INTO
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 								(   user_id
-								  , status
+								  , job_status
 								  , job_start_time
 								  , job_end_time
 								)
@@ -109,10 +110,10 @@ class JobQueue extends DbAbstract{
 		}
 
 		$sSql = 'UPDATE
-					' . $this->sDbname . '
+					' . $this->sTableName . '
 
 				SET
-					  status       = ?
+					  job_status       = ?
 				    , job_end_time = ' . $sJobEndTime . '
 				WHERE
 				    id             = ?';
@@ -126,6 +127,7 @@ class JobQueue extends DbAbstract{
 		return  $this->Execute( $sSql, $aBindArray );
 
 	}
+
 
 	/*
 	 *

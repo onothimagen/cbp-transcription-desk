@@ -30,17 +30,11 @@ require_once 'html_header.inc.php';
 
 require_once 'global.inc.php';
 
-require_once 'Classes\1_InitiateJobsTask.php';
+require_once 'Classes/1_InitiateJobsTask.php';
 
 $oInitiateJobsTask = new InitiateJobsTask( $oDi );
 
-
-try {
-	$oJobQueueEntity = $oInitiateJobsTask->Execute();
-
-} catch (Exception $e) {
- // Write to log
-}
+$oJobQueueEntity = $oInitiateJobsTask->Execute();
 
 echo 'Job ' . $oJobQueueEntity->getId() . ' started <br />';
 

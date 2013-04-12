@@ -30,7 +30,7 @@ require_once 'html_header.inc.php';
 
 require_once 'global.inc.php';
 
-require_once 'Classes\3_SliceImagesTask.php';
+require_once 'Classes/3_SliceImagesTask.php';
 
 $oSliceImagesTask = new SliceImagesTask(  $oDi
 										, $aSectionConfig
@@ -38,15 +38,8 @@ $oSliceImagesTask = new SliceImagesTask(  $oDi
 
 echo 'Image slicing started <br />';
 
-try {
-	$oSliceImagesTask->Execute();
-} catch ( Exception $e ) {
 
-	/* @var $oJobQueueDb JobQueue */
-	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
-
-	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
-}
+$oSliceImagesTask->Execute();
 
 echo 'Image slicing completed <p />';
 

@@ -39,6 +39,8 @@ use Classes\Entities\Item     as ItemEntity;
 
 use Classes\Helpers\File   as FileHelper;
 
+use Classes\Exceptions\Importer as ImporterException;
+
 class SliceImagesTask  extends TaskAbstract{
 
 	/* @var $oFolioItemEntity FolioEntity */
@@ -51,23 +53,23 @@ class SliceImagesTask  extends TaskAbstract{
 
 	private $sArchivePath;
 
-	private $iJobQueueId;
-
 
 	public function __construct(  Di             $oDi
-								,                $aSectionConfig
+								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
-		$this->sImageImportPath = $aSectionConfig[ 'path.image.import' ];
-		$this->sImageExportPath = $aSectionConfig[ 'path.image.export' ];
-		$this->sArchivePath     = $aSectionConfig[ 'path.archive' ];
-		$this->sSlicerPath      = $aSectionConfig[ 'path.slicer'];
+		$this->sImageImportPath = $aConfig[ 'path.image.import' ];
+		$this->sImageExportPath = $aConfig[ 'path.image.export' ];
+		$this->sArchivePath     = $aConfig[ 'path.archive' ];
+		$this->sSlicerPath      = $aConfig[ 'path.slicer'];
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
 		$this->sProcess         = 'slice';
+
+		$this->sPreviousProcess = 'import';
 
 	}
 
@@ -78,82 +80,17 @@ class SliceImagesTask  extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		$this->CheckPaths();
+		// Pre-check paths
 
-		$this->SliceBoxes();
+		try {
+			$this->CheckPaths();
 
-	}
+			// Don't flag all entities as as started. This is done in a granular way for this process.
 
-	/*
-	 *
-	 */
-	private function CheckPaths(){
+			$this->ProcessBoxes();
 
-		$this->oFile->CheckExists( $this->sImageImportPath );
-		$this->oFile->CheckExists( $this->sImageExportPath );
-		$this->oFile->CheckExists( $this->sArchivePath );
-		$this->oFile->CheckExists( $this->sSlicerPath );
-
-	}
-
-
-
-
-	/*
-	 *
-	 */
-	private function SliceBoxes(){
-
-		$rBoxes = $this->GetBoxesToSlice();
-
-		/* @var $oBoxEntity BoxEntity */
-		while ( $oBoxEntity = $rBoxes->getResource()->fetchObject( 'Classes\Entities\Box' ) ){
-
-			$iBoxId = $oBoxEntity->getId();
-
-			$this->oBoxDb->UpdateProcessStatus( $iBoxId, 'slice', 'started' );
-
-			try {
-
-				$this->SliceFolios( $oBoxEntity );
-
-			} catch ( ImporterException $oException ) {
-
-				$this->HandleError( $oException, $oBoxEntity );
-			}
-
-			$this->oBoxDb->UpdateProcessStatus( $iBoxId, 'slice', 'completed' );
-
-		}
-
-	}
-
-
-	/*
-	 *
-	 */
-
-	private function SliceFolios( BoxEntity $oBoxEntity ){
-
-		$iBoxId = $oBoxEntity->getId();
-
-		$rFolios = $this->GetFoliosToSlice( $iBoxId );
-
-		/* @var $oFolioEntity FolioEntity */
-		while ( $oFolioEntity = $rFolios->getResource()->fetchObject( 'Classes\Entities\Folio' ) ){
-
-			$iFolioId = $oFolioEntity->getId();
-
-			$this->oFolioDb->UpdateProcessStatus( $iFolioId, 'slice', 'started' );
-
-			try {
-				$this->SliceItems( $oBoxEntity, $oFolioEntity );
-			} catch ( ImporterException $oException ) {
-				$this->HandleError( $oException, $oFolioEntity );
-			}
-
-			$this->oFolioDb->UpdateProcessStatus( $iFolioId, 'slice', 'completed' );
-
+		} catch (Exception $oException) {
+			$this->HandleError( $oException, $oJobQueueEntity );
 		}
 
 	}
@@ -162,51 +99,22 @@ class SliceImagesTask  extends TaskAbstract{
 	/*
 	 *
 	*/
+	private function CheckPaths(){
 
-	private function SliceItems( BoxEntity $oBoxEntity, FolioEntity $oFolioEntity ){
-
-		$iFolioId = $oFolioEntity->getId();
-
-		$rItems = $this->GetItemsToSlice( $iFolioId );
-
-		/* @var $oItemEntity ItemEntity */
-		while ( $oItemEntity = $rItems->getResource()->fetchObject( 'Classes\Entities\Item' ) ){
-
-			$iItemId = $oItemEntity->getId();
-
-			$this->oItemDb->UpdateProcessStatus(
-												$iItemId
-												, 'slice'
-												, 'started'
-												);
-			try {
-
-				$sImagePath = $this->ConstructImagePath( $oBoxEntity, $oFolioEntity, $oItemEntity );
-
-				// During development Comment this out to skip actual slicing
-				$this->SliceImage( $sImagePath );
-
-			} catch ( ImporterException $oException ) {
-				$this->HandleError( $oException, $oItemEntity );
-			}
-
-			$this->oItemDb->UpdateProcessStatus(
-												$iItemId
-												, 'slice'
-												, 'completed'
-												);
-		}
+		$this->oFile->CheckExists( 'ImageImportPath', $this->sImageImportPath );
+		$this->oFile->CheckExists( 'ImageExportPath', $this->sImageExportPath );
+		$this->oFile->CheckExists( 'ArchivePath', $this->sArchivePath );
+		$this->oFile->CheckExists( 'SlicerPath', $this->sSlicerPath );
 
 	}
 
-
-
-
-
-	private function ConstructImagePath(
-										  BoxEntity $oBoxEntity
-										, FolioEntity $oFolioEntity
-										, ItemEntity $oItemEntity ){
+	/*
+	 *
+	 */
+	protected function ConstructPath(
+									  BoxEntity   $oBoxEntity
+									, FolioEntity $oFolioEntity
+									, ItemEntity  $oItemEntity ){
 
 		$sBoxNumber   = $oBoxEntity->getBoxNumber();
 
@@ -216,13 +124,13 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
 
+		$sImageImportPath = $this->sImageImportPath;
+
+		$this->oFile->CheckExists( 'ImageImportPath', $sImageImportPath );
+
 		$sRootPath      = $this->sImageImportPath;
 
 		$sFullImagePath = $sRootPath . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
-
-		if( file_exists( $sFullImagePath ) === false ){
-			throw new ImporterException( $sFullImagePath . ' passed to SliceImage() does not exist' );
-		}
 
 		return $sFullImagePath;
 
@@ -231,9 +139,19 @@ class SliceImagesTask  extends TaskAbstract{
 	/*
 	 *
 	 */
-	private function SliceImage( $sImagePath ){
+	protected function Process( $sImagePath ){
 
-		$sSlicerPath    = $this->sSlicerPath;
+		$sImageExportPath = $this->sImageExportPath;
+
+		$sSlicerPath      = $this->sSlicerPath;
+
+		// Just in time checks
+
+		$this->oFile->CheckExists( 'ImagePath', $sImagePath );
+
+		$this->oFile->CheckExists( 'ImageExportPath', $sImageExportPath );
+
+		$this->oFile->CheckExists( 'SlicerPath', $sSlicerPath );
 
 		$sCommand       = 'perl ' . $sSlicerPath . ' --input_file ' . $sImagePath . ' --output_path ' . $this->sImageExportPath;
 
@@ -254,47 +172,7 @@ class SliceImagesTask  extends TaskAbstract{
 		}
 
 		echo $sPerlOutput . '<p />';
-
 	}
-
-	/*
-	 *
-	 */
-	private function GetBoxesToSlice(){
-
-		return $this->oBoxDb->GetBoxes(
-										  $this->iJobQueueId
-										, 'import'
-										, 'completed'
-										  );
-
-	}
-
-
-	/*
-	 *
-	 */
-	private function GetFoliosToSlice( $iBoxId ){
-
-		return $this->oFolioDb->GetFolios(
-										  $iBoxId
-										, 'import'
-										, 'completed'
-										  );
-	}
-
-	/*
-	 *
-	 */
-	private function GetItemsToSlice( $iFolioId ){
-
-		return $this->oItemDb->GetJobItems(
-											$iFolioId
-										 , 'import'
-										 , 'completed'
-										  );
-	}
-
 
 
 }

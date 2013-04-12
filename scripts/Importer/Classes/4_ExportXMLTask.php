@@ -7,13 +7,15 @@ use Zend\Di\Di;
 use Zend\Db\ResultSet\ResultSet;
 
 use Classes\Entities\JobQueue as JobQueueEntity;
-use Classes\Entities\Folio    as FolioEntity;
+use Classes\Entities\Folio    as FolioItemEntity;
 
 use Classes\Db\Box   as BoxDb;
 use Classes\Db\Folio as FolioDb;
 use Classes\Db\Item  as ItemDb;
 
-use Classes\Helpers\MwXml;
+use Classes\Mappers\MwXml;
+
+use Classes\Exceptions\Importer as ImporterException;
 
 class ExportXMLTask extends TaskAbstract{
 
@@ -26,34 +28,27 @@ class ExportXMLTask extends TaskAbstract{
 
 	private $sArchivePath;
 
-	private $sPagePrefix;
-
-	private $iJobQueueId;
-
-	/* @var $oDomDocument DOMDocument */
-	private $oDomDocument;
-
-	/* @var $oMwXml MwXml */
-	private $oMwXml;
+	/* @var JoBItemsToMwXml */
+	private $oMapper;
 
 
 	public function __construct(  Di             $oDi
-								,                $aSectionConfig
+								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
-		$this->sXMLExportPath   = $aSectionConfig[ 'path.xml.export' ];
-
-		$this->sImageExportPath = $aSectionConfig[ 'path.image.export' ];
-		$this->sArchivePath     = $aSectionConfig[ 'path.archive' ];
+		$this->sXMLExportPath   = $aConfig[ 'path.xml.export' ];
+		$this->sArchivePath     = $aConfig[ 'path.archive' ];
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
 		/* @var MwXml */
-		$this->oMwXml           = $oDi->get( 'Classes\Helpers\MwXml' );
+		$this->oMapper          = $oDi->get( 'Classes\Mappers\JobItemsToMwXml' );
 
-		$this->sProcess        = 'export';
+		$this->sProcess         = 'export';
+
+		$this->sPreviousProcess = 'slice';
 
 	}
 
@@ -64,17 +59,42 @@ class ExportXMLTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
+		try {
 
-		$this->oDomDocument      = $this->oMwXml->InitialiseDocument();
+			$sProcess    = $this->sProcess;
+			$iJobQueueId = $this->iJobQueueId;
 
-		$aFolioCollection        = $this->GetFolioItems();
+			// Pre-checks
+			$this->CheckPaths();
 
-		$aFolioCollectionMarkers = $this->GetFolioCollectionMarkers( $aFolioCollection );
+			$aFolioCollection        = $this->GetFolioItems();
 
-		$this->ProcessFolioItems( $aFolioCollection, $aFolioCollectionMarkers );
+			$aFolioCollectionMarkers = $this->GetFolioCollectionRanges( $aFolioCollection );
 
-		$this->ExportXml();
+			// Only do this after the resultset has been created
+			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
 
+			$this->ProcessFolioItems( $aFolioCollection, $aFolioCollectionMarkers );
+
+			$this->ExportXml();
+
+			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
+
+		} catch ( Exception $oException ) {
+			$this->HandleError( $oException, $oJobQueueEntity );
+		}
+
+
+	}
+
+
+	/*
+	 *
+	*/
+	private function CheckPaths(){
+
+		$this->oFile->CheckExists( 'MLExportPath', $this->sXMLExportPath );
+		$this->oFile->CheckExists( 'ArchivePath', $this->sArchivePath );
 
 	}
 
@@ -83,16 +103,16 @@ class ExportXMLTask extends TaskAbstract{
 	 *
 	 */
 	private function ProcessFolioItems( $aFolioCollection
-										 , $aFolioCollectionMarkers ){
+									  , $aFolioCollectionMarkers ){
 
 		$counter = 0;
 
 		$sCurrentBoxNumber = '';
 
-		/* @var $oFolioEntity FolioEntity */
-		foreach ( $aFolioCollection as $key => $oFolioEntity ){
+		/* @var $oEntity FolioItemEntity */
+		foreach ( $aFolioCollection as $key => $oEntity ){
 
-			$sBoxNumber = $oFolioEntity->getBoxNumber();
+			$sBoxNumber = $oEntity->getBoxNumber();
 
 			// Start of a new box
 
@@ -122,22 +142,8 @@ class ExportXMLTask extends TaskAbstract{
 			$oNextEntity = $aFolioCollection[ $iNextEntityIndex ];
 			$oPrevEntity = $aFolioCollection[ $iPrevEntityIndex ];
 
-			$sFolioText = $this->oMwXml->CreateFolioText(
-																$oNextEntity
-															  , $oFolioEntity
-															  , $oPrevEntity );
-
-			$oFolioTextNode = $this->oMwXml->CreatePageElement( $oFolioEntity
-																 , $this->oDomDocument
-																 , $sFolioText );
-
-			$oPageText     = $this->oMwXml->CreatePageText( $oFolioEntity );
-
-			$oPageTextNode = $this->oMwXml->CreatePageElement(
-																$oFolioEntity
-															  , $this->oDomDocument
-															  , $oPageText
-																);
+			// Generate XML
+			$this->oMapper->CreateItemPages( $oNextEntity, $oEntity, $oPrevEntity );
 
 		}
 
@@ -169,7 +175,7 @@ class ExportXMLTask extends TaskAbstract{
 	/*
 	 * @return array
 	 */
-	private function GetFolioCollectionMarkers( array $aFolioCollection ){
+	private function GetFolioCollectionRanges( array $aFolioCollection ){
 
 		if( count ( $aFolioCollection)  === 0 ){
 			return array();
@@ -178,10 +184,10 @@ class ExportXMLTask extends TaskAbstract{
 		$sCurrentBox   = NULL;
 		$sCurrentIndex = NULL;
 
-		/* @var $oFolioItemEntity FolioEntity */
-		foreach ( $aFolioCollection as $oFolioItemEntity ){
+		/* @var $oEntity FolioItemEntity */
+		foreach ( $aFolioCollection as $oEntity ){
 
-			$sBox = $oFolioItemEntity->getBoxNumber();
+			$sBox = $oEntity->getBoxNumber();
 
 			// Start of a new box
 
@@ -230,7 +236,9 @@ class ExportXMLTask extends TaskAbstract{
 
 	private function ExportXml(){
 
-		$this->oDomDocument->formatOutput = true;
+		$oDomDocument = $this->oMapper->GetDocument();
+
+		$oDomDocument->formatOutput = true;
 
 		$sXmlFileName = $this->sXMLExportPath . DIRECTORY_SEPARATOR . $this->iJobQueueId . '.xml';
 
@@ -240,7 +248,7 @@ class ExportXMLTask extends TaskAbstract{
 			unlink( $sXmlFileName );
 		}
 
-		$this->oDomDocument->save( $sXmlFileName );
+		$oDomDocument->save( $sXmlFileName );
 
 
 	}
@@ -250,7 +258,7 @@ class ExportXMLTask extends TaskAbstract{
 	*/
 	protected function ExportXMLPseudoSetterForAutoComplete( MwXml $oMwXml ){
 
-		$this->oMwXml = $oMwXml;
+		$this->oMapper = $oMwXml;
 
 	}
 

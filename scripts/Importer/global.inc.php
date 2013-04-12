@@ -48,22 +48,34 @@ $autoloader->registerNamespace( 'Classes'
 
 $autoloader->register();
 
+
+
 /*****************************************
  * CONFIGURE LOGGER
  *****************************************/
 
-switch ( $_SERVER['HTTP_HOST'] ){
-	case 'www.transcribe-bentham.da.ulcc.ac.uk':
-		$sConfigSection = 'production';
-		break;
-	case 'w02.benpro.wf.ulcc.ac.uk':
-		$sConfigSection = 'production';
-		break;
-	case 'cbp-transcription-desk.local':
-		error_reporting(E_ALL);
-		ini_set( 'display_errors', 1 );
-		$sConfigSection = 'development';
-		break;
+// Set the $sConfigSection if running from cron
+
+$sConfigSection = 'staging';
+
+if( isset ( $_SERVER[ 'SCRIPT_FILENAME' ]) ){
+
+	switch ( $_SERVER['HTTP_HOST'] ){
+		case 'www.transcribe-bentham.da.ulcc.ac.uk':
+			$sConfigSection = 'production';
+			break;
+		case 'w02.benpro.wf.ulcc.ac.uk':
+			error_reporting(E_ALL);
+			ini_set( 'display_errors', 1 );
+			$sConfigSection = 'staging';
+			break;
+		case 'cbp-transcription-desk.local':
+			error_reporting(E_ALL);
+			ini_set( 'display_errors', 1 );
+			$sConfigSection = 'development';
+			break;
+	}
+
 }
 
 
@@ -73,7 +85,15 @@ $oConfig->setNestSeparator( ' : ' );
 
 $aConfig        = $oConfig->fromFile( 'config.ini.php' );
 
-$aSectionConfig = $aConfig[ $sConfigSection ][ 'common' ];
+// Load common config items
+
+$aSectionConfig = $aConfig[ 'common' ];
+
+
+// Load section specific config items
+
+$aSectionConfig = array_merge( $aSectionConfig, $aConfig[ $sConfigSection ][ 'common' ] );
+
 
 $oInfoLogger		= new Zend\Log\Logger;
 $oExceptionLogger	= new Zend\Log\Logger;
@@ -84,8 +104,8 @@ $oExceptionLogger	= new Zend\Log\Logger;
 *****************************************/
 
 $aDbConfig	= array(
-					 'driver'	=> $aConfig[ 'common' ][ 'database.adapter' ]
-					,'host'     => $aConfig[ 'common' ] ['database.params.host' ]
+					 'driver'	=> $aSectionConfig[ 'database.adapter' ]
+					,'host'     => $aSectionConfig[ 'database.params.host' ]
 					,'username' => $aSectionConfig[ 'database.params.username' ]
 					,'password'	=> $aSectionConfig[ 'database.params.password' ]
 					,'dbname'   => $aSectionConfig[ 'database.params.dbname' ]
@@ -104,17 +124,18 @@ $oDi = new Zend\Di\Di();
 $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 										    							'oInfoLogger'      => $oInfoLogger
 																   	  , 'oExceptionLogger' => $oExceptionLogger
-																	  , 'aSectionConfig'   => $aSectionConfig
-									 							  )
+																	  , 'aConfig'          => $aSectionConfig
+									 							       )
 									 );
 
-$oDi->instanceManager()->setParameters( 'Classes\Helpers\MwXml', array( 'aSectionConfig'   => $aSectionConfig ) );
+$oDi->instanceManager()->setParameters( 'Classes\Mappers\JobItemsToMwXml', array( 'aConfig' => $aSectionConfig ) );
 
 $oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ) );
 $oDi->instanceManager()->setParameters( 'Classes\Db\Box'     , array( 'oAdapter' => $oAdapter ) );
 $oDi->instanceManager()->setParameters( 'Classes\Db\Folio'   , array( 'oAdapter' => $oAdapter ) );
 $oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ) );
 $oDi->instanceManager()->setParameters( 'Classes\Db\ErrorLog', array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\MediaWiki', array( 'oAdapter' => $oAdapter ) );
 
 /*****************************************
  * TASKS
@@ -123,7 +144,7 @@ $oDi->instanceManager()->setParameters( 'Classes\Db\ErrorLog', array( 'oAdapter'
 require_once 'Classes/TaskAbstract.php';
 
 
-if( $sConfigSection === 'development' ){
+if( $sConfigSection === 'development' or $sConfigSection === 'staging' ){
 
  require 'test_scripts.inc.php';
 

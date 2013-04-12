@@ -53,8 +53,6 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	private $sCsvFilePath;
 
-	private $iJobQueueId;
-
 	/* @var BoxEntity */
 	private $oBoxEntity;
 
@@ -67,18 +65,20 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	/* @var ErrorLogEntity */
 	private $oErrorLogEntity;
 
+	private $iCurrentFolioId;
+
 	public function __construct(  Di				  $oDi
 								, CsvRowToFolioEntity $oCsvRowToFolioEntityMapper
-								,                     $aSectionConfig
+								,                     $aConfig
 								, JobQueueEntity      $oJobQueueEntity ){
 
 		parent::__construct( $oDi );
 
 		$this->oCsvRowToFolioEntityMapper = $oCsvRowToFolioEntityMapper;
 
-		$this->sCsvFilePath = $aSectionConfig[ 'path.csv.import' ];
+		$this->sCsvFilePath = $aConfig[ 'path.csv.import' ];
 
-		$this->iJobQueueId      = $oJobQueueEntity->getId();
+		$this->iJobQueueId  = $oJobQueueEntity->getId();
 
 		$this->oBoxEntity   = new BoxEntity();
 
@@ -98,13 +98,18 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		// No started flag is needed because we do not have the records to flag
+		// No started flag is needed because we do not have the records to flag!
 
-		$sFilePath = $this->sCsvFilePath;
+		try {
+			$sFilePath = $this->sCsvFilePath;
+			$hHandle   = $this->oFile->GetFileHandle( $sFilePath );
 
-		$hHandle   = $this->oFile->GetFileHandle( $sFilePath );
+			$this->IterateCsvFileAndInsertRowsIntoDb( $hHandle );
 
-		$this->IterateCsvFileAndInsertRowsIntoDb( $hHandle );
+		} catch (Exception $oException ) {
+			$this->HandleError( $oException, $oJobQueueEntity );
+		}
+
 
 
 	}
@@ -123,11 +128,11 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$iJobQueueId = $this->iJobQueueId;
 
-		$oBoxEntity = $this->oBoxEntity;
+		$oBoxEntity  = $this->oBoxEntity;
 
-		$sBoxNumber = NULL;
+		$sBoxNumber  = NULL;
 
-		$iBoxId = NULL;
+		$iBoxId      = NULL;
 
 		while ( $aRow = fgetcsv ( $hHandle, 4000, '|' ) ){
 
@@ -177,6 +182,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 				// If false then the $oMappedFolioEntityrecord already exists so exit
 				// TODO Could items be subsequently added to a portfolio?
+
 				if( $oMappedFolioEntity !== false ){
 					$this->InsertItems( $oMappedFolioEntity );
 				}
@@ -241,7 +247,14 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$oMappedFolioEntity->setBoxId( $iBoxId );
 
+		/* @var $oMappedFolioEntity FolioEntity */
 		$oMappedFolioEntity = $this->oFolioDb->Insert( $oMappedFolioEntity );
+
+		if( $oMappedFolioEntity->getId() === $this->iCurrentFolioId ){
+			return false;
+		}
+
+		$this->iCurrentFolioId =  $oMappedFolioEntity->getId();
 
 		return $oMappedFolioEntity;
 

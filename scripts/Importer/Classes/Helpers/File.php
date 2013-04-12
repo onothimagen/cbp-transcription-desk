@@ -295,7 +295,7 @@ class File {
 	*/
 	public function GetFileHandle( $sFilePath ){
 
-		$this->CheckExists( $sFilePath );
+		$this->CheckExists( 'FilePath', $sFilePath );
 
 		$hHandle = fopen( $sFilePath, 'r' );
 
@@ -310,12 +310,12 @@ class File {
 	/*
 	 *
 	 */
-	public function CheckExists( $sFilePath ){
+	public function CheckExists( $sName, $sFilePath ){
 
 		$bFileExists = file_exists( $sFilePath );
 
 		if( $bFileExists === false ){
-			throw new ImporterException( $sFilePath . ' does not exist<p />' );
+			throw new ImporterException( $sName . ' ' . $sFilePath . ' does not exist<p />' );
 		}
 
 	}

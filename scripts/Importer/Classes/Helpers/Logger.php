@@ -36,6 +36,7 @@ class Logger {
 	private $sFolderLocation;
 	private $sLogName;
 	private $sErrorLogName;
+	private $sSystemGroup;
 
 	const LINE_WIDTH = 80;
 
@@ -47,12 +48,13 @@ class Logger {
 
 	public function __construct(   ZendLogger $oInfoLogger
 								 , ZendLogger $oExceptionLogger
-								 ,            $aSectionConfig ){
+								 ,            $aConfig ){
 
 		$this->oInfoLogger		= $oInfoLogger;
 		$this->oExceptionLogger	= $oExceptionLogger;
-		$this->sLogPath         = $aSectionConfig[ 'path.logs' ];
-		$this->sAdminEmail      = $aSectionConfig[ 'admin.email' ];
+		$this->sLogPath         = $aConfig[ 'path.logs' ];
+		$this->sAdminEmail      = $aConfig[ 'admin.email' ];
+		$this->sSystemGroup     = $aConfig[ 'system.group' ];
 
 	}
 
@@ -61,7 +63,7 @@ class Logger {
 		$sContext = strtolower( $sContext );
 
 		$sRootFolder 		= $this->sLogPath;
-		$sFolderLocation 	= $sRootFolder . $sContext;
+		$sFolderLocation 	= $sRootFolder . DIRECTORY_SEPARATOR . $sContext;
 
 		if( !is_dir( $sFolderLocation ) ){
 			if( !mkdir( $sFolderLocation, 0, true )) {
@@ -74,10 +76,18 @@ class Logger {
 
 		if( file_exists( $this->sLogName ) === false ){
 			touch( $this->sLogName );
+			if(  $this->ServerOS() === 'UNIX' ){
+				chmod( $this->sLogName, 0770 );
+				chgrp( $this->sLogName, $this->sSystemGroup );
+			}
 		}
 
 		if( file_exists( $this->sErrorLogName ) === false ){
 			touch( $this->sErrorLogName );
+			if(  $this->ServerOS() === 'UNIX' ){
+				chmod( $this->sErrorLogName, 0770 );
+				chgrp( $this->sErrorLogName, $this->sSystemGroup );
+			}
 		}
 
 		$oInfoWriter			= new Stream( $this->sLogName );
@@ -99,6 +109,7 @@ class Logger {
 		$this->MailException( $sExceptionText );
 
 		$this->oExceptionLogger->log( ZendLogger::ERR, $sExceptionText . "\r\n" );
+
     }
 
     private function MailException ( $sExceptionText ){
@@ -135,6 +146,24 @@ class Logger {
     private function CreateLogFileName( $sLogName, $sExtension ) {
         return $sLogName . '/' . date( 'Y-m-d' ) . $sExtension;
     }
+
+    /*
+     *
+    */
+    private function ServerOS(){
+
+    	$sys = strtoupper( PHP_OS );
+
+    	if( substr( $sys, 0, 3 ) == 'WIN' ){
+    		return 'WIN';
+    	}elseif( $sys == 'LINUX' ){
+    		return 'LINUX';
+    	}else{
+    		return 'OTHER';
+    	}
+
+    }
+
 }
 
 

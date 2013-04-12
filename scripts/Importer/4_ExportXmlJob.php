@@ -30,7 +30,7 @@ require_once 'html_header.inc.php';
 
 require_once 'global.inc.php';
 
-require_once 'Classes\4_ExportXMLTask.php';
+require_once 'Classes/4_ExportXMLTask.php';
 
 $oExportXmlTask = new ExportXMLTask( $oDi
 								   , $aSectionConfig
@@ -38,15 +38,9 @@ $oExportXmlTask = new ExportXMLTask( $oDi
 
 echo 'XML export started <br />';
 
-try {
-	$oExportXmlTask->Execute();
-} catch ( Exception $e ) {
 
-	/* @var $oJobQueueDb JobQueue */
-	$oJobQueueDb = $oDi->get( 'Classes\Db\JobQueue' );
+$oExportXmlTask->Execute();
 
-	$oJobQueueDb->UpdateJobStatus( $iJobQueueId, 'error' );
-}
 
 echo 'XML export completed <p />';
 
