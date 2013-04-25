@@ -1,0 +1,2008 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.7/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.7/ http://www.mediawiki.org/xml/export-0.7.xsd" version="0.7" xml:lang="en-gb">
+  <siteinfo>
+    <sitename>Transcribe Bentham: Transcription Desk</sitename>
+    <base>http://w02.benpro.wf.ulcc.ac.uk/td/Main_Page</base>
+    <generator>MediaWiki 1.20.2</generator>
+    <case>first-letter</case>
+    <!-- pages in this export: 
+    
+Template:About BenthamWiki	
+Template:About Discussion Forum	
+Template:About Project Partners
+Template:About The Software		
+Template:About The Transcription Desk
+Template:Hl2	
+Template:Infobox Folio New
+Template:Progress	
+Template:TopUsers
+
+Discussion Forum
+Main Page
+Manuscripts	
+Software Credits	
+TestSMW
+Transcription Desk
+
+Help:Administrators	
+Help:Contents	
+Help:Editing pages
+Help:Formatting	
+Help:Hints and Tips	
+Help:Navigation
+Help:Palaeography Skills	
+Help:Preferences	
+Help:Searching
+Help:SocialProfile	
+Help:Tables	
+Help:Tracking changes
+Help:Transcription Guidelines	
+Help:User Accounts	
+Help:User levels
+
+Mediawiki:Sidebar
+MediaWiki:Edittools
+MediaWiki:Sitenotice
+
+-->
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">Project</namespace>
+      <namespace key="5" case="first-letter">Project talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+      <namespace key="100" case="first-letter">Metadata</namespace>
+      <namespace key="101" case="first-letter">Metadata talk</namespace>
+      <namespace key="102" case="first-letter">Property</namespace>
+      <namespace key="103" case="first-letter">Property talk</namespace>
+      <namespace key="108" case="first-letter">Concept</namespace>
+      <namespace key="109" case="first-letter">Concept talk</namespace>
+      <namespace key="200" case="first-letter">UserWiki</namespace>
+      <namespace key="201" case="first-letter">UserWiki talk</namespace>
+      <namespace key="202" case="first-letter">User profile</namespace>
+      <namespace key="203" case="first-letter">User profile talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Template:About BenthamWiki</title>
+    <ns>10</ns>
+    <id>1085</id>
+    <revision>
+      <id>1134</id>
+      <parentid>1133</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>kghvmgyh82jtxjl6zlot86bqp9aftzd</sha1>
+      <text xml:space="preserve" bytes="1103">&lt;table class=&quot;infobox&quot; style=&quot;padding:0.3em; float:right; margin-left:15px; margin-bottom:8px; border:1px solid #A3B1BF; background:#ffffcc; text-align:center; font-size:95%; line-height:1.5em; width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th style=&quot;background:#ffdd00; padding:0.3em; font-size:1.1em;&quot;&gt;Transcribe Bentham Right Now!&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Transcribe Bentham is running [http://www.mediawiki.org/ MediaWiki]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt; It has {{NUMBEROFARTICLES}} articles, and {{NUMBEROFPAGES}} pages in total.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;There have been {{NUMBEROFEDITS}} edits.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;There are {{NUMBEROFUSERS}} [[Special:ListUsers|registered users]],&lt;br&gt;including {{NUMBEROFADMINS}} [[Wikipedia:Administrators|administrators]].&lt;/td&gt;&lt;/tr&gt;
+
+&lt;tr&gt;&lt;td&gt;There are {{NUMBEROFFILES}} uploaded files.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;small&gt;This information is correct as of {{CURRENTTIME}} on {{CURRENTMONTHNAME}} {{CURRENTDAY}}, {{CURRENTYEAR}}.&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;background:#ffbb00; padding:0.3em;&quot;&gt;&lt;small&gt;This page last edited by {{REVISIONUSER}} on {{REVISIONDAY}}/{{REVISIONMONTH}}/{{REVISIONYEAR}}&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:About Discussion Forum</title>
+    <ns>10</ns>
+    <id>1086</id>
+    <revision>
+      <id>1136</id>
+      <parentid>1135</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>ticfb0u0ollr0qtely1l3qyhebfhfls</sha1>
+      <text xml:space="preserve" bytes="413">&lt;table class=&quot;infobox&quot; style=&quot;padding:0.3em; float:right; margin-left:15px; margin-bottom:8px; border:1px solid #A3B1BF; background:#ffffcc; text-align:center; font-size:95%; line-height:1.5em;  width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th colspan=&quot;2&quot; style=&quot;background:#ffdd00; padding:0.3em; font-size:1.1em;&quot;&gt;Discussion Forum Info&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;
+&lt;forum_info&gt;
+width=100%
+showall=false
+inline=true
+&lt;/forum_info&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:About Project Partners</title>
+    <ns>10</ns>
+    <id>1087</id>
+    <revision>
+      <id>1138</id>
+      <parentid>1137</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>h3v36e6v9vdtb88yxvxiiiuloj42neo</sha1>
+      <text xml:space="preserve" bytes="1414">&lt;table class=&quot;infobox&quot; style=&quot;padding:0.3em; float:right; margin-left:15px; margin-bottom:8px; border:1px solid #A3B1BF; background:#ffffff; text-align:center; font-size:95%; line-height:1.5em;  width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th colspan=&quot;2&quot; style=&quot;background:#ffbb00; padding:0.3em; font-size:1.1em;&quot;&gt;Transcribe Bentham is brought to you by&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;
+[[File:UCL-logo.png|link=http://www.ucl.ac.uk/Bentham-Project/|80px]]
+&lt;/td&gt;
+&lt;td  style=&quot;text-align: left;&quot;&gt;[http://www.ucl.ac.uk/Bentham-Project/ University College London Bentham Project]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;[[File:UCL-DH-logo.png|link=http://www.ucl.ac.uk/dh/|64px]]&lt;/td&gt;
+ &lt;td style=&quot;text-align: left;&quot;&gt;[http://www.ucl.ac.uk/dh/ University College London Centre for Digital Humanities]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;[[File:ULCC-logo.png|link=http://www.ulcc.ac.uk|80px]]&lt;/td&gt;
+&lt;td style=&quot;text-align: left;&quot;&gt;[http://www.ulcc.ac.uk/ University of London Computer Centre Digital Archives]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#ffffcc; padding:0.3em;&quot;&gt;Established under funding from&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;[[File:AHRC-logo.png|link=http://www.ahrc.ac.uk/|120px]]&lt;/td&gt;
+&lt;td style=&quot;text-align: left;&quot;&gt;[http://www.ahrc.ac.uk/ Arts and Humanities Research Council]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#ffffcc; padding:0.3em;&quot;&gt;Currently supported by&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: right&quot;&gt;[http://www.mellon.org/ The Andrew W. Mellon Foundation]&lt;/td&gt;&lt;/tr&gt;
+
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:About The Software</title>
+    <ns>10</ns>
+    <id>1088</id>
+    <revision>
+      <id>1168</id>
+      <parentid>1156</parentid>
+      <timestamp>2013-04-25T10:29:10Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>qtre5384ocwn03per2vcuv0ra4pgr10</sha1>
+      <text xml:space="preserve" bytes="1145">&lt;table class=&quot;infobox&quot; style=&quot;padding:0.3em; float:right; margin-left:15px; margin-bottom:8px; border:1px solid #A3B1BF; background:#ffffff; text-align:center; font-size:95%; line-height:1.5em;  width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th colspan=&quot;2&quot; style=&quot;background:#6f2c52; padding:0.3em; font-size:1.1em; color: #fff;&quot;&gt;Transcription Desk for Mediawiki is brought to you by&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align: left;&quot;&gt;
+* [http://www.ucl.ac.uk/Bentham-Project/ University College London, Bentham Project]
+* [http://www.ucl.ac.uk/dh/ University College London, Centre for Digital Humanities]
+* [http://ulcc.ac.uk/services/research-technology University of London Computer Centre, Academic &amp; Research Technologies]
+&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#eadbe4; padding:0.3em; text-align: left;&quot;&gt;Established under funding from the [http://www.ahrc.ac.uk/ Arts and Humanities Research Council]
+&lt;br/&gt;Further development funded by [http://www.mellon.org/ The Andrew W. Mellon Foundation]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot; padding:0.3em; text-align: left;&quot;&gt;''See the [[Software Credits|credits page]] for a full list of contributors.''&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:About The Transcription Desk</title>
+    <ns>10</ns>
+    <id>1064</id>
+    <revision>
+      <id>1145</id>
+      <parentid>1082</parentid>
+      <timestamp>2013-04-25T09:01:06Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>bf1tsu8hcj9le9fxn85hxvae1rxyq25</sha1>
+      <text xml:space="preserve" bytes="1231">&lt;table class=&quot;infobox&quot; style=&quot;padding:0.3em; float:right; margin-left:15px; margin-bottom:8px; border:1px solid #aa8899; background:#e1e9e1; text-align:center; font-size:95%; line-height:1.5em; width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th style=&quot;background:#3f593f; padding:0.3em; font-size:1.1em;  color: #fff&quot;&gt;Transcription Desk Right Now!&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;The Transcription Desk is running [http://www.mediawiki.org/ MediaWiki] {{CURRENTVERSION}}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt; It has {{NUMBEROFARTICLES}} articles (including manuscripts), and {{NUMBEROFPAGES}} [[Special:AllPages|pages]] grouped by [[Special:Categories|category]].&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;There have been {{NUMBEROFEDITS}} edits.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;There are {{NUMBEROFUSERS}} [[Special:ListUsers|registered users]],&lt;br&gt;including {{NUMBEROFADMINS}} [[Wikipedia:Administrators|administrators]].&lt;/td&gt;&lt;/tr&gt;
+
+&lt;tr&gt;&lt;td&gt;There are {{NUMBEROFFILES}} uploaded files.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;small&gt;This information is correct as of {{CURRENTTIME}} on {{CURRENTMONTHNAME}} {{CURRENTDAY}}, {{CURRENTYEAR}}.&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;background:#557655; padding:0.3em; color: #fff;&quot;&gt;&lt;small&gt;This page last edited by {{REVISIONUSER}} on {{REVISIONDAY}}/{{REVISIONMONTH}}/{{REVISIONYEAR}}&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:Hl2</title>
+    <ns>10</ns>
+    <id>1083</id>
+    <revision>
+      <id>1130</id>
+      <parentid>1129</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>momzemmp55juez4nuk9fw6nwmucps6t</sha1>
+      <text xml:space="preserve" bytes="86">bgcolor=&quot;#A7C1F2&quot; &lt;noinclude&gt;[[Category:Project Development|{{PAGENAME}}]]&lt;/noinclude&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:Infobox Folio New</title>
+    <ns>10</ns>
+    <id>4</id>
+    <revision>
+      <id>1128</id>
+      <parentid>10</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>qg45wa37bmxfr2poz03yb8rth04zi6u</sha1>
+      <text xml:space="preserve" bytes="5803">&lt;noinclude&gt;This is a greatly simplified adaptation of the template from [[wikipedia:{{FULLPAGENAME}}]].
+
+This version embeds semantic annotation inside the template, so the template both displays information in a table and records semantically meaningful properties.
+Such [[Help:Semantic templates|semantic templates]] simplify adding semantics to recurring elements in wiki pages.
+
+Note this table does not handle missing values.
+
+That can be done using &lt;tt&gt;&lt;nowiki&gt;{{#if:}}&lt;/nowiki&gt;&lt;/tt&gt; from the MediaWiki ParserFunctions extension, but using conditionals in a table requires tricky syntax to mix pipe ' '''|''' ' symbols for layout and expressions (see [[wikipedia:Wikipedia:Conditional_tables]]).
+
+The table appears below in this template page (we could hide it with &lt;nowiki&gt;&lt;includeonly&gt;&lt;/nowiki&gt;).  You don't see any factbox for this dummy table because in this Semantic MediaWiki installation, semantic annotations are not enabled in the Template namespace.&lt;/noinclude&gt;
+
+&lt;table id=&quot;folioview&quot; style=&quot;width:100%; font-size: 90%;&quot;  align=&quot;center&quot;&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: center; background-color: #def;&quot; colspan=&quot;4&quot;&gt;
+[[Property:Identifier | Identifier]]: | [[identifier::{{{identifier}}}]]
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def; width:25%;&quot;&gt;
+[[Property:Date_1 | Date_1]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top; width:25%;&quot;&gt;
+[[date_1::{{{date_1}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def; width:25%;&quot;&gt;
+[[Property:Marginal summary numbering | Marginal Summary Numbering]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top; width:25%;&quot;&gt;
+[[marginal_summary_numbering::{{{marginal_summary_numbering}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Box number | Box]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[box_number::{{{box_number}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Main headings | Main Headings]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[main_headings::{{{main_headings}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Folio number | Folio number]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[folio_number::{{{folio_number}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Info in main headings field | Info in main headings field]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[info_in_main_headings_field::{{{info_in_main_headings_field}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Image number | Image]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[image_number::{{{image_number}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Titles | Titles]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[titles::{{{titles}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Category | Category]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[category::{{{category}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Number of pages | Number of Pages]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[number_of_pages::{{{number_of_pages}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Rectoverso | Recto/Verso]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[rectoverso::{{{rectoverso}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Page_numbering | Page Numbering]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[page_numbering::{{{page_numbering}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Penner | Penner]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[penner::{{{penner}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Watermarks | Watermarks]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[watermarks::{{{watermarks}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Marginals | Marginals]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[marginals::{{{marginals}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Paper producer | Paper Producer]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[paper_producer::{{{paper_producer}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Corrections | Corrections]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[corrections::{{{corrections}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Paper produced in year | Paper Produced in Year]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[paper_produced_in_year::{{{paper_produced_in_year}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:Notes public | Notes public]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[notes_public::{{{notes_public}}}]]
+&lt;/td&gt;
+&lt;th style=&quot;vertical-align: top; text-align: right; background-color: #def;&quot;&gt;
+[[Property:ID Number | ID Number]]
+&lt;/th&gt;
+&lt;td style=&quot;vertical-align: top;&quot;&gt;
+[[id_number::{{{id_number}}}]]
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;4&quot; style=&quot;text-align: center;background-color: #def;&quot;&gt;
+'''[[:Category:Box {{{box_number}}}|Box Contents]]''' 
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+
+
+&lt;!-- now some annotations that don't appear in the template --&gt;
+&lt;includeonly&gt;[[Category:All Folios]] [[ Category:Box {{{box_number}}}]]&lt;/includeonly&gt;
+&lt;noinclude&gt;[[Category:Project Development]] &lt;/noinclude&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:Progress</title>
+    <ns>10</ns>
+    <id>1090</id>
+    <revision>
+      <id>1166</id>
+      <parentid>1165</parentid>
+      <timestamp>2013-04-25T09:59:04Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>totobeuywfb8frlpqr76jhx6d0wx84y</sha1>
+      <text xml:space="preserve" bytes="683">&lt;noinclude&gt;
+
+Call as&lt;br/&gt;
+&lt;nowiki&gt;{{&lt;/nowiki&gt;Progress &lt;br/&gt;
+&lt;nowiki&gt;|&lt;/nowiki&gt; title    = Project Progress&lt;br/&gt;
+&lt;nowiki&gt;|&lt;/nowiki&gt; percent  = 50&lt;br/&gt;
+&lt;nowiki&gt;|&lt;/nowiki&gt; comment  = We are 50% complete! (not really!!)&lt;br/&gt;
+}}
+&lt;/noinclude&gt;
+{|cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; style=&quot;background:transparent; width:{{{width|100%}}}&quot;
+|-
+!colspan=&quot;2&quot;| {{{title}}}
+!colspan=&quot;2&quot;|{{{percent}}}% finished
+|- style=&quot;outline:1px solid black; height:15px;&quot;
+|style=&quot;width:{{{percent&lt;noinclude&gt;|25&lt;/noinclude&gt;}}}%; background-color:#8a3737; padding:0px;&quot; |&amp;nbsp;
+|style=&quot;width:{{#expr: 100 - {{{percent&lt;noinclude&gt;|25&lt;/noinclude&gt;}}} }}%; background-color:#ff7f50; padding:0px;&quot;| &amp;nbsp;
+|
+{{{comment}}}}</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:TopUsers</title>
+    <ns>10</ns>
+    <id>1084</id>
+    <revision>
+      <id>1132</id>
+      <parentid>1131</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>31xyqywx7rnbnb01brzj5qsxgg1uv5x</sha1>
+      <text xml:space="preserve" bytes="4115">&lt;table  style=&quot;padding:0.3em; margin-left:15px; margin-bottom:8px; border:1px solid #A3B1BF; background:#fff; text-align:center; font-size:95%; line-height:1.5em; width: 28em;&quot;&gt;
+&lt;tr&gt;&lt;th style=&quot;background:#ff6666; padding:0.3em; font-size:1.1em;&quot;&gt;Transcribe Bentham Top Contributors&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_1}}}_m.jpg [[User:{{{username_1}}}|{{{username_1}}}]] '''{{{points_1}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_2}}}_m.jpg [[User:{{{username_2}}}|{{{username_2}}}]] '''{{{points_2}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_3}}}_m.jpg [[User:{{{username_3}}}|{{{username_3}}}]] '''{{{points_3}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_4}}}_m.jpg [[User:{{{username_4}}}|{{{username_4}}}]] '''{{{points_4}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_5}}}_m.jpg [[User:{{{username_5}}}|{{{username_5}}}]] '''{{{points_5}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_6}}}_m.jpg [[User:{{{username_6}}}|{{{username_6}}}]] '''{{{points_6}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_7}}}_m.jpg [[User:{{{username_7}}}|{{{username_7}}}]] '''{{{points_7}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_8}}}_m.jpg [[User:{{{username_8}}}|{{{username_8}}}]] '''{{{points_8}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_9}}}_m.jpg [[User:{{{username_9}}}|{{{username_9}}}]] '''{{{points_9}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_10}}}_m.jpg [[User:{{{username_10}}}|{{{username_10}}}]] '''{{{points_10}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_11}}}_m.jpg [[User:{{{username_11}}}|{{{username_11}}}]] '''{{{points_11}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_12}}}_m.jpg [[User:{{{username_12}}}|{{{username_12}}}]] '''{{{points_12}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_13}}}_m.jpg [[User:{{{username_13}}}|{{{username_13}}}]] '''{{{points_13}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_14}}}_m.jpg [[User:{{{username_14}}}|{{{username_14}}}]] '''{{{points_14}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_15}}}_m.jpg [[User:{{{username_15}}}|{{{username_15}}}]] '''{{{points_15}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_16}}}_m.jpg [[User:{{{username_16}}}|{{{username_16}}}]] '''{{{points_16}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_17}}}_m.jpg [[User:{{{username_17}}}|{{{username_17}}}]] '''{{{points_17}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_18}}}_m.jpg [[User:{{{username_18}}}|{{{username_18}}}]] '''{{{points_18}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_19}}}_m.jpg [[User:{{{username_19}}}|{{{username_19}}}]] '''{{{points_19}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;http://www.benthamproject.da.ulcc.ac.uk/td/images/avatars/benprowiki_{{{userid_20}}}_m.jpg [[User:{{{username_20}}}|{{{username_20}}}]] '''{{{points_20}}}''' points&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;'''[[Help:User_levels|Find out]] how to become a Master transcriber!'''&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;small&gt;Last updated on  {{REVISIONDAY}}/{{REVISIONMONTH}}/{{REVISIONYEAR}}&lt;/small&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Discussion Forum</title>
+    <ns>0</ns>
+    <id>1068</id>
+    <revision>
+      <id>1144</id>
+      <parentid>1096</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>fylmelm9f4deub6dq95uxydvfcw5f43</sha1>
+      <text xml:space="preserve" bytes="91">''Use this page to describe or redirect to a discussion forum if you have implemented it.''</text>
+    </revision>
+  </page>
+  <page>
+    <title>Main Page</title>
+    <ns>0</ns>
+    <id>1</id>
+    <redirect title="Transcription Desk" />
+    <revision>
+      <id>1142</id>
+      <parentid>1093</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>ska3ko0znlm3sufz578vzyshvu5mmyo</sha1>
+      <text xml:space="preserve" bytes="530">#REDIRECT [[Transcription Desk]]
+
+This page will be set to forward to [[Transcription Desk]]
+
+'''MediaWiki has been successfully installed.'''
+
+Consult the [//meta.wikimedia.org/wiki/Help:Contents User's Guide] for information on using the wiki software.
+
+== Getting started ==
+* [//www.mediawiki.org/wiki/Manual:Configuration_settings Configuration settings list]
+* [//www.mediawiki.org/wiki/Manual:FAQ MediaWiki FAQ]
+* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki release mailing list]
+
+__NOTITLE__</text>
+    </revision>
+  </page>
+  <page>
+    <title>Manuscripts</title>
+    <ns>0</ns>
+    <id>1067</id>
+    <revision>
+      <id>1095</id>
+      <timestamp>2013-04-24T22:09:47Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with &quot;''Use this page to summarise the contents of the transcription desk - classifications, groupings, arrangement''  ==Subject matter==  ==Time period==  ==Difficulty level==  ==F...&quot;</comment>
+      <sha1>1ank7m8l88oo04amkrfyzwgpdbn1bos</sha1>
+      <text xml:space="preserve" bytes="1141">''Use this page to summarise the contents of the transcription desk - classifications, groupings, arrangement''
+
+==Subject matter==
+
+==Time period==
+
+==Difficulty level==
+
+==Find a totally untranscribed manuscript==
+
+If you are looking for manuscripts which have yet to be worked on at all, consult [[:Category:Untranscribed_Manuscripts|the list of untranscribed manuscripts]].
+
+==Complete a partially-transcribed manuscript==
+
+If you would prefer to tackle a partially-transcribed manuscript, rather than starting one from scratch, have a look at the list of [[:Category:Incomplete_Folios|the list of incomplete transcripts]].
+
+==Box Number==
+
+This category refers to a box based archival arrangement. The Transcription Desk supports this arrangement by default using the [[:Category:All_Boxes|Categories]] function of Mediawiki.
+
+==Folio Number==
+
+Each box contains a range of individual manuscripts known as folios. Each folio has been assigned a unique number: this arrangement can also be implemented using Mediawiki's [[:Category:All_Folios|Categories]] function.
+
+==Or pick a manuscript at random==
+
+[[Special:Random|Spin the wheel!]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Software Credits</title>
+    <ns>0</ns>
+    <id>1089</id>
+    <revision>
+      <id>1157</id>
+      <timestamp>2013-04-25T09:27:19Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with &quot;People and software that have contributed to the Transcription Desk   == People == * Tim Causer (UCL) * Valerie Wallace (UCL) * Justin Tonra (UCL) * Philip Schofield (UCL) * M...&quot;</comment>
+      <sha1>dkbfjgzop9fgw0cy49190c8fts3lmyd</sha1>
+      <text xml:space="preserve" bytes="294">People and software that have contributed to the Transcription Desk 
+
+== People ==
+* Tim Causer (UCL)
+* Valerie Wallace (UCL)
+* Justin Tonra (UCL)
+* Philip Schofield (UCL)
+* Melissa Terras (UCL)
+
+* Richard Davis (ULCC)
+* Ben Parish (ULCC)
+
+
+==Software ==
+* [http://www.mediawiki.org/ Mediawiki]</text>
+    </revision>
+  </page>
+  <page>
+    <title>TestSMW</title>
+    <ns>0</ns>
+    <id>2</id>
+    <revision>
+      <id>3</id>
+      <timestamp>2013-02-19T11:54:23Z</timestamp>
+      <contributor>
+        <username>Ben Parish</username>
+        <id>1</id>
+      </contributor>
+      <comment>Created page with &quot;Property test:  [[testproperty::Dummypage]]&quot;</comment>
+      <sha1>px2rk44p4jig6euc7cpx1g4r3gl96os</sha1>
+      <text xml:space="preserve" bytes="43">Property test:  [[testproperty::Dummypage]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Transcription Desk</title>
+    <ns>0</ns>
+    <id>1062</id>
+    <revision>
+      <id>1172</id>
+      <parentid>1171</parentid>
+      <timestamp>2013-04-25T10:31:16Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>czl2oqjni3i2gpwe8o4n29borz2xsy2</sha1>
+      <text xml:space="preserve" bytes="1318">{{About The Transcription Desk}}
+{{About The Software}}
+==Welcome to the Transcription Desk==
+
+This Mediawiki with Transcription Desk tools is now installed. The Transcription Desk tools are available at [https://github.com/onothimagen/cbp-transcription-desk Github] where you will also find some [https://github.com/onothimagen/cbp-transcription-desk/wiki documentation]
+
+===Things you might like to do now===
+
+====Transcription Desk tasks ====
+# [[Run the demo image uploader]] (not connected yet!). When this is completed a [[demo image]] will be available for you to test the zoom viewer tools work.
+# Read a description of  [[Help:Transcription Desk Back End|how to configure the back end]] to receive and process images and metadata for use in this system
+
+====MediaWiki tasks====
+# Configure
+# Look at some [[:Category:Help|Help]] pages
+
+== Progress ==
+''If you have the Progressbar extension installed you can display a progress summary (manually updated) here.''
+&lt;progressbar direction=horizontal backgroundcolor=#933 start=0 current=500 end=1000 height=50px width=500px&gt;Transcription Desk Progress: folios transcribed so far!&lt;/progressbar&gt;
+
+or use [[Template:Progress]]
+{{Progress 
+| title    = Project Progress
+| percent  = 50
+| comment  = We are 50% complete! (not really!!)
+}}
+__NOTOC__
+
+__NOEDITSECTION__</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Administrators</title>
+    <ns>12</ns>
+    <id>1072</id>
+    <revision>
+      <id>1104</id>
+      <parentid>1103</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>gn4x67bmzqhfmldbhg6ys6mjcwa25mb</sha1>
+      <text xml:space="preserve" bytes="1326">==Updating site messages and features==
+
+You can, and should, edit many of the site messages, where it is possible to assist the user by providing more detailed information specific to this site. 
+
+There is a very big list at [[Special:AllMessages]]: if you know some of the content of what you are looking for, use browser Find feature to locate it.
+
+===Links to useful message pages===
+
+* [[MediaWiki:Mainpage]] sets the Home Page of the wiki. 
+* [[MediaWiki:Sitenotice]] contains any text that you want to appear at the top of every page. Useful for important sitewide announcements.
+* [[MediaWiki:Copyrightstatement2]] is the text that appears on the Edit Page, before the Save button. (There is also [[MediaWiki:Copyrightstatement]] which appears elsewhere, not sure where: it may be worth keeping these two in sync.)
+* [[MediaWiki:Confirmemail_text]] is the text of the email message sent to users on registration. You may want to add additional instructions or information.
+* [[MediaWiki:Edittools]] provides text at the botom of the Edit form
+
+
+===Editorial matters===
+* [http://en.wikipedia.org/wiki/Wikipedia:Editorial_oversight_and_control Wikipedia's editorial process] offers useful guidelines
+
+===TBTD Resources===
+* [[List of pages with broken images]]
+* [[Special:TopUsers|Top contributors]]
+
+[[Category:Help]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Contents</title>
+    <ns>12</ns>
+    <id>1069</id>
+    <revision>
+      <id>1098</id>
+      <parentid>1097</parentid>
+      <timestamp>2013-04-24T22:31:49Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>ghkloahwnoohywgfhjtn26mjj5fpqo4</sha1>
+      <text xml:space="preserve" bytes="821">The following pages contain information on using the Transcription Desk. Further information for Transcribe Bentham administrators can be found by following the Advanced Help link at the bottom of this page.
+
+;JB Specials
+:[[Help:Transcription Guidelines]]
+:[[Help:Palaeography Skills]]
+:[[Help:Searching]]
+:[[Help:User Accounts]]
+:[[Help:Wiki Overview]]
+:[[Help:User levels]]
+:[[Help:Hints and Tips]]
+
+;Reading
+:[[Help:Navigation|Navigation]]
+:[[Help:Searching|Searching]]
+:[[Help:Tracking changes|Tracking changes]]
+
+;Editing
+:[[Help:Editing pages|Editing pages]]
+:[[Help:Starting a new page|Starting a new page]]
+:[[Help:Formatting|Formatting]]
+:[[Help:Links|Links]]
+:[[Help:Categories|Categories]]
+
+[[Help:Advanced Help|Advanced Help]]
+
+[[Help:Administrators|Help for Site Administrators]]
+
+[[Category:Help|Contents]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Editing pages</title>
+    <ns>12</ns>
+    <id>1070</id>
+    <revision>
+      <id>1100</id>
+      <parentid>1099</parentid>
+      <timestamp>2013-04-24T22:31:49Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>5ld8sjayllo1zokqezdvf5mq6opkwfn</sha1>
+      <text xml:space="preserve" bytes="903">As a user of Transcribe Bentham, you will generally be transcribing manuscripts by editing pages that contain those manuscripts.
+
+The process you will follow to do this includes:
+
+* Clicking 'Edit' in the toolbar of the chosen manuscript to begin transcribing.
+
+* Typing your transcription in the transcription box opposite.
+
+* Using the toolbar above the transcription box to add markup to your transcription: there are tips on using this toolbar in the video on [[Getting_Started|this page]].
+
+* Previewing your transcription by clicking 'Show Preview' below the transcription box. Saving your transcription, even if it is incomplete, by clicking 'Save Page' below the transcription box. 
+
+For more detailed instructions, including video tutorials, you should refer to [[Getting_Started|Getting Started]] and [[Help:Transcription_Input_Form|Transcription Guidelines]].
+
+[[Category:Help|Editing pages]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Formatting</title>
+    <ns>12</ns>
+    <id>1071</id>
+    <revision>
+      <id>1102</id>
+      <parentid>1101</parentid>
+      <timestamp>2013-04-24T22:31:49Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>j2d876qnpobzvl8uqv06wsfmpmgsv1s</sha1>
+      <text xml:space="preserve" bytes="3095">You can format your text using wiki markup. This consists of normal characters like asterisks, single quotes or equation marks which have a special function in the wiki, sometimes depending on their position. For example, to format a word in ''italic'', you include it in two single quotes like &lt;tt&gt;&lt;nowiki&gt;''this''&lt;/nowiki&gt;&lt;/tt&gt;
+
+== Text formatting markup ==
+
+{| align=&quot;center&quot; {{Prettytable}}
+|-
+|{{Hl2}} |'''Description'''
+|{{Hl2}} |'''You type'''	
+|{{Hl2}} |'''You get'''
+|-
+| colspan=&quot;3&quot; align=&quot;center&quot; | ''applies anywhere''
+|-
+|Italic text
+|&lt;tt&gt;&lt;nowiki&gt;''italic''&lt;/nowiki&gt;&lt;/tt&gt;
+|''italic''
+|-
+| Bold text
+|&lt;tt&gt;&lt;nowiki&gt;'''bold'''&lt;/nowiki&gt;&lt;/tt&gt;
+|'''bold'''
+|-
+| Bold and italic
+|&lt;tt&gt;&lt;nowiki&gt;'''''bold &amp; italic'''''&lt;/nowiki&gt;&lt;/tt&gt;
+|'''''bold &amp; italic'''''
+|-
+|Escape wiki markup
+|&lt;tt&gt;&lt;nowiki&gt;&lt;nowiki&gt;no ''markup''&lt;/nowiki&gt;&lt;/nowiki&gt;&lt;/tt&gt;
+|&lt;nowiki&gt;no ''markup''&lt;/nowiki&gt;
+|-
+| colspan=&quot;3&quot; align=&quot;center&quot; | ''only at the beginning of the line''
+|-
+|Headings of&lt;br /&gt;
+different sizes
+|
+&lt;tt&gt;&lt;nowiki&gt;==level 1==&lt;/nowiki&gt;&lt;/tt&gt;&lt;br /&gt;
+&lt;tt&gt;&lt;nowiki&gt;===level 2===&lt;/nowiki&gt;&lt;/tt&gt;&lt;br /&gt;
+&lt;tt&gt;&lt;nowiki&gt;====level 3====&lt;/nowiki&gt;&lt;/tt&gt;&lt;br /&gt;
+&lt;tt&gt;&lt;nowiki&gt;=====level 4=====&lt;/nowiki&gt;&lt;/tt&gt;
+|
+==Level 1==
+===Level 2===
+====Level 3====
+=====Level 4=====
+|-
+|Horizontal rule
+|
+&lt;tt&gt;&lt;nowiki&gt;----&lt;/nowiki&gt;&lt;/tt&gt;
+|
+----
+|-
+|Bullet list
+|
+&amp;#42; one&lt;br&gt;
+&amp;#42; two&lt;br&gt;
+&amp;#42; three&lt;br&gt;
+&amp;#42;&amp;#42; three and one-third&lt;br&gt;
+&amp;#42;&amp;#42; three and two-thirds&lt;br&gt;
+|
+* one
+* two
+* three
+** three and one-third
+** three and two-thirds
+|-
+|Numbered list
+|
+&amp;#35; one&lt;br /&gt;
+&amp;#35; two&lt;nowiki&gt;&lt;br&gt;&lt;/nowiki&gt;spanning several lines&lt;nowiki&gt;&lt;br&gt;&lt;/nowiki&gt;without breaking the numbering&lt;br /&gt;
+&amp;#35; three&lt;br /&gt;
+&amp;#35;&amp;#35; three point one&lt;br /&gt;
+&amp;#35;&amp;#35; three point two&lt;br /&gt;
+|
+# one
+# two&lt;br&gt;spanning several lines&lt;br&gt;without breaking the numbering
+# three
+## three point one
+## three point two
+|-
+| Mixture of bulleted&lt;br /&gt; and numbered lists
+|
+&amp;#35; one&lt;br /&gt;
+&amp;#35; two&lt;br /&gt;
+&amp;#35;&amp;#42; two point one&lt;br /&gt;
+&amp;#35;&amp;#42; two point two&lt;br /&gt;
+|
+# one
+# two
+#* two point one
+#* two point two
+|-
+|Definition list
+|
+&amp;#59;Definition&lt;br /&gt;
+&amp;#58;item 1&lt;br /&gt;
+&amp;#58;item 2&lt;br /&gt;
+|
+;Definition
+:item 1
+:item 2
+|-
+|Preformatted text
+|
+&amp;nbsp;&amp;nbsp;preformatted text is done with&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;a space at the&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;beginning of the line&lt;br /&gt;
+|
+ preformatted text is done with
+ a space at the 
+ beginning of the line
+|}
+
+
+== Paragraphs ==
+
+Mediawiki ignores normal line breaks. To start a new paragraph, leave an empty line. You can also start a newline with the HTML tag &lt;tt&gt;&lt;nowiki&gt;&lt;br&amp;nbsp;/&gt;&lt;/nowiki&gt;&lt;/tt&gt;.  
+
+== HTML ==
+
+Some [[Help:HTML_in_wikitext|HTML-Tags]] are allowed in MediaWiki, for example &lt;tt&gt;&lt;nowiki&gt;&lt;code&gt;&lt;/nowiki&gt;&lt;/tt&gt;, &lt;tt&gt;&lt;nowiki&gt;&lt;div&gt;&lt;/nowiki&gt;&lt;/tt&gt;, &lt;tt&gt;&lt;nowiki&gt;&lt;span&gt;&lt;/nowiki&gt;&lt;/tt&gt; and &lt;tt&gt;&lt;nowiki&gt;&lt;font&gt;&lt;/nowiki&gt;&lt;/tt&gt;.
+
+
+== More advanced formatting ==
+Beyond the basic text formatting markup shown above, there are some more advanced formatting tricks:
+*[[Help:Links|Links]]
+*[[Help:Images|Images]]
+*[[Help:Tables|Tables]]
+*[[Help:HTML_in_wikitext|Permitted HTML]]
+
+
+__NOTOC__
+__NOEDITSECTION__
+
+[[Category:Help|Formatting]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Hints and Tips</title>
+    <ns>12</ns>
+    <id>1074</id>
+    <revision>
+      <id>1108</id>
+      <parentid>1107</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>1i4wtjyititvwt7m7srqcopk1akgkfc</sha1>
+      <text xml:space="preserve" bytes="193">* You can list your favourite Bentham book, quote and amusing anecdote by editing the [[Special:UpdateProfile/custom|custom information]] in your profile.
+&lt;hr&gt;
+
+[[Category:Help|Hints and Tips]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Navigation</title>
+    <ns>12</ns>
+    <id>1075</id>
+    <revision>
+      <id>1110</id>
+      <parentid>1109</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>gxacjfmaq1dg1dkmkxzjnwg4hhklnm8</sha1>
+      <text xml:space="preserve" bytes="6329">== Overview==
+If you look at a page in '''[[Main Page|{{SITENAME}}]]''', you'll find three main navigation elements: The '''Sidebar''' on the left gives you access to important pages in the Wiki like recent changes or file upload. The '''Page Tabs''' at the top of the page relate to the page currently displayed, and link to its associated '''discussion page''', the '''version history''' and '''the edit page'''. In the '''top right corner''' you'll find either link to create an account or login, or, once logged-in, a collection of personal '''User Links''', like the one to your '''personal user page''' or your '''preferences page'''.
+
+The rest of this page describes each of these areas in more detail.
+
+== Sidebar ==
+The sidebar is displayed on the left edge of the page below the site logo (if using the default MonoBook skin). This sidebar gives you access to important pages in the Wiki like recent changes or file upload.
+
+=== Navigation    ===
+A click on the logo brings you back to the start page of the wiki. The links take you to important pages in the wiki, they can be configured by site administrators of the individual wikis
+
+{{Admin tip|tip=You can customize the links in the navigation section via [[Special:Allmessages]]. For example edit [[MediaWiki:Sitesupport]] (displayed name) and [[MediaWiki:Sitesupport-url]] (target page). Or create a menu on your own in [[MediaWiki:Sidebar]].}}
+
+=== Toolbox ===
+The toolbox contains a selection of links which change depending on what type of page you are viewing.
+
+On all pages (except special pages):
+* '''What links here''' takes you to a special page that lists the pages on this wiki which contain a link to the current page. This is helpful when you are looking for pages of related information. The ''What links here'' information can also be useful when you are refactoring wiki pages and need to check whether links to this page are still relevant after changes in the current page.
+* The '''Related changes''' tool lists all recent changes in the pages linked to from the current page. Recent changes to all relevant template pages are included in the resulting page list. The &quot;Hide minor edits&quot; option that can be set in the user [[Help:Preferences|preferences]] applies, among other things, to ''Related Changes''.
+
+On all pages (including special pages):
+* '''Upload file''' displays a special page that allows logged-in users to upload images and other files to the wiki. Uploaded files can be linked-from or embedded-in wiki pages. Uploading files, viewing files on the server, including them in wiki pages and managing the uploaded files is discussed in the [[Help:Managing files|managing files]] section of this manual. This is not displayed if file uploading has been disabled or not enabled in the first place.
+{{Admin tip|tip=To enable file uploading someone with access to the MediaWiki installation files needs to edit the &lt;code&gt;LocalSettings.php&lt;/code&gt; file and uncomment or add the option &lt;code&gt;$wgEnableUploads = true;&lt;/code&gt;. Uploaded files will be stored in the images folder specified by the &lt;code&gt;$wgUploadPath&lt;/code&gt; variable in the &lt;code&gt;LocalSettings.php&lt;/code&gt;. This directory must be writable if file uploads is enabled. The [[Manual:LocalSettings.php#Upload location|upload location]] and [[Manual:LocalSettings.php#Image uploads|image uploads]] settings are described in more detail on the MetaWiki [[Manual:LocalSettings.php|LocalSettings.php]] page.}}
+* The '''Special pages''' tool lists the MediaWiki special pages. In MediaWiki terminology, a special page is one that presents information about the Wiki and/or allows access to administration activities for the wiki. For example, a list of users registered with the wiki, statistics about the wiki such as the number of pages and number of page edits, system logs, a list of orphaned pages, and so on. These special pages are commonly generated when the special page is loaded rather than being stored in the wiki database.
+
+:''The function and use of the default special pages can be found in the [[Help:Special pages|special pages]] section of this manual.''
+
+== Page Tabs ==
+
+The page tabs are displayed at the top of the article to the right of the site logo (if using the default MonoBook skin). These tabs allow you to perform actions or view pages that are related to the current article. The available default actions include: viewing, editing, and discussing the current article. The specific tabs displayed on your pages depend on whether or not you are logged into the wiki and whether you have sysop (administrator) privileges on the wiki. On special pages only the namespace tab is displayed.
+
+===All users===
+: ''[[Help:Namespaces|namespace]]'' (article, help, special page, template, user page etc.)
+: ''discussion''
+: ''edit'' (may be view source if anonymous editing is enabled, the page is in the MediaWiki namespace or the page is protected)
+: ''history''
+
+===Logged in users===
+: ''move''
+: ''watch''
+
+===Sysops only===
+: ''protect''
+: ''delete''
+
+Extra tabs may be added, or some taken away, by wiki administrators using JavaScript or adding extensions so these may be different depending on which wiki you are using.
+
+== User Links ==
+The user links are displayed at the top far right of the article (if using the default MonoBook skin). These tabs allow the logged-in user to view and edit their user page and wiki preferences. Additionally, the user links allow the user to quickly access their contributions to the wiki and logout.
+
+For anonymous users the user links is replaced by a link to the wiki login page or, if enabled, a link to your ip address and your ip address's talk page.
+
+* ''&lt;username&gt;'' 
+*: This links to your user page which is where you can put information about yourself, store bits of information you want to remember or whatever else you fancy.
+* ''my talk''
+*: This links to your discussion page, where people can leave messages for you.
+* ''preferences''
+*: Allows you to change your personal site preferences.
+* ''my watchlist''
+*: A list of all pages that you are watching.  Pages can be added to this list by clicking 'watch' at the top of the page.
+* ''my contributions''
+*: A list of all contributions you have made to the wiki.
+* ''log out''
+*: Click this link to log out of the wiki.
+
+[[Category:Help|Navigation]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Palaeography Skills</title>
+    <ns>12</ns>
+    <id>1076</id>
+    <revision>
+      <id>1112</id>
+      <parentid>1111</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>3q53u6hkfoqo25iyosdxldnkulhy7vn</sha1>
+      <text xml:space="preserve" bytes="2471">=Palaeography Skills: Tips for Reading Old Handwriting=
+
+Reading and transcribing historical documents can seem daunting at first. Here are some tips to help you.
+
+==Spellings==
+Be aware that in the past spelling was inconsistent. Always transcribe the spelling you see in front of you and do not attempt to translate the word. Here are some examples of Bentham’s [[alternative spellings]].
+
+==Neologisms==
+Bentham also coined many new words. Some of these, like ‘international’, we still use today, but many words are unusual and particular to Bentham. Try to represent the word as faithfully as possible. See a list of Bentham’s [http://www.ucl.ac.uk/Bentham-Project/faqs/neologisms neologisms].
+
+==Flourishes==
+Letters were often represented with certain flourishes we do not use today. For example, Bentham usually wrote the letter 'd' with a swirl to the left: 
+[[File:Reduced.jpg|left|frame|reduced]]
+&lt;br style=&quot;clear: both&quot; /&gt; A double 's', as in the word ‘necessary’, was represented as follows: 
+[[File:Necessary.jpg|left|frame|necessary]]
+&lt;br style=&quot;clear: both&quot; /&gt;
+
+Further examples of Bentham's handwriting can be seen [[Help:Examples of Bentham's handwriting|here]].
+
+
+==Helpful Hints==
+
+If you are finding it difficult to make out a particular word, try the following:
+
+* try to make sense of the context in which the word appears
+* break the word down and read it letter by letter
+* compare individual letters in the word to others letters elsewhere in the document
+* magnify or minimise the document to view the word from a different perspective
+* have a break and come back to the word later
+
+The manuscripts have been categorised by [[Manuscripts#Difficulty_Level|difficulty level]]. If you are a beginner, select a manuscript from the Easy category to start off with. Remember, the more you read the easier it becomes!
+
+==Further Advice==
+You can always ask for help by [[Contact_the_project|contacting us]] or by posting a comment in the [[Special:AWCforum|discussion forum]]. See detailed [[Help:Transcription_Guidelines|guidelines]] on how to use the transcription box and toolbar .
+For further advice on palaeography and practical tutorials you can consult the following websites:
+
+[http://www.nationalarchives.gov.uk/palaeography/default.htm The National Archives]
+
+[http://www.shl.lon.ac.uk/subjects/palaeographyandmanuscriptstudies/gateways.shtml#pct Senate House Library, University of London]
+
+[[Category:Help|Palaeography Skills]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Preferences</title>
+    <ns>12</ns>
+    <id>1077</id>
+    <revision>
+      <id>1114</id>
+      <parentid>1113</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>ndvuceo4qsbkaies2d8ljz3bgmx9on5</sha1>
+      <text xml:space="preserve" bytes="1028">
+Clicking on the [[special:preferences|my preferences]] link in the upper right while logged in allows you to change your preferences.
+
+==Date format==
+The following is normally rendered depending on preferences:
+
+&lt;pre&gt;
+ [[2001-01-05]] (or [[2001]]-[[01-05]]) (with leading zeros)
+ [[2001]] [[January 5]] ([[2001]] [[January 05]])
+ [[January 5]], [[2001]] ([[January 05]], [[2001]])
+ [[5 January]] [[2001]] ([[05 January]] [[2001]])
+ [[January 5]] ([[January 05]])
+ [[5 January]] ([[05 January]])
+&lt;/pre&gt;
+
+With your current preference setting on this project the seven are rendered as follows:
+
+#[[2001-01-05]] ([[2001]]-[[01-05]])
+#[[2001]] [[January 5]] ([[2001]] [[January 05]]}
+#[[January 5]], [[2001]] ([[January 05]], [[2001]])
+#[[5 January]] [[2001]] ([[05 January]] [[2001]])
+#[[January 5]] ([[January 05]])
+#[[5 January]] ([[05 January]])
+
+The user-specified date format does not seem to work on the [[mw:]] wiki for links! It works in Recent Changes etc.
+
+== See also ==
+* [[Help:Skins]]
+
+
+[[Category:Help|Preferences]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Searching</title>
+    <ns>12</ns>
+    <id>1078</id>
+    <revision>
+      <id>1116</id>
+      <parentid>1115</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>10smk0e4ynfewqjqnwhvl0w2ohna076</sha1>
+      <text xml:space="preserve" bytes="1841">==Search and Go==
+On the left-hand side of your screen, in the Sidebar, there is a '''Search''' box with two buttons under it labeled &quot;Go&quot; and &quot;Search&quot;. 
+
+&lt;div style=&quot;border:1px solid #ababff; background: #fdfdff; padding: 1em; margin: 1.1em 1em 1em 0em; font-size:105%&quot;&gt;
+Put your keyword, page title or search terms in the searchbox.
+* &lt;font face=&quot;MS Sans Serif,Arial&quot;&gt;'''Go'''&lt;/font&gt; - (or ''Enter'' on keyboard) will take you automatically to the article, if it exists. If it does not exist, you will be presented with a list of articles that matched your search terms (if any exist).  
+* &lt;font face=&quot;MS Sans Serif,Arial&quot;&gt;'''Search'''&lt;/font&gt; - will search the text of all pages on the wiki (with some restrictions, see below).
+&lt;/div&gt;
+
+
+== How it works ==
+Here's how the search works:
+
+* Only the article content is searched - the page title is ignored.
+* The article content is searched in its raw (wikitext) form - i.e. it searches the text that appears in the edit box when you click 'edit', not the rendered page.  This means that content coming from an included template will not be picked up, but the target of piped links will be.
+* Even if you enclose a phrase in quotes, the search looks for each word individually.  e.g. if you enter &quot;world war 2&quot; it will return pages that contain &quot;world&quot; and &quot;war&quot; and &quot;2&quot;.
+* The search is not case-sensitive, so &quot;MediaWiki&quot;, &quot;mediawiki&quot; and &quot;MEDIAWIKI&quot; all give the same result.
+
+== Restricting the search ==
+By default only the [[Help:namespaces|namespaces]] specified in your [[Help:preferences|preferences]] will be searched.  Logged-in users can change their preferences to specify the namespaces they want to search by default, or if you just want to specify different namespaces for a single search then you can do so on the search results page.
+
+
+
+__NOTOC__
+
+[[Category:Help|Searching]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:SocialProfile</title>
+    <ns>12</ns>
+    <id>1073</id>
+    <revision>
+      <id>1106</id>
+      <parentid>1105</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>1hu0vqlc3r5xhr2kc52436tqumjbosf</sha1>
+      <text xml:space="preserve" bytes="976">===Social Profile===
+Once you are logged in you can click on your user name on the horizontal tool bar at the top of the page. You will be directed to your profile page.
+
+You can upload an avatar and supply biographical information about yourself.
+
+Tell us about your favourite Bentham book, quote or piece of trivia, and anything else you want to share with the Transcribe Bentham community. 
+
+You can add other users as friends, and post public or private messages to their message boards. 
+
+You can check your message board at any time by clicking on your username on the page tabs. 
+
+Through your profile you can also access a list of your own contributions; view the pages you have added to your watchlist; and see the [[Help:User_levels|level you have reached]] and the [[Help:User_levels|number of points]] you have been awarded for your transcriptions. Users are awarded points for edits and advance up the progress ladder as points are accumulated.
+
+[[Category:Help]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Tables</title>
+    <ns>12</ns>
+    <id>1079</id>
+    <revision>
+      <id>1118</id>
+      <parentid>1117</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>h435en7awgq7ru3huwomzrlj8csq9q9</sha1>
+      <text xml:space="preserve" bytes="9813">Tables may be authored in wiki pages using either HTML table elements directly, or using wikicode formatting to define the table. HTML table elements and their use are well described on various web pages and will not be discussed here. The benefit of wikicode is that the table is constructed of character symbols which tend to make it easier to perceive the table structure in the article editing view compared to HTML table elements.
+
+A good general rule of thumb is to avoid using a table unless you need to. Table markup often complicates page editing.
+
+== Wiki table markup summary ==
+
+{|cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; border=&quot;1&quot; width=&quot;600&quot;
+|&lt;nowiki&gt;{|&lt;/nowiki&gt; || start '''table'''
+|-
+|&lt;nowiki&gt;|+&lt;/nowiki&gt; || table '''caption,''' ''optional;'' only one per table and between table start and first row
+|-
+|&lt;nowiki&gt;|-&lt;/nowiki&gt; || '''table row,''' ''optional on first row'' -- wiki engine assumes the first row
+|-
+|&lt;nowiki&gt;!&lt;/nowiki&gt;  || '''table header''' cell, ''optional.'' Consecutive table headers may be added on same line separated by double marks (!!) or start on new lines, each with its own single mark (!).
+|- 
+|&lt;nowiki&gt;|&lt;/nowiki&gt;  || '''table data''' cell, ''required!'' Consecutive table data cells may be added on same line separated by double marks (&lt;nowiki&gt;||&lt;/nowiki&gt;) or start on new lines, each with its own single mark (&lt;nowiki&gt;|&lt;/nowiki&gt;).
+|-
+|&lt;nowiki&gt;|}&lt;/nowiki&gt; || end '''table'''
+|}
+*The above marks must '''start on a new line''' except the double || and !! for optionally adding consecutive cells to a line.
+*'''XHTML attributes.''' Each mark, except table end, optionally accepts one or more XHTML attributes. Attributes must be on the same line as the mark. Separate attributes from each other with a single space. 
+**Cells and caption (&lt;nowiki&gt;| or ||, ! or !!, and |+&lt;/nowiki&gt;) hold content. So separate any attributes from content with a single pipe (|). Cell content may follow on same line or on following lines.
+**Table and row marks (&lt;nowiki&gt;{| and |-&lt;/nowiki&gt;) do not directly hold content. Do ''not'' add pipe (|) after their optional attributes. If you erroneously add a pipe after attributes for the table mark or row mark the parser will delete it ''and'' your final attribute if it was touching the erroneous pipe!
+*'''Content''' may (a) follow its cell mark on the same line after any optional XHTML attributes or (b) on lines below the cell mark. Content that uses wiki markup that itself needs to start on a new line, such as lists, headers, or nested tables, must of course be on its own new line.
+
+==Simple table==
+
+===Plain===
+The following table lacks borders and good spacing but shows the simplest wiki markup table structure
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{|
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{|
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+===Alternative===
+For more table-ish looking wiki markup cells can be listed on one line separated by ||. This does not scale well for longer cell content such as paragraphs. It works well for short bits of content however, such as our example table.
+
+Extra spaces within cells in the wiki markup can be added, as I have done in the wiki markup below, to make the wiki markup itself look better but they do not effect the actual table rendering.
+
+HTML attributes can be added to this table following the examples in other tables on this page but have been left out of the following example for simplicity.
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{|
+|  Orange    ||   Apple   ||   more
+|-
+|   Bread    ||   Pie     ||   more
+|-
+|   Butter   || Ice cream ||  and more
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{|
+|  Orange    ||   Apple   ||   more
+|-
+|   Bread    ||   Pie     ||   more
+|-
+|   Butter   || Ice cream ||  and more
+|}
+&lt;/pre&gt;
+|}
+
+===With HTML attributes===
+You can add HTML attributes to make your table look better
+====border=&quot;1&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+====align=&quot;center&quot; border=&quot;1&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| align=&quot;center&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| align=&quot;center&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+====align=&quot;right&quot; border=&quot;1&quot;====
+You can put attributes on individual '''cells.''' Numbers for example may look better aligned right
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|align=&quot;right&quot;|12,333.00
+|-
+|Bread
+|Pie
+|align=&quot;right&quot;|500.00
+|-
+|Butter
+|Ice cream
+|align=&quot;right&quot;|1.00
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|align=&quot;right&quot;|12,333.00
+|-
+|Bread
+|Pie
+|align=&quot;right&quot;|500.00
+|-
+|Butter
+|Ice cream
+|align=&quot;right&quot;|1.00
+|}
+&lt;/pre&gt;
+|}
+
+
+You can put attributes on individual '''rows,''' too.
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|align=&quot;right&quot;|12,333.00
+|-
+|Bread
+|Pie
+|align=&quot;right&quot;|500.00
+|- style=&quot;font-style:italic;color:green;&quot;
+|Butter
+|Ice cream
+|align=&quot;right&quot;|1.00
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot;
+|Orange
+|Apple
+|align=&quot;right&quot;|12,333.00
+|-
+|Bread
+|Pie
+|align=&quot;right&quot;|500.00
+|- style=&quot;font-style:italic;color:green;&quot;
+|Butter
+|Ice cream
+|align=&quot;right&quot;|1.00
+|}
+&lt;/pre&gt;
+|}
+
+====cellspacing=&quot;0&quot; border=&quot;1&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+====cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+===With HTML attributes and CSS styles===
+CSS style attributes can be added with or without other HTML attributes
+====style=&quot;color:green;background-color:#ffffcc;&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| style=&quot;color:green;background-color:#ffffcc;&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| style=&quot;color:green;background-color:#ffffcc;&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+==Table with TH headings==
+
+TH (HTML table headings) can be created by using ! instead of |. Headings usually show up bold and centered by default.
+
+===Top headings===
+====Each column====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!Yummy
+!Yummier
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!Yummy
+!Yummier
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+====Colspan=&quot;2&quot;====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!colspan=&quot;2&quot;|Yummies
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+! colspan=&quot;2&quot;|Yummies
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+===Side headings===
+====Default====
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!Fruit
+|Orange
+|Apple
+|-
+!Dish
+|Bread
+|Pie
+|-
+!Complement
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!Fruit
+|Orange
+|Apple
+|-
+!Dish
+|Bread
+|Pie
+|-
+!Complement
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+====Right justify====
+Right justified side headings can be done as follows
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!align=&quot;right&quot; |Fruit
+|Orange
+|Apple
+|-
+!align=&quot;right&quot; |Dish
+|Bread
+|Pie
+|-
+!align=&quot;right&quot; |Complement
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+!align=&quot;right&quot; |Fruit
+|Orange
+|Apple
+|-
+!align=&quot;right&quot; |Dish
+|Bread
+|Pie
+|-
+!align=&quot;right&quot; |Complement
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+==Caption==
+A '''table caption''' can be added to the top of any table as follows
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|+Food complements
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|+Food complements
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+'''Attributes''' can be added to the caption as follows
+
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|+align=&quot;bottom&quot; style=&quot;color:#e76700;&quot;|''Food complements''
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|+align=&quot;bottom&quot; style=&quot;color:#e76700;&quot;|''Food complements''
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+==Table with H1, H2, H3 etc. headings==
+
+HTML H1, H2, H3, H4 etc. headings can be created the standard wiki markup way with ==equal== signs and '''must be on a line all by themselves''' to work.
+
+'''Preview the whole table.''' If you click on an edit tab for a heading ''within'' a table, edit, and preview, the parent table will display erroneously broken because part of it will be missing.
+
+Keep the heading hierarchy consistent with the rest of the page so that the table of contents at page top works correctly.
+
+{| width=&quot;100%&quot;
+|width=&quot;50%&quot;|
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|colspan=&quot;2&quot;|
+===Yummiest===
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+|width=&quot;50%&quot;|
+&lt;pre&gt;
+{| border=&quot;1&quot; cellpadding=&quot;20&quot; cellspacing=&quot;0&quot;
+|colspan=&quot;2&quot;|
+===Yummiest===
+|-
+|Orange
+|Apple
+|-
+|Bread
+|Pie
+|-
+|Butter
+|Ice cream 
+|}
+&lt;/pre&gt;
+|}
+
+[[Category:Help|Tables]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Tracking changes</title>
+    <ns>12</ns>
+    <id>1080</id>
+    <revision>
+      <id>1120</id>
+      <parentid>1119</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>f1f804ckzblwhvjpppef7x26hng02jd</sha1>
+      <text xml:space="preserve" bytes="1777">'''[[Main Page|{{SITENAME}}]]''' offers a collection of special pages and tools to keep track of what is going on in the wiki. So you can watch for example:
+* recent changes to all pages
+* newly created pages
+* the contributions of one specific user 
+* the revision history: all changes made to one page
+
+The most interesting special page is '''[[Special:Recentchanges]]'''. It displays all edits, file uploads, page moves, deletions and other actions done in the wiki. In the menu on top it offers a collection of links to customize your display: limit the number of changes shown, the number of days or restrict it to edits to a certain namespace. You can also hide edits marked as minor (don't forget that major changes can be flagged by a user as minor anyway).
+
+One line in recentchanges consists of several links:
+* ''diff'' displays the difference to the previous revision of the page,
+* ''hist'' links to the revision history of the page,
+* the link with the full title of the page brings you to the current version. If the title is in bold, it indicates that it is on your watchlist.
+
+Next is a flag describing the article modification type:
+*''N'' signalizes a new page,
+*''m'' a minor edit,
+*''b'' an edit made by a bot.
+
+Following the timestamp the user is mentioned with a link to his user and talk page and to his contributions. In italic follows a comment if the user has submitted one. 
+
+=== See also ===
+* [[Special:Newpages]]
+* Related changes: [[Special:Recentchangeslinked/Pagename]]
+* User contributions: [[Special:Contributions/User]]
+* History
+* [[Special:Watchlist]]  
+
+{{Admin tip|tip=You may want to add important pages in your wiki to [[MediaWiki:Recentchangestext]], the intro shown at [[Special:Recentchanges]]}}
+
+[[Category:Help|Tracking changes]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:Transcription Guidelines</title>
+    <ns>12</ns>
+    <id>1065</id>
+    <revision>
+      <id>1170</id>
+      <parentid>1169</parentid>
+      <timestamp>2013-04-25T10:30:25Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>d1092smepq3n7x2cfzlutggl69nlx8w</sha1>
+      <text xml:space="preserve" bytes="600">This page offers Guidelines for users of the Transcription Desk. Here, you can find specific directions about how best to transcribe, and how to encode specific features and phenomena of the manuscripts. Some of this may seem daunting, but do not be afraid of having a go at transcription - it is impossible to break anything, and any errors you might make can easily be reverted. If you do come across a manuscript which has been partially transcribed by another volunteer and aren't sure whether you should change anything, do drop the other volunteer(s) a message about it.
+
+...
+
+[[Category:Help]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:User Accounts</title>
+    <ns>12</ns>
+    <id>1081</id>
+    <revision>
+      <id>1124</id>
+      <parentid>1123</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>fz86szqh4f10hdtk4asyz3e7crd9hoo</sha1>
+      <text xml:space="preserve" bytes="2353">===Creating an Account===
+Users must [[Special:UserLogin|create an account]] in order to transcribe documents and save contributions. Pick a user name and fill out the form, remembering to type in the words you see in the security box. Please supply an e-mail address. If you fail to provide one you will be unable to edit or save transcriptions. Once you have created your account validate it by clicking on the link sent to the e-mail address you provided. 
+
+'''Please be aware that a number of users have been unable to validate their TB account, as their email provider transfers the confirmation email to a spam folder.''' This appears to affect only those using free webmail providers, and primarily Hotmail/Windows Live accounts. If your confirmation email does not appear to have arrived, please check your spam folder.
+
+===My Preferences===
+
+Click on [[Special:Preferences|My Preferences]] in the tool bar at the top of the screen to tailor the site to your needs. Here you can change your password and personal details; re-set the language; change skins; and adjust the screen layout. You can opt to receive e-mails when a page on your watchlist (see below) has been edited.
+
+===My Watchlist===
+
+Here you will find a list of pages you are currently watching. To watch a page is to monitor the edits on the page. Watch a page by clicking 'Watch' on the row of page tabs at the top of any page. Your watchlist can be accessed by clicking [[Special:Watchlist|My Watchlist]] on the tool bar at the top of the screen or by viewing your profile (see below). Your watchlist will display the recent changes made on each of your watched pages. Users are encouraged to use this feature in order to keep track of transcriptions they are in the process of editing. You can receive notifications by e-mail when one of your watched pages has been edited by clicking on the option in your preferences (see above).
+
+===My Contributions===
+
+Here you will find a list of all the contributions you have made to the site including any transcriptions you have done; edits you have made to pages; and the dates on which these changes were made. Access your contributions by clicking on [[Special:Contributions|My Contributions]] in the toolbar at the top of the screen or by viewing your profile (see below).
+
+{{Help:SocialProfile}}
+
+[[Category:Help|User Accounts]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Help:User levels</title>
+    <ns>12</ns>
+    <id>1082</id>
+    <revision>
+      <id>1126</id>
+      <parentid>1125</parentid>
+      <timestamp>2013-04-24T22:31:50Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>q7jkjicb1fra8zos10ox9yysntzigd8</sha1>
+      <text xml:space="preserve" bytes="851">To encourage you to participate, we have set the system to award points for your activities. Points are awarded as follows:
+
+* Adding comments: 10 points
+* Editing pages: 25 points
+* Adding a friend: 100 points
+* Uploading an avatar: 1000 points
+* Creating an account/profile: 1000 points
+
+'''Check the [[Top_Users|leader board]] to find out who is the top transcriber!'''
+
+The more points you accumulate, the more quickly you will advance up the progress ladder. Levels of user are as follows:
+
+*'''Prodigy''' =&gt; 75,000 points
+*'''Master''' =&gt; 60,000 points
+*'''Expert''' =&gt; 40,000 points
+*'''Adept''' =&gt; 25,000 points
+*'''Acolyte''' =&gt; 20,000 points
+*'''Amanuensis''' =&gt; 15,000 points
+*'''Scribe''' =&gt; 10,000 points
+*'''Apprentice''' =&gt; 5000 points
+*'''Novice''' =&gt; 2500 points
+*'''Probationer''' =&gt; 0 points
+
+
+
+
+
+
+
+
+
+
+
+[[Category:Help|User Levels]]</text>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Sidebar</title>
+    <ns>8</ns>
+    <id>1066</id>
+    <revision>
+      <id>1140</id>
+      <parentid>1094</parentid>
+      <timestamp>2013-04-24T22:31:51Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial page load (4th try)</comment>
+      <sha1>t8ondygj8hnrz9yzua7b5f809ggty65</sha1>
+      <text xml:space="preserve" bytes="317">* navigation
+** Transcription Desk|Transcription Desk
+** Help:Transcription_Guidelines|Transcription Guidelines
+** Manuscripts|Select a Manuscript
+** Discussion Forum|Discussion Forum
+** recentchanges-url|recentchanges
+** randompage-url|randompage
+** contact|Contact Us
+** helppage|help
+* SEARCH
+* TOOLBOX
+* LANGUAGES</text>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Edittools</title>
+    <ns>8</ns>
+    <id>1092</id>
+    <revision>
+      <id>1174</id>
+      <timestamp>2013-04-25T10:40:32Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with &quot;&lt;!-- Text here will be shown below edit and upload forms. --&gt; &lt;span style=&quot;background-color:#ffa;padding:3px;&quot;&gt;'''If your transcription is complete and ready for review, pleas...&quot;</comment>
+      <sha1>f5u7b7gsms4f0tu99tdpyija4rlorfo</sha1>
+      <text xml:space="preserve" bytes="361">&lt;!-- Text here will be shown below edit and upload forms. --&gt;
+&lt;span style=&quot;background-color:#ffa;padding:3px;&quot;&gt;'''If your transcription is complete and ready for review, please [[Special:EmailUser/TB_Editor|send a message]] to the Editors''' ''&lt;small&gt;[Opens a new window]&lt;/small&gt;''&lt;lb/&gt;Note: you '''must''' also click 'Save Page' to save your transcript.&lt;/span&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Sitenotice</title>
+    <ns>8</ns>
+    <id>1093</id>
+    <revision>
+      <id>1177</id>
+      <parentid>1176</parentid>
+      <timestamp>2013-04-25T10:44:08Z</timestamp>
+      <contributor>
+        <username>RichardDavis</username>
+        <id>2</id>
+      </contributor>
+      <sha1>7kdmedumlmjrid86m53zbpvxakh80yy</sha1>
+      <text xml:space="preserve" bytes="105">★ You can edit page [[MediaWiki:Sitenotice]] to display a sitewide important message for all users. ★</text>
+    </revision>
+  </page>
+</mediawiki>
