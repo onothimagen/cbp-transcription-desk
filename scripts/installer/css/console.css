@@ -1,0 +1,17 @@
+
+#console {
+    margin: 10px;
+    font-family: courier;
+    color: white;
+    background-color: black;
+}
+
+#console {
+    overflow: auto;
+    padding: 5px;
+    height: 200px;
+}
+
+#console pre {
+    display: inline;
+}

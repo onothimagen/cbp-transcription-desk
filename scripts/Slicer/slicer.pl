@@ -61,8 +61,8 @@ my $box       = $1; # e.g. 070
 my $file_name = $2; # e.g. 070_001_001
 
 
-print "box number: $box\n";
-print "file name:  $file_name\n";
+print "Box number: $box\n";
+print "File name:  $file_name\n";
 
 $output_path           = $output_path . '/' . $box . '/';
 
@@ -89,7 +89,7 @@ warn $fault if $fault;
 
 unless ( -d $tmp_output_path ) { die( "Error: slice failed to create $tmp_output_path\n" ); }
 
-print "moving $tmp_output_path to $target_output_path\n";
+print "Moving $tmp_output_path to $target_output_path\n";
 
 rename(  $tmp_output_path, $target_output_path ) || die ( "Error: Renaming $tmp_output_path to $target_output_path failed\n" );
 
