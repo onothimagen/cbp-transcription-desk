@@ -26,13 +26,13 @@ namespace Classes;
 
 use Zend\Di\Di;
 
-use Classes\Db\JobQueue   as JobQueueDb;
-use Classes\Db\Box        as BoxDb;
-use Classes\Db\Folio      as FolioDb;
-use Classes\Db\Item       as ItemDb;
-use Classes\Db\ErrorLogDb as ErrorLogDb;
+use Classes\Db\JobQueue as JobQueueDb;
+use Classes\Db\Box      as BoxDb;
+use Classes\Db\Folio    as FolioDb;
+use Classes\Db\Item     as ItemDb;
+use Classes\Db\ErrorLog as ErrorLogDb;
 
-use Classes\Helpers\File   as FileHelper;
+use Classes\Helpers\File as FileHelper;
 use Classes\Helpers\Logger;
 
 use Classes\Entities\JobQueue as JobQueueEntity;
@@ -66,7 +66,7 @@ abstract class TaskAbstract{
 	/* @var ErrorLogDb */
 	protected $oErrorLogDb;
 
-	/* @var FileHelper */
+	/* @var $oFile FileHelper */
 	protected $oFile;
 
 	/* @var Logger */
@@ -114,7 +114,6 @@ abstract class TaskAbstract{
 
 		$oErrorLogEntity = new ErrorLogEntity();
 
-		$oErrorLogEntity->setJobQueueId( $this->iJobQueueId );
 		$oErrorLogEntity->setProcess( $this->sProcess );
 		$oErrorLogEntity->setError( $sErrorString );
 
@@ -127,23 +126,26 @@ abstract class TaskAbstract{
 		switch( true ){
 
 			case $oEntity instanceof JobQueueEntity:
+				$this->oJobQueueDb->ClearErrorLog( $iId );
 				$oErrorLogEntity->setJobQueueId( $iId );
                 $oEntity->setStatus( 'error' );
 				$this->oJobQueueDb->InsertUpdate( $oEntity );
 				break;
 
 			case $oEntity instanceof BoxEntity:
-
+				$this->oBoxDb->ClearErrorLog( $iId );
 				$oErrorLogEntity->setBoxId( $iId );
 				$this->oBoxDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
 				break;
 
 			case $oEntity instanceof FolioEntity:
+				$this->oFolioDb->ClearErrorLog( $iId );
 				$oErrorLogEntity->setFolioId( $iId );
 				$this->oFolioDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
 				break;
 
 			case $oEntity instanceof ItemEntity:
+				$this->oItemDb->ClearErrorLog( $iId );
 				$oErrorLogEntity->setItemId( $iId );
 				$this->oItemDb->UpdateProcessStatus( $iId, $this->sProcess, 'error' );
 				break;
@@ -152,7 +154,7 @@ abstract class TaskAbstract{
 		$this->oErrorLogDb->Insert( $oErrorLogEntity );
 
 		// Escalate to the JobQueue but we don't want to bubble higher than the job queue
-		if( ( $oEntity instanceof JobQueueEntity) === true ){
+		if( ( $oEntity instanceof JobQueueEntity ) === true ){
 			exit( $oException->getMessage() );
         }
 
@@ -164,9 +166,15 @@ abstract class TaskAbstract{
 	/*
 	 *
 	*/
-	protected function ProcessBoxes(){
+	protected function ProcessBoxes( JobQueueEntity $oJobQueueEntity ){
 
-		$rBoxes = $this->GetBoxes( $this->sPreviousProcess, 'completed' );
+		$iJobQueueId = $oJobQueueEntity->getId();
+
+		$rBoxes = $this->GetBoxes( $iJobQueueId );
+
+		if( $rBoxes->count() < 1 ){
+			$this->oLogger->Log( 'ProcessBoxes(): No boxes could be found with ' . $this->sPreviousProcess . ' completed' );
+		}
 
 		/* @var $oBoxEntity BoxEntity */
 		while ( $oBoxEntity = $rBoxes->getResource()->fetchObject( 'Classes\Entities\Box' ) ){
@@ -174,6 +182,8 @@ abstract class TaskAbstract{
 			$iBoxId = $oBoxEntity->getId();
 
 			$this->oBoxDb->UpdateProcessStatus( $iBoxId, $this->sProcess, 'started' );
+
+			$this->oBoxDb->ClearErrorLog( $iBoxId );
 
 			try {
 
@@ -198,7 +208,12 @@ abstract class TaskAbstract{
 
 		$iBoxId  = $oBoxEntity->getId();
 
-		$rFolios = $this->GetFolios( $iBoxId, $this->sPreviousProcess, 'completed' );
+		$rFolios = $this->GetFolios( $iBoxId );
+
+		if( $rFolios->count() < 1 ){
+			$this->oLogger->Log( 'ProcessFolios(): No folios could be found with ' . $this->sPreviousProcess . ' completed' );
+			return;
+		}
 
 		/* @var $oFolioEntity FolioEntity */
 		while ( $oFolioEntity = $rFolios->getResource()->fetchObject( 'Classes\Entities\Folio' ) ){
@@ -206,6 +221,8 @@ abstract class TaskAbstract{
 			$iFolioId = $oFolioEntity->getId();
 
 			$this->oFolioDb->UpdateProcessStatus( $iFolioId,  $this->sProcess, 'started' );
+
+			$this->oFolioDb->ClearErrorLog( $iFolioId );
 
 			try {
 				$this->ProcessItems( $oBoxEntity, $oFolioEntity );
@@ -226,10 +243,12 @@ abstract class TaskAbstract{
 
 		$iFolioId = $oFolioEntity->getId();
 
-		$rItems   = $this->GetItems( $iFolioId
-								   , $this->sPreviousProcess
-								   , 'completed'
-								   , $this->sProcess );
+		$rItems   = $this->GetItems( $iFolioId );
+
+		if( $rItems->count() < 0 ){
+			$this->oLogger->Log( 'ProcessItems(): No items could be found with ' . $this->sPreviousProcess . ' completed' );
+			return;
+		}
 
 		/* @var $oItemEntity ItemEntity */
 		while ( $oItemEntity = $rItems->getResource()->fetchObject( 'Classes\Entities\Item' ) ){
@@ -237,6 +256,8 @@ abstract class TaskAbstract{
 			$iItemId = $oItemEntity->getId();
 
 			$this->oItemDb->UpdateProcessStatus( $iItemId, $this->sProcess, 'started');
+
+			$this->oItemDb->ClearErrorLog( $iItemId );
 
 			try {
 
@@ -257,42 +278,33 @@ abstract class TaskAbstract{
 	/*
 	 *
 	*/
-	protected function GetBoxes( $sProcess, $sStatus ){
+	protected function GetBoxes( $iJobQueueId ){
 
-		return $this->oBoxDb->GetBoxes(
-										  $this->iJobQueueId
-										, $sProcess
-										, $sStatus
-		);
-
+		return $this->oBoxDb->GetBoxes( $iJobQueueId
+									  , $this->sPreviousProcess
+									  , $this->sProcess );
 	}
 
 	/*
 	 *
 	*/
-	protected function GetFolios( $iBoxId, $sProcess, $sStatus ){
+	protected function GetFolios( $iBoxId ){
 
 		return $this->oFolioDb->GetFolios(
 										  $iBoxId
-										, $sProcess
-										, $sStatus
-		);
+										, $this->sPreviousProcess
+										, $this->sProcess );
 	}
 
 	/*
 	 *
 	*/
-	protected function GetItems( $iFolioId
-							   , $sPreviousProcess
-							   , $sStatus
-							   , $sProcess ){
+	protected function GetItems( $iFolioId ){
 
 		return $this->oItemDb->GetJobItems(
 										  $iFolioId
-										, $sPreviousProcess
-										, $sStatus
-										, $sProcess
-		);
+										, $this->sPreviousProcess
+										, $this->sProcess );
 	}
 
 	/*

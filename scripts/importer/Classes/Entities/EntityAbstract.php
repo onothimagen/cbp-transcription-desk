@@ -4,13 +4,14 @@ namespace Classes\Entities;
 
 abstract class EntityAbstract{
 
-	protected $id;
-	protected $process;
-	protected $process_status;
-	protected $process_start_time;
-	protected $process_end_time;
-	protected $updated;
-	protected $created;
+	public $id;
+	public $process;
+	public $process_status;
+	public $process_start_time;
+	public $process_end_time;
+	public $updated;
+	public $created;
+	public $error;
 
 	/**
 	 * @return int
@@ -116,4 +117,60 @@ abstract class EntityAbstract{
 		}
 	}
 
+
+	/*
+	 *
+	*/
+	public function exchangeArray( $data ){
+
+		$this->id                 = ( !empty( $data[ 'id' ] ) ) ? $data[ 'id' ] : null;
+		$this->process            = ( !empty( $data[ 'process' ] ) ) ? $data[ 'process' ] : null;
+		$this->process_status     = ( !empty( $data[ 'process_status' ] ) ) ? $data[ 'process_status' ] : null;
+		$this->process_start_time = ( !empty( $data[ 'process_start_time' ] ) ) ? $data[ 'process_start_time']  : null;
+		$this->process_end_time   = ( !empty( $data[ 'process_end_time' ] ) ) ? $data[ 'process_end_time']  : null;
+		$this->updated            = ( !empty( $data[ 'updated' ] ) ) ? $data[ 'updated']  : null;
+		$this->created            = ( !empty( $data[ 'created' ] ) ) ? $data[ 'created']  : null;
+		$this->error              = ( !empty( $data[ 'error'   ] ) ) ? $data[ 'error'  ] : null;
+
+
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

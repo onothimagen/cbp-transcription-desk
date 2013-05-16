@@ -51,6 +51,8 @@ class SliceImagesTask  extends TaskAbstract{
 
 	private $sSlicerPath;
 
+	private $sTokenSeperator;
+
 	private $sImageImportPath;
 	private $sImageExportPath;
 
@@ -67,6 +69,7 @@ class SliceImagesTask  extends TaskAbstract{
 		$this->sImageExportPath = $aConfig[ 'path.image.export' ];
 		$this->sArchivePath     = $aConfig[ 'path.archive' ];
 		$this->sSlicerPath      = $aConfig[ 'path.slicer'];
+		$this->sTokenSeperator  = $aConfig[ 'tokenseperator'];
 
 		$this->oJobQueueEntity  = $oJobQueueEntity;
 
@@ -90,11 +93,15 @@ class SliceImagesTask  extends TaskAbstract{
 		// Pre-check paths
 
 		try {
+			$sProcess    = $this->sProcess;
+			$iJobQueueId = $this->iJobQueueId;
+			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
 			$this->CheckPaths();
 
 			// Don't flag all entities as started. This is done in a granular way for this process.
 
-			$this->ProcessBoxes();
+			$this->ProcessBoxes( $this->oJobQueueEntity  );
+			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
 
 		} catch ( ImporterException $oException ) {
 			$this->HandleError( $oException, $this->oJobQueueEntity );
@@ -108,11 +115,10 @@ class SliceImagesTask  extends TaskAbstract{
 	*/
 	private function CheckPaths(){
 
-		$this->oFile->CheckDirExists( 'ImageImportPath', $this->sImageImportPath );
-		$this->oFile->CheckDirExists( 'ImageExportPath', $this->sImageExportPath );
-		$this->oFile->CheckDirExists( 'ArchivePath', $this->sArchivePath );
-		$this->oFile->CheckDirExists( 'SlicerPath', $this->sSlicerPath );
-
+		$this->oFile->CheckExists( 'ImageImportPath', $this->sImageImportPath );
+		$this->oFile->CheckDirExists( $this->sImageExportPath );
+		$this->oFile->CheckDirExists( $this->sArchivePath );
+		$this->oFile->CheckDirExists( $this->sSlicerPath );
 	}
 
 	/*
@@ -123,11 +129,26 @@ class SliceImagesTask  extends TaskAbstract{
 									, FolioEntity $oFolioEntity
 									, ItemEntity  $oItemEntity ){
 
-		$sBoxNumber   = $oBoxEntity->getBoxNumber();
+		$sBoxNumber        = $oBoxEntity->getBoxNumber();
 
-		$sFolioNumber = $oFolioEntity->getFolioNumber();
+		$sFolioNumber      = $oFolioEntity->getFolioNumber();
 
-		$sItemNumber  = $oItemEntity->getItemNumber();
+		$sItemNumber       = $oItemEntity->getItemNumber();
+
+		$sBoxPrefix        = $this->sBoxPrefix;
+
+		$sImageExportPath  = $this->sImageExportPath;
+
+		$sImageImportPath = $this->sImageImportPath;
+
+		$sJobArchivePath  = $this->sArchivePath;
+
+		$sTokenSeperator = $this->sTokenSeperator;
+
+		$iJobQueueId     = $this->iJobQueueId;
+
+
+		// Check whether slices already exixt
 
 		$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
 
@@ -144,42 +165,87 @@ class SliceImagesTask  extends TaskAbstract{
 			return '';
 		}
 
-		// It does not exist yet so carry on
+
+		// They have not been processed so carry on and determine the images full path
 
 		$sImageImportPath = $this->sImageImportPath;
 
-		$this->oFile->CheckDirExists( 'ImageImportPath', $sImageImportPath );
+		$this->oFile->CheckDirExists( $sImageImportPath );
 
-		$sRootPath        = $this->sImageImportPath;
+		$sBoxPrefix             = $this->sBoxPrefix;
 
-		$sBoxPrefix       = $this->sBoxPrefix;
+		$sItemName          = DIRECTORY_SEPARATOR . $sBoxPrefix . $sImagePath . '.jpg';
 
-		$sFullImagePath   = $sRootPath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sImagePath . '.jpg';
+		$sFullImageImportPath   = $sImageImportPath . $sItemName;
 
-		return $sFullImagePath;
+
+		// Fall back to Archive directory if needed
+
+		$bDirExists = file_exists( $sFullImageImportPath );
+
+		if( $bDirExists === false ){
+
+			$sFullImageArchivePath   = $sJobArchivePath . DIRECTORY_SEPARATOR . $iJobQueueId . $sItemName;
+
+			$this->oLogger->Log( $sFullImageImportPath . ' no longer exists. Now checking archive ' . $sFullImageArchivePath );
+
+			$bDirExists = file_exists( $sFullImageArchivePath );
+
+			if( $bDirExists ){
+
+				//Before we move file, create the parent BOX directory otherwise it will complain
+
+				$sTargetImageDirectory = $this->sImageImportPath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
+
+				if( file_exists( $sTargetImageDirectory ) === false ){
+					mkdir( $sTargetImageDirectory );
+					$this->oLogger->Log( 'Created directory ' . $sTargetImageDirectory );
+				}
+
+				$this->oLogger->Log( 'Moving archived image back from ' . $sFullImageArchivePath . ' to ' .  $sFullImageImportPath );
+				rename( $sFullImageArchivePath, $sFullImageImportPath );
+			}
+
+			// Otherwise move it back from the archive
+		}
+
+
+		// Do one last check
+
+		$bDirExists = file_exists( $sFullImageImportPath );
+
+		// If it doesn't exist in the Archive directory there then we have a genuine problem so throw an exception
+		if( $bDirExists === false ){
+			throw new ImporterException( 'FullImageImportPath ' . $sFullImageImportPath . ' does not exist' );
+		}
+
+		return $sFullImageImportPath;
 
 	}
 
 	/*
 	 *
 	 */
-	protected function Process( $sImagePath ){
+	protected function Process( $sInputImagePath ){
 
-		if( $sImagePath == '' ){
-			return false;
+		if( $sInputImagePath == '' ){
+
+			// Further processing skipped
+
+			return;
 		}
 
 		$sImageExportPath = $this->sImageExportPath;
 
 		$sSlicerPath      = $this->sSlicerPath;
 
-		$this->oFile->CheckExists( 'ImagePath', $sImagePath );
+		$this->oFile->CheckExists( 'ImagePath', $sInputImagePath );
 
-		$this->oFile->CheckDirExists( 'ImageExportPath', $sImageExportPath );
+		$this->oFile->CheckDirExists( $sImageExportPath );
 
 		$this->oFile->CheckExists( 'SlicerPath', $sSlicerPath );
 
-		$sCommand = 'perl ' . $sSlicerPath . ' --input_file ' . $sImagePath . ' --output_path ' . $this->sImageExportPath;
+		$sCommand = 'perl ' . $sSlicerPath . ' --input_file ' . $sInputImagePath . ' --output_path ' . $sImageExportPath;
 
 		$sCommand = str_replace('\\', '/', $sCommand );
 

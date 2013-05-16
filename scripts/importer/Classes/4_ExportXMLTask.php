@@ -31,7 +31,6 @@ class ExportXMLTask extends TaskAbstract{
 	/* @var JoBItemsToMwXml */
 	private $oMapper;
 
-
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -95,8 +94,8 @@ class ExportXMLTask extends TaskAbstract{
 	*/
 	private function CheckPaths(){
 
-		$this->oFile->CheckDirExists( 'XMLExportPath', $this->sXMLExportPath );
-		$this->oFile->CheckDirExists( 'ArchivePath', $this->sArchivePath );
+		$this->oFile->CheckDirExists( $this->sXMLExportPath );
+		$this->oFile->CheckDirExists( $this->sArchivePath );
 
 	}
 

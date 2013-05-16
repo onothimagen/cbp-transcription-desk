@@ -1,11 +1,35 @@
 // Doesn't work with Opera
 //http://www.codekites.com/ajax-based-streaming-without-polling/
 
-function ajaxConnect(){
+function ajaxConnect( action, id ){
+	
+	StartScroll();
 
-    var ie         = false;
-    var xhr;  // The variable that makes Ajax possible!
-    var ajaxURL    = '/scripts/importer/index.php' + '?' + Math.random();
+    var ie           = false;
+    var xhr;
+    
+    var ajaxURL      = '';
+    
+    var job_id_param = '';
+    
+    if( id != null ){
+    	job_id_param = '?job_id=' + id;
+    }
+    
+    switch ( action ) {
+ 	   case "start" :
+		   var ajaxURL    = '/scripts/importer/index.php' + '?' + Math.random();
+	      break;
+	   case "restart" :
+		   var ajaxURL    = '/scripts/importer/index.php' + job_id_param + '&' + Math.random();
+	      break;
+	   case "stop" :
+		   var ajaxURL    = '/scripts/importer/stop.php?' + job_id_param;
+	      break;
+	   default :
+	     alert( 'action not specified in ajaxConnect()' );
+    }
+   
     var returnText = '';;
 
     try{
@@ -73,6 +97,8 @@ function ajaxConnect(){
         }
         xhr.open( "GET", ajaxURL, true );
         xhr.send('');
+        window.clearTimeout( scrollConsole );
+        ScrollConsole();
     }
 }
 
@@ -108,6 +134,31 @@ function StartScroll(){
 	scrollConsole = setTimeout( "StartScroll()", 1000 );
 
 }
+
+
+$(document).ready(function() {
+
+    $('.error').qtip({
+    	content: {
+    		attr: 'alt'
+    	},
+
+    	position: {
+    		my: 'right center',
+    		at: 'left center',
+    		target: $('.error'),
+    		adjust: {
+    			y: -80,
+    			x: 300
+    		}
+    	},
+
+    	style: {
+    		classes: 'qtip-light qtip-rounded',
+    	}
+
+	})
+});
 
 
 

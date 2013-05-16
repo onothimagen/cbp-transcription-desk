@@ -29,7 +29,6 @@ namespace Classes;
 
 use Zend\Di\Di;
 
-
 use Classes\Entities\JobQueue   as JobQueueEntity;
 use Classes\Exceptions\Importer as ImporterException;
 
@@ -41,7 +40,6 @@ use Zend\Db\Adapter\Driver\Pdo\Result;
 class InitiateJobsTask extends TaskAbstract{
 
 	private $rIncompleteJobs;
-
 
 	public function __construct( Di $oDi ){
 
@@ -58,20 +56,86 @@ class InitiateJobsTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		// All jobs are complete so start a new job
+		// Has a specific job been specified?
+
+		$iSpecifiedJobId = $this->GetSpecifiedId();
+
+		if( $iSpecifiedJobId !== false ){
+
+			// Are there any other jobs running other than the job being restarted
+
+			$this->rIncompleteJobs = $this->GetIncompleteJobs( $iSpecifiedJobId );
+
+			if( $this->rIncompleteJobs ){
+				$sLogData  = 'There are existing incomplete jobs. Exiting...';
+				$this->oLogger->Log( $sLogData );
+				return false;
+			}
+
+			$oJobQueueEntity = $this->GetUserSpecifiedJob( $iSpecifiedJobId );
+
+			if( $oJobQueueEntity === false ){
+				$sLogData  = 'Job ' . $iSpecifiedJobId . ' could not be found. Exiting...';
+				$this->oLogger->Log( $sLogData );
+				return false;
+			}
+
+			$this->KillJobProcess( $oJobQueueEntity );
+
+			$this->oJobQueueDb->ClearErrorLog( $iSpecifiedJobId );
+
+			return $oJobQueueEntity;
+		}
 
         $this->rIncompleteJobs = $this->GetIncompleteJobs();
+
+		// If all jobs are complete so start a new job
 
         if( $this->rIncompleteJobs === false ){
             $oJobQueueEntity = $this->CreateNewJob();
             return $oJobQueueEntity;
         }
 
-        $oJobQueueEntity = $this->GetExistingJob();
+		$sLogData  = 'There are existing incomplete jobs. Exiting...';
+		$this->oLogger->Log( $sLogData );
 
-        return $oJobQueueEntity;
+        return false;
 
 	}
+
+
+	/*
+	 *
+	 */
+	private function KillJobProcess( JobQueueEntity $oJobQueueEntity ){
+
+		$iPid = $oJobQueueEntity->getPid();
+
+		if( (int) $iPid === 0 ){
+			return;
+		}
+
+		$bProcessExists = false;
+
+		$bProcessExists = $this->oFile->ProcessExists( $iPid );
+
+		if( $bProcessExists === false ){
+			$sLogData = 'Process ' . $iPid . ' has already terminated' ;
+			$this->oLogger->Log( $sLogData );
+			return;
+		}
+
+		$sLogData = $iPid . ' is still running';
+		$this->oLogger->Log( $sLogData );
+
+		$iPid     = $oJobQueueEntity->getId();
+
+		$this->oFile->KillProcess( $iPid );
+
+		$sLogData = $iPid . ' has been killed';
+		$this->oLogger->Log( $sLogData );
+	}
+
 
 	/*
 	 * @return JobQueueEntity
@@ -86,8 +150,10 @@ class InitiateJobsTask extends TaskAbstract{
 		$oJobQueueEntity->setPid( $iProcessId );
 		$oJobQueueEntity = $this->oJobQueueDb->InsertUpdate( $oJobQueueEntity );
 
-		$sJobId = $oJobQueueEntity->getId();
-		$sStep  = 'Job ' . $sJobId . ' started';
+		$sJobId    = $oJobQueueEntity->getId();
+		$sLogData  = 'Job ' . $sJobId . ' started';
+		$this->oLogger->Log( $sLogData );
+
 		return $oJobQueueEntity;
 
 	}
@@ -99,17 +165,6 @@ class InitiateJobsTask extends TaskAbstract{
 
 		// If all processes have ended then start a new job
 		// else restart the oldest incomplete job
-
-		$iSpecifiedJobId = $this->GetSpecifiedId();
-
-		if( $iSpecifiedJobId ){
-
-			$oJobQueueEntity = $this->GetUserSpecifiedJob( $iSpecifiedJobId );
-
-			if( $oJobQueueEntity === false ){
-				return false;
-			}
-		}
 
 		$oJobQueueEntity        = $this->GetOldestJob();
 
@@ -161,12 +216,12 @@ class InitiateJobsTask extends TaskAbstract{
 	/*
 	 * @return JobQueueEntity
 	*/
-	private function GetUserSpecifiedJob( $iSpecifiedId ){
+	private function GetUserSpecifiedJob( $Id ){
 
-		$rUserSpecifiedJob = $this->GetSpecifiedJob( $iSpecifiedId );
+		$rUserSpecifiedJob = $this->GetSpecifiedJob( $Id );
 
 		if( $rUserSpecifiedJob === false ){
-            $sLogData           = $sJobId . ' no longer exists' ;
+            $sLogData           = $Id . ' no longer exists' ;
 			$this->oLogger->Log( $sLogData );
 			return false;
 		}
@@ -214,8 +269,8 @@ class InitiateJobsTask extends TaskAbstract{
     /*
      * @return ResultSet | boolean
      */
-    private function GetIncompleteJobs(){
-        return $this->oJobQueueDb->GetIncompleteJobs();
+    private function GetIncompleteJobs( $iSpecifiedJobId = null ){
+        return $this->oJobQueueDb->GetIncompleteJobs( $iSpecifiedJobId );
     }
 
     /*

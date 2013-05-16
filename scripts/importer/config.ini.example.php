@@ -12,9 +12,10 @@ site_name            = 'Transcription Desk'
 home_page_name       = 'Transcribe'
 box.prefix           = 'BOX_'
 tokenseperator       = '_'
-item.regex           = '(\d\d\d[rv]?_\d?).jpg'
 page.path            = 'td';
 page.prefix          = 'JB';
+item.regex           = '(\d\d\d[rv]?_?\d?).jpg'
+import_folio_limit	 = 20
 
 path.image.export    = 'zimages'
 path.mw.importer     = 'w/maintenance/importDump.php'

@@ -37,6 +37,11 @@ require_once 'Classes/1_InitiateJobsTask.php';
 $oInitiateJobsTask = new InitiateJobsTask( $oDi );
 
 $oJobQueueEntity = $oInitiateJobsTask->Execute();
+
+if( $oJobQueueEntity === false){
+	exit;
+}
+
 $sJobId          = $oJobQueueEntity->getId();
 
 $sStep = 'Job ' . $sJobId . ' initiated';

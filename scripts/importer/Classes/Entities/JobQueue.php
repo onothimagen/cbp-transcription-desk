@@ -26,25 +26,13 @@ namespace Classes\Entities;
 
 class JobQueue extends EntityAbstract{
 
-	private $user_id;
-	private $status;
-	private $job_start_time;
-	private $job_end_time;
-    private $pid;
+	public $user_id;
+	public $job_status;
+	public $job_start_time;
+	public $job_end_time;
+	public $created;
+    public $pid;
 
-	/**
-	 * @return int
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * @param int $iId;
-	 */
-	public function setId( $id ) {
-		$this->id = $id;
-	}
 
 	/**
 	 * @param string $sUserId
@@ -64,14 +52,14 @@ class JobQueue extends EntityAbstract{
 	 * @param string $sProcessStatus
 	 */
 	public function setStatus( $status ) {
-		$this->status = $status;
+		$this->job_status = $status;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getStatus() {
-		return $this->status;
+		return $this->job_status;
 	}
 
 	/**
@@ -140,4 +128,52 @@ class JobQueue extends EntityAbstract{
 		}
 	}
 
+	/*
+	 *
+	 */
+	public function exchangeArray( $data ){
+		parent::exchangeArray( $data );
+		$this->user_id        = ( !empty( $data[ 'user_id' ] ) ) ? $data[ 'user_id' ] : null;
+		$this->job_status     = ( !empty( $data[ 'job_status' ] ) ) ? $data[ 'job_status' ] : null;
+		$this->job_start_time = ( !empty( $data[ 'job_start_time' ] ) ) ? $data[ 'job_start_time']  : null;
+		$this->job_end_time   = ( !empty( $data[ 'job_end_time' ] ) ) ? $data[ 'job_end_time']  : null;
+		$this->created        = ( !empty( $data[ 'created' ] ) ) ? $data[ 'created']  : null;
+		$this->pid            = ( !empty( $data[ 'pid' ] ) ) ? $data[ 'pid']  : null;
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

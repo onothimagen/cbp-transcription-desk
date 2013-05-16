@@ -24,9 +24,7 @@
 
 namespace Classes\Db;
 
-use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\Adapter\Driver\Pdo\Result;
-use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Adapter;
 
 use Classes\Exceptions\Importer as ImporterException;
@@ -40,7 +38,8 @@ abstract class DbAbstract {
 	 */
 	protected $oAdapter;
 
-	function __construct( \Zend\Db\Adapter\Adapter $oAdapter ){
+
+	function __construct( Adapter $oAdapter ){
 		$this->oAdapter = $oAdapter;
 	}
 
@@ -67,18 +66,24 @@ abstract class DbAbstract {
 		return $results;
 	}
 
+	/*
+	 *
+	 */
 	public function Truncate(){
 
 		$sSql = 'TRUNCATE TABLE ' . $this->sTableName . ';';
 		$this->Execute( $sSql );
 	}
 
+	/*
+	 *
+	 */
 	public function UpdateProcessStatus(
 										  $iId
 										, $sProcess
 										, $sStatus
 										){
-		$sTime = '';
+		$sTime  = '';
 
 		if( $sStatus === 'started' ){
 			$sTime = ', process_start_time = NOW(), process_end_time   = NULL';
@@ -89,7 +94,7 @@ abstract class DbAbstract {
 		}
 
 		if( $sStatus === 'completed'	){
-			$sTime = ', process_end_time   = NOW()';
+			$sTime  = ', process_end_time   = NOW()';
 		}
 
 		$sSql = 'UPDATE
@@ -97,7 +102,7 @@ abstract class DbAbstract {
 				SET
 					    process        = ?
 					  , process_status = ?
-					  ' . $sTime .'
+					  ' . $sTime  . '
 					  , updated        = NOW()
 		  		WHERE
 		  			id = ?';

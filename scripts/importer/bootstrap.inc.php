@@ -41,10 +41,13 @@ require 'Zend/Loader/StandardAutoloader.php';
 
 $autoloader = new Zend\Loader\StandardAutoloader( array( 'autoregister_zf' => true ) );
 
-$sClassNameSpacePath = $sImporterPath . '/Classes';
+$sImporterClassNameSpacePath = $sImporterPath . DIRECTORY_SEPARATOR . 'Classes';
+
+$sInstallerNameSpacePath     = $sScriptPath . DIRECTORY_SEPARATOR . 'installer' . DIRECTORY_SEPARATOR . 'Reports' . DIRECTORY_SEPARATOR;
 
 $autoloader->registerNamespace( 'Classes'
-							  , $sClassNameSpacePath );
+							  , $sImporterClassNameSpacePath
+							  , $sInstallerNameSpacePath );
 
 $autoloader->register();
 
@@ -126,7 +129,7 @@ if( isset ( $aSectionConfig[ 'path.prefix' ] ) and  $aSectionConfig[ 'path.prefi
 $oInfoLogger		= new Zend\Log\Logger;
 $oExceptionLogger	= new Zend\Log\Logger;
 
-$oLogger     = new Classes\Helpers\Logger( $oInfoLogger, $oExceptionLogger, $aSectionConfig );
+$oLogger            = new Classes\Helpers\Logger( $oInfoLogger, $oExceptionLogger, $aSectionConfig );
 
 $oLogger->SetContext( 'jobs' );
 
@@ -162,13 +165,17 @@ $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 
 $oDi->instanceManager()->setParameters( 'Classes\Mappers\JobItemsToMwXml', array( 'aConfig' => $aSectionConfig ) );
 
-$oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue', array( 'oAdapter' => $oAdapter ) );
-$oDi->instanceManager()->setParameters( 'Classes\Db\Box'     , array( 'oAdapter' => $oAdapter ) );
-$oDi->instanceManager()->setParameters( 'Classes\Db\Folio'   , array( 'oAdapter' => $oAdapter ) );
-$oDi->instanceManager()->setParameters( 'Classes\Db\Item'    , array( 'oAdapter' => $oAdapter ) );
-$oDi->instanceManager()->setParameters( 'Classes\Db\ErrorLog', array( 'oAdapter' => $oAdapter ) );
+
+$oDi->instanceManager()->setParameters( 'Classes\Db\JobQueue',  array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Box'     ,  array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Folio'   ,  array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\Item'    ,  array( 'oAdapter' => $oAdapter ) );
+$oDi->instanceManager()->setParameters( 'Classes\Db\ErrorLog',  array( 'oAdapter' => $oAdapter ) );
 $oDi->instanceManager()->setParameters( 'Classes\Db\MediaWiki', array( 'oAdapter' => $oAdapter ) );
 
+$oMediaWikiDb = $oDi->get( 'Classes\Db\MediaWiki' );
+
+$oDi->instanceManager()->setParameters( 'Classes\Mappers\JobItemsToMwXml', array( $oMediaWikiDb, 'aConfig' => $aSectionConfig ) );
 
 /*****************************************
  * ADD TASK ABSTRACT

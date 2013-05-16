@@ -27,37 +27,37 @@ namespace Classes\Entities;
 
 class Folio extends EntityAbstract{
 
-	private $id_number                    = NULL;
-	private $box_id                       = NULL;
-	private $folio_number                 = NULL;
-	private $second_folio_number          = NULL;
-	private $category                     = NULL;
-	private $recto_verso                  = NULL;
-	private $creator                      = NULL;
-	private $recipient                    = NULL;
-	private $penner                       = NULL;
-	private $marginals                    = NULL;
-	private $corrections                  = NULL;
-	private $date_1                       = NULL;
-	private $date_2                       = NULL;
-	private $date_3                       = NULL;
-	private $date_4                       = NULL;
-	private $date_5                       = NULL;
-	private $date_6                       = NULL;
-	private $estimated_date               = NULL;
-	private $info_in_main_heading_field   = NULL;
-	private $main_heading                 = NULL;
-	private $sub_headings                 = NULL;
-	private $marginal_summary_numbering   = NULL;
-	private $number_of_pages              = NULL;
-	private $page_numbering               = NULL;
-	private $titles                       = NULL;
-	private $watermarks                   = NULL;
-	private $paper_producer               = NULL;
-	private $paper_producer_in_year       = NULL;
-	private $notes_public                 = NULL;
-	private $box_number                   = NULL;
-	private $item_number                  = NULL;
+	public $id_number                    = NULL;
+	public $box_id                       = NULL;
+	public $folio_number                 = NULL;
+	public $second_folio_number          = NULL;
+	public $category                     = NULL;
+	public $recto_verso                  = NULL;
+	public $creator                      = NULL;
+	public $recipient                    = NULL;
+	public $penner                       = NULL;
+	public $marginals                    = NULL;
+	public $corrections                  = NULL;
+	public $date_1                       = NULL;
+	public $date_2                       = NULL;
+	public $date_3                       = NULL;
+	public $date_4                       = NULL;
+	public $date_5                       = NULL;
+	public $date_6                       = NULL;
+	public $estimated_date               = NULL;
+	public $info_in_main_heading_field   = NULL;
+	public $main_heading                 = NULL;
+	public $sub_headings                 = NULL;
+	public $marginal_summary_numbering   = NULL;
+	public $number_of_pages              = NULL;
+	public $page_numbering               = NULL;
+	public $titles                       = NULL;
+	public $watermarks                   = NULL;
+	public $paper_producer               = NULL;
+	public $paper_producer_in_year       = NULL;
+	public $notes_public                 = NULL;
+	public $box_number                   = NULL;
+	public $item_number                  = NULL;
 
 	/**
 	 * @param int $id_number
@@ -505,5 +505,83 @@ class Folio extends EntityAbstract{
 	}
 
 
+	/*
+	 *
+	*/
+	public function exchangeArray( $data ){
+		parent::exchangeArray( $data );
+		$this->id_number                    = ( !empty( $data[ 'id_number'                  ] ) ) ? $data[ 'id_number'                  ] : null;
+		$this->box_id                       = ( !empty( $data[ 'box_id'                     ] ) ) ? $data[ 'box_id'                     ] : null;
+		$this->folio_number                 = ( !empty( $data[ 'folio_number'               ] ) ) ? $data[ 'folio_number'               ] : null;
+		$this->second_folio_number          = ( !empty( $data[ 'second_folio_number'        ] ) ) ? $data[ 'second_folio_number'        ] : null;
+		$this->category                     = ( !empty( $data[ 'category'                   ] ) ) ? $data[ 'category'                   ] : null;
+		$this->recto_verso                  = ( !empty( $data[ 'recto_verso'                ] ) ) ? $data[ 'recto_verso'                ] : null;
+		$this->creator                      = ( !empty( $data[ 'creator'                    ] ) ) ? $data[ 'creator'                    ] : null;
+		$this->recipient                    = ( !empty( $data[ 'recipient'                  ] ) ) ? $data[ 'recipient'                  ] : null;
+		$this->penner                       = ( !empty( $data[ 'penner'                     ] ) ) ? $data[ 'penner'                     ] : null;
+		$this->marginals                    = ( !empty( $data[ 'marginals'                  ] ) ) ? $data[ 'marginals'                  ] : null;
+		$this->corrections                  = ( !empty( $data[ 'corrections'                ] ) ) ? $data[ 'corrections'                ] : null;
+		$this->date_1                       = ( !empty( $data[ 'date_1'                     ] ) ) ? $data[ 'date_1'                     ] : null;
+		$this->date_2                       = ( !empty( $data[ 'date_2'                     ] ) ) ? $data[ 'date_2'                     ] : null;
+		$this->date_3                       = ( !empty( $data[ 'date_3'                     ] ) ) ? $data[ 'date_3'                     ] : null;
+		$this->date_4                       = ( !empty( $data[ 'date_4'                     ] ) ) ? $data[ 'date_4'                     ] : null;
+		$this->date_5                       = ( !empty( $data[ 'date_5'                     ] ) ) ? $data[ 'date_5'                     ] : null;
+		$this->date_6                       = ( !empty( $data[ 'date_6'                     ] ) ) ? $data[ 'date_6'                     ] : null;
+		$this->estimated_date               = ( !empty( $data[ 'estimated_date'             ] ) ) ? $data[ 'estimated_date'             ] : null;
+		$this->info_in_main_heading_field   = ( !empty( $data[ 'info_in_main_heading_field' ] ) ) ? $data[ 'info_in_main_heading_field' ] : null;
+		$this->main_heading                 = ( !empty( $data[ 'main_heading'               ] ) ) ? $data[ 'main_heading'               ] : null;
+		$this->sub_headings                 = ( !empty( $data[ 'sub_headings'               ] ) ) ? $data[ 'sub_headings'               ] : null;
+		$this->marginal_summary_numbering   = ( !empty( $data[ 'marginal_summary_numbering' ] ) ) ? $data[ 'marginal_summary_numbering' ] : null;
+		$this->number_of_pages              = ( !empty( $data[ 'number_of_pages'            ] ) ) ? $data[ 'number_of_pages'            ] : null;
+		$this->page_numbering               = ( !empty( $data[ 'page_numbering'             ] ) ) ? $data[ 'page_numbering'             ] : null;
+		$this->titles                       = ( !empty( $data[ 'titles'                     ] ) ) ? $data[ 'titles'                     ] : null;
+		$this->watermarks                   = ( !empty( $data[ 'watermarks'                 ] ) ) ? $data[ 'watermarks'                 ] : null;
+		$this->paper_producer               = ( !empty( $data[ 'paper_producer'             ] ) ) ? $data[ 'paper_producer'             ] : null;
+		$this->paper_producer_in_year       = ( !empty( $data[ 'paper_producer_in_year'     ] ) ) ? $data[ 'paper_producer_in_year'     ] : null;
+		$this->notes_public                 = ( !empty( $data[ 'notes_public'               ] ) ) ? $data[ 'notes_public'               ] : null;
+		$this->box_number                   = ( !empty( $data[ 'box_number'                 ] ) ) ? $data[ 'box_number'                 ] : null;
+		$this->item_number                  = ( !empty( $data[ 'item_number'                ] ) ) ? $data[ 'item_number'                ] : null;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

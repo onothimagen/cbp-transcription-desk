@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.4-rc1
+-- version 3.3.3
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 10, 2013 at 10:28 AM
+-- Generation Time: May 16, 2013 at 06:08 AM
 -- Server version: 5.5.15
 -- PHP Version: 5.3.8
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `cbp_boxes` (
   `job_queue_id` int(11) NOT NULL,
   `box_number` varchar(4) NOT NULL,
   `process` enum('import','slice','export','import_mw','verify','archive') NOT NULL DEFAULT 'import',
-  `process_status` enum('error','started','completed') NOT NULL DEFAULT 'started',
+  `process_status` enum('error','started','completed','stopped') NOT NULL DEFAULT 'started',
   `process_start_time` timestamp NULL DEFAULT NULL,
   `process_end_time` timestamp NULL DEFAULT NULL,
   `updated` timestamp NULL DEFAULT NULL,
@@ -41,6 +41,11 @@ CREATE TABLE IF NOT EXISTS `cbp_boxes` (
   KEY `process_status` (`process_status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `cbp_boxes`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -49,17 +54,29 @@ CREATE TABLE IF NOT EXISTS `cbp_boxes` (
 
 CREATE TABLE IF NOT EXISTS `cbp_error_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `job_queue_id` int(11) unsigned NOT NULL,
+  `job_queue_id` int(11) unsigned DEFAULT NULL,
   `box_id` int(15) DEFAULT NULL,
   `folio_id` int(15) DEFAULT NULL,
   `item_id` int(15) DEFAULT NULL,
-  `process` enum('import','slice','export','import_mw','verify') DEFAULT NULL,
+  `process` enum('import','slice','export','import_mw','verify','archive') DEFAULT NULL,
   `error` varchar(255) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `box_id` (`box_id`),
+  UNIQUE KEY `folio_id` (`folio_id`),
+  UNIQUE KEY `item_id` (`item_id`),
+  UNIQUE KEY `job_queue_id_2` (`job_queue_id`),
+  UNIQUE KEY `box_id_2` (`box_id`),
+  UNIQUE KEY `folio_id_2` (`folio_id`),
+  UNIQUE KEY `item_id_2` (`item_id`),
   KEY `process` (`process`),
   KEY `job_queue_id` (`job_queue_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cbp_error_log`
+--
+
 
 -- --------------------------------------------------------
 
@@ -99,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `cbp_folios` (
   `paper_producer_in_year` varchar(255) DEFAULT NULL,
   `notes_public` varchar(50) DEFAULT NULL,
   `process` enum('import','slice','export','import_mw','verify','archive') NOT NULL DEFAULT 'import',
-  `process_status` enum('started','completed','error') NOT NULL DEFAULT 'started',
+  `process_status` enum('started','completed','stopped','error') NOT NULL DEFAULT 'started',
   `process_start_time` timestamp NULL DEFAULT NULL,
   `process_end_time` timestamp NULL DEFAULT NULL,
   `updated` timestamp NULL DEFAULT NULL,
@@ -109,6 +126,11 @@ CREATE TABLE IF NOT EXISTS `cbp_folios` (
   KEY `process` (`process`),
   KEY `process_status` (`process_status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cbp_folios`
+--
+
 
 -- --------------------------------------------------------
 
@@ -121,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `cbp_items` (
   `folio_id` int(11) NOT NULL,
   `item_number` varchar(4) NOT NULL,
   `process` enum('import','slice','export','import_mw','verify','archive') NOT NULL DEFAULT 'slice',
-  `process_status` enum('error','started','completed') NOT NULL DEFAULT 'started',
+  `process_status` enum('error','started','completed','stopped') NOT NULL DEFAULT 'started',
   `process_start_time` timestamp NULL DEFAULT NULL,
   `process_end_time` timestamp NULL DEFAULT NULL,
   `updated` timestamp NULL DEFAULT NULL,
@@ -132,6 +154,11 @@ CREATE TABLE IF NOT EXISTS `cbp_items` (
   KEY `process` (`process`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `cbp_items`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -141,14 +168,19 @@ CREATE TABLE IF NOT EXISTS `cbp_items` (
 CREATE TABLE IF NOT EXISTS `cbp_job_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '1',
-  `job_status` enum('started','completed','error') NOT NULL DEFAULT 'started',
+  `job_status` enum('started','completed','error','stopped') NOT NULL DEFAULT 'started',
   `job_start_time` timestamp NULL DEFAULT NULL,
   `job_end_time` timestamp NULL DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `pid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cbp_job_queue`
+--
+
 
 -- --------------------------------------------------------
 
@@ -166,3 +198,8 @@ CREATE TABLE IF NOT EXISTS `cbp_process_log` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_job_process` (`job_queue_id`,`process`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cbp_process_log`
+--
+

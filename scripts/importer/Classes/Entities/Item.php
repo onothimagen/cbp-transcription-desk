@@ -27,8 +27,9 @@ namespace Classes\Entities;
 class Item extends EntityAbstract{
 
 
-	private $folio_id;
-	private $item_number;
+	public $folio_id;
+	public $folio_number;
+	public $item_number;
 
 
 	/**
@@ -59,6 +60,53 @@ class Item extends EntityAbstract{
 		return $this->item_number;
 	}
 
-
+	/*
+	 *
+	*/
+	public function exchangeArray( $data ){
+		parent::exchangeArray( $data );
+		$this->folio_id     = ( !empty( $data[ 'folio_id' ] ) ) ? $data[ 'folio_id' ] : null;
+		$this->item_number  = ( !empty( $data[ 'item_number' ] ) ) ? $data[ 'item_number' ] : null;
+		$this->folio_number  = ( !empty( $data[ 'folio_number' ] ) ) ? $data[ 'folio_number' ] : null;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -24,32 +24,16 @@
 
 namespace Classes\Entities;
 
-class ErrorLog{
+class ErrorLog extends EntityAbstract{
 
 
-	private $id;
-	private $job_queue_id;
-	private $box_id;
-	private $folio_id;
-	private $item_id;
-	private $process;
-	private $error;
-	private $created;
+	public $job_queue_id;
+	public $box_id;
+	public $folio_id;
+	public $item_id;
+	public $process;
+	public $error;
 
-
-	/**
-	 * @return int
-	 */
-	public function getId() {
-		return $this->id;
-	}
-
-	/**
-	 * @param int $id;
-	 */
-	public function setId( $id ) {
-		$this->id = $id;
-	}
 
 	/**
 	 * @param string $sJobQueueId
@@ -109,22 +93,6 @@ class ErrorLog{
 		return $this->item_id;
 	}
 
-
-	/**
-	 * @param string $sProcess
-	 */
-	public function setProcess( $process ) {
-		$this->process = $process;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getProcess() {
-		return $this->process;
-	}
-
-
 	/**
 	 * @param string $sDescription
 	 */
@@ -165,4 +133,57 @@ class ErrorLog{
 		}
 	}
 
+	/*
+	 *
+	*/
+	public function exchangeArray( $data ){
+		parent::exchangeArray( $data );
+		$this->job_queue_id = ( !empty( $data[ 'job_queue_id' ] ) ) ? $data[ 'job_queue_id' ] : null;
+		$this->box_id       = ( !empty( $data[ 'box_id' ] ) ) ? $data[ 'box_id' ] : null;
+		$this->folio_id     = ( !empty( $data[ 'folio_id' ] ) ) ? $data[ 'folio_id' ] : null;
+		$this->item_id      = ( !empty( $data[ 'item_id' ] ) ) ? $data[ 'item_id' ] : null;
+		$this->error        = ( !empty( $data[ 'error' ] ) ) ? $data[ 'error' ] : null;
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

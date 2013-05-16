@@ -1,0 +1,64 @@
+<?php
+
+use \Models\FolioTable;
+
+require 'Models/FolioTable.php';
+
+$oTable = new FolioTable( $oAdapter );
+
+require 'configure.paginator.inc.php';
+
+if( $oPages->pageCount > 0 ){
+	?>
+	<div id="breadcrumbs">
+		<a href="index.php">Jobs</a> >
+		&nbsp;<a href="index.php?entity_type=boxes&job_queue_id=<?php echo $iJobQueueId; ?>">Job Queue ID:&nbsp;<?php echo $iJobQueueId; ?>&nbsp;Boxes</a>&nbsp;>
+		&nbs
+		p;Box Number:&nbsp;<?php echo $sBoxNumber; ?>&nbsp;Folios
+	</div>
+<div id="table-container">
+<?php
+	require 'pagination.inc.php';
+?>
+<p />
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Box</th>
+        <th>Folio</th>
+        <th>Process</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Updated</th>
+        <th>Created</th>
+        <th>&nbsp;</th>
+        <th>Error</th>
+    </tr>
+    <?php
+
+    /* @var $oFolioEntity Folio */
+    foreach ( $oPaginator as $oFolioEntity ): ?>
+        <tr>
+            <td><?php echo $oFolioEntity->id; ?></td>
+            <td><?php echo $oFolioEntity->box_number; ?></td>
+            <td><?php echo $oFolioEntity->folio_number; ?></td>
+            <td><?php echo $oFolioEntity->process; ?></td>
+            <td><?php echo $oFolioEntity->process_status; ?></td>
+            <td><?php echo $oFolioEntity->process_start_time; ?></td>
+            <td><?php echo $oFolioEntity->process_end_time; ?></td>
+            <td><?php echo $oFolioEntity->updated; ?></td>
+            <td><?php echo $oFolioEntity->created; ?></td>
+            <td><a href="index.php?entity_type=items&folio_id=<?php echo $oFolioEntity->id; ?>&job_queue_id=<?php echo $iJobQueueId; ?>&box_number=<?php echo $sBoxNumber; ?>&box_id=<?php echo $iBoxId; ?>&folio_number=<?php echo $oFolioEntity->folio_number; ?>&page_num=1">View items</td>
+            <td><div class="error" alt="<?php echo $oFolioEntity->error; ?>"><?php echo $oFolioEntity->error; ?></div></td>
+        </tr>
+    <?php
+    endforeach; ?>
+</table>
+</div>
+<?php
+}else{
+ echo 'No Folios found';
+}
+?>
+

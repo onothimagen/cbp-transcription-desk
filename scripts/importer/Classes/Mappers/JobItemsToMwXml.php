@@ -27,8 +27,14 @@ namespace Classes\Mappers;
 
 use Classes\Entities\Folio as FolioItemEntity;
 
+use Classes\Db\MediaWiki as MediaWikiDb;
+
+use Zend\Di\Di;
 
 class JobItemsToMwXml{
+
+	/* @var MediaWikiDb */
+	private $oMediaWikiDb;
 
 	private $sPagePrefix;
 
@@ -81,7 +87,10 @@ class JobItemsToMwXml{
 							, '121707' => 'Forum'
 							);
 
-	public function __construct( array $aConfig ){
+	public function __construct( MediaWikiDb $oMediaWikiDb, array $aConfig ){
+
+		/* @var $oMediaWikiDb MediaWikiDb */
+		$this->oMediaWikiDb   = $oMediaWikiDb;
 
 		$this->sPagePrefix    = $aConfig[ 'page.prefix' ];
 
@@ -101,7 +110,9 @@ class JobItemsToMwXml{
 
 
 
-
+	/*
+	 *
+	 */
 	public function CreateItemPages(  FolioItemEntity $oNextEntity
 									, FolioItemEntity $oEntity
 									, FolioItemEntity $oPrevEntity ){
@@ -134,15 +145,19 @@ class JobItemsToMwXml{
 	 */
 	private function CreatePageElement( $sText ){
 
-		$oEntity = $this->oEntity;
+		$oEntity      = $this->oEntity;
+		$oDomDocument = $this->oDocument;
 
 		$sItemPath = $this->CreateItemPath( $oEntity );
+
+		if( $this->oMediaWikiDb->DoesItemPageExist( $sItemPath ) ){
+			return $oDomDocument;
+		}
 
 		if( strpos( $sText, '{{Infobox Folio New' ) !== false ){
 			$sItemPath = 'Metadata:' . $sItemPath;
 		}
 
-		$oDomDocument = $this->oDocument;
 
 		$oRootNodes   = $oDomDocument->getElementsByTagName( 'mediawiki' );
 

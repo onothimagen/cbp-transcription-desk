@@ -85,10 +85,9 @@ class Box extends DbAbstract{
 	* @param string $sStatus
 	* @return ResultSet
 	*/
-	public function GetBoxes(
-							  $iJobQueueId
-							, $sProcess
-							, $sStatus ){
+	public function GetBoxes( $iJobQueueId
+							, $sPreviousProcess
+							, $sProcess ){
 
 		$sSql = 'SELECT
 					   id
@@ -106,17 +105,19 @@ class Box extends DbAbstract{
 				WHERE
 					job_queue_id   = ?
 				AND
-					process        = ?
-				AND
-					process_status = ?
+					( ( process       = ?
+						AND
+					  process_status = "completed" )
+				OR
+					process        = ? )
 				ORDER BY
 					box_number ASC';
 
 
 		$aBindArray = array(
 							  $iJobQueueId
+							, $sPreviousProcess
 							, $sProcess
-							, $sStatus
 					);
 
 		$rResult   = $this->Execute( $sSql, $aBindArray );
@@ -218,17 +219,16 @@ class Box extends DbAbstract{
 											, $sProcess
 									       ){
 
-		$aProcessList = array(
-							  'export'    => 'slice'
-							, 'import_mw' => 'export'
-							, 'verify'    => 'import_mw' );
+		$aProcessList = array( 'slice'
+							 , 'export'
+							 , 'import_mw'
+							 , 'verify'
+							 , 'archive'
+							);
 
-		if( array_key_exists( $sProcess, $aProcessList ) === false ) {
+		if( in_array( $sProcess, $aProcessList ) === false ) {
 			throw new ImporterException( 'Process ' . $sProcess . ' passed to FlagJobProcessAsStarted() is not a valid process' );
 		}
-
-		$sPreviousProcess = $aProcessList[ $sProcess];
-
 
 		$sSql = 'UPDATE
 					cbp_boxes
@@ -259,19 +259,7 @@ class Box extends DbAbstract{
 					, cbp_items.process_end_time   = NULL
 				    , cbp_items.updated            = NOW()
 				 WHERE
-					cbp_boxes.job_queue_id         = ?
-				 AND
-					cbp_boxes.process              = ?
-				 AND
-					cbp_boxes.process_status       = "completed"
-				 AND
-					cbp_folios.process             = ?
-				 AND
-					cbp_folios.process_status      = "completed"
-				 AND
-					cbp_items.process              = ?
-				 AND
-					cbp_items.process_status       = "completed"';
+					cbp_boxes.job_queue_id         = ?';
 
 
 		$aBindArray = array (
@@ -279,9 +267,6 @@ class Box extends DbAbstract{
 							, $sProcess
 							, $sProcess
 							, $iJobQueueId
-							, $sPreviousProcess
-							, $sPreviousProcess
-							, $sPreviousProcess
 							);
 
 
@@ -296,12 +281,9 @@ class Box extends DbAbstract{
 	/*
 	 *
 	*/
-	public function FlagJobProcessAsCompleted(
-			$iJobQueueId
-			, $sProcess
-	){
+	public function FlagJobProcessAsCompleted( $iJobQueueId , $sProcess ){
 
-		$aProcessList = array( 'export', 'import_mw', 'verify', 'archive' );
+		$aProcessList = array( 'slice', 'export', 'import_mw', 'verify', 'archive' );
 
 		if( in_array( $sProcess, $aProcessList ) === false ) {
 			throw new ImporterException( 'Process ' . $sProcess . ' passed to FlagJobProcessAsCompleted() is not a valid process' );
@@ -336,6 +318,7 @@ class Box extends DbAbstract{
 					, cbp_items.process_status    = "completed"
 					, cbp_items.process_end_time  = NOW()
 				    , cbp_items.updated           = NOW()
+
 				 WHERE
 					cbp_boxes.job_queue_id         = ?
 				 AND
@@ -358,6 +341,25 @@ class Box extends DbAbstract{
 							, $sProcess
 							, $sProcess );
 
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
+
+	}
+
+
+	/*
+	 *
+	*/
+	public function ClearErrorLog( $iId ){
+
+		$sSql = 'DELETE FROM
+					cbp_error_log
+				WHERE
+		  			box_id = ?';
+
+		$aBindArray = array ($iId );
 
 		$this->Execute( $sSql, $aBindArray );
 

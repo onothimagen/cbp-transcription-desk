@@ -32,12 +32,12 @@ require_once 'bootstrap.inc.php';
 
 require_once 'Classes/6_VerifyPagesTask.php';
 
+$sStep = 'Verifying items have been imported into MW started';
+$oLogger->Step( $sStep );
+
 $oVerifyPagesTask = new VerifyPagesTask(  $oDi
 										, $aSectionConfig
 										, $oJobQueueEntity );
-
-$sStep = 'Verifying items have been imported into MW started';
-$oLogger->Step( $sStep );
 
 $oVerifyPagesTask->Execute();
 

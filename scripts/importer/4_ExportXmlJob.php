@@ -32,12 +32,13 @@ require_once 'bootstrap.inc.php';
 
 require_once 'Classes/4_ExportXMLTask.php';
 
+$sStep = 'XML export started';
+$oLogger->Step( $sStep );
+
 $oExportXmlTask = new ExportXMLTask( $oDi
 								   , $aSectionConfig
 								   , $oJobQueueEntity );
 
-$sStep = 'XML export started';
-$oLogger->Step( $sStep );
 
 $oExportXmlTask->Execute();
 

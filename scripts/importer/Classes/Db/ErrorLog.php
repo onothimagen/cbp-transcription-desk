@@ -62,7 +62,9 @@ class ErrorLog extends DbAbstract{
 									 , ?
 									 , ?
 									 , ?
-									);';
+									)
+				ON DUPLICATE KEY UPDATE
+									error           = ?';
 
 		$aBindArray = array(
 							   $oErrorLogEntity->getJobQueueId()
@@ -72,6 +74,7 @@ class ErrorLog extends DbAbstract{
 							 , $oErrorLogEntity->getProcess()
 							 , $oErrorLogEntity->getError()
 							 , $oErrorLogEntity->getCreated()
+							 , $oErrorLogEntity->getError()
 							);
 
 		$this->Execute( $sSql, $aBindArray );

@@ -89,7 +89,6 @@ class Item extends DbAbstract{
 	 */
 	public function GetJobItems(  $iFolioId
 								, $sPreviousProcess
-								, $sStatus
 								, $sProcess ){
 
 		$sSql = 'SELECT
@@ -101,21 +100,36 @@ class Item extends DbAbstract{
 				AND
 					(( process       = ?
 						AND
-					  process_status = ? )
+					  process_status = "completed" )
 				OR
-					( process        = ?
-						AND
-					  process_status = "error" ))';
+					process        = ? )';
 
 		$aBindArray = array( $iFolioId
 						   , $sPreviousProcess
-						   , $sStatus
 						   , $sProcess
 		 );
 
 		$rResult   = $this->Execute( $sSql, $aBindArray );
 
 		return $rResult;
+
+	}
+
+	/*
+	 *
+	*/
+	public function ClearErrorLog( $iId ){
+
+		$sSql = 'DELETE FROM
+					cbp_error_log
+				WHERE
+		  			item_id = ?';
+
+		$aBindArray = array ($iId );
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
 
 	}
 

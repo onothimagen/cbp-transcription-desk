@@ -143,11 +143,16 @@ class JobQueue extends DbAbstract{
 
 
 	/*
-	 * Get oldest incomplete job
 	 *
 	 * @return ResultSet | boolean
 	 */
-	public function GetIncompleteJobs(){
+	public function GetIncompleteJobs( $iSpecifiedJobId = null){
+
+		$sWhereClause = '';
+
+		if( $iSpecifiedJobId !== null){
+			$sWhereClause = 'AND id <> ' . $iSpecifiedJobId;
+		}
 
 		$sql = 'SELECT
 					*
@@ -155,13 +160,14 @@ class JobQueue extends DbAbstract{
 					cbp_job_queue
 				WHERE
 					job_end_time IS NULL
+				' . $sWhereClause . '
 				ORDER by
 				    job_start_time DESC;';
 
 		$rResult = $this->Execute( $sql );
 
 		if( $rResult->count() > 0 ){
-			return $rResult;
+			return true;
 		}
 
 		return false;
@@ -170,7 +176,6 @@ class JobQueue extends DbAbstract{
 
 
 	/*
-	 * Get oldest incomplete job
 	 *
 	 * @return ResultSet | boolean
 	 */
@@ -192,6 +197,46 @@ class JobQueue extends DbAbstract{
       	}
 
         return false;
+
+	}
+
+
+	/*
+	*
+	* @return ResultSet | boolean
+	*/
+	public function GetAllJobs(){
+
+		$sSql = 'SELECT
+					*
+				FROM
+					cbp_job_queue;';
+
+		$rResult = $this->Execute( $sSql);
+
+		if( $rResult->count() > 0 ){
+			return $rResult;
+		}
+
+		return false;
+
+	}
+
+	/*
+	 *
+	*/
+	public function ClearErrorLog( $iId ){
+
+		$sSql = 'DELETE FROM
+					cbp_error_log
+				WHERE
+		  			job_queue_id = ?';
+
+		$aBindArray = array ( $iId );
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
 
 	}
 

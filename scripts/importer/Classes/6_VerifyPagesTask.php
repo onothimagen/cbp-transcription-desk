@@ -83,8 +83,11 @@ class VerifyPagesTask  extends TaskAbstract{
 	public function Execute(){
 
 		try {
-			$this->ProcessBoxes();
-
+			$sProcess    = $this->sProcess;
+			$iJobQueueId = $this->iJobQueueId;
+			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
+			$this->ProcessBoxes( $this->oJobQueueEntity  );
+			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
 		} catch (Exception $oException ) {
 			$this->HandleError( $oException, $oJobQueueEntity );
 		}

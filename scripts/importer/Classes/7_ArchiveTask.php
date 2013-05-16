@@ -60,6 +60,8 @@ class ArchiveTask  extends TaskAbstract{
 
     private $sBoxNumber;
 
+    private $sTokenSeperator;
+
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -78,6 +80,8 @@ class ArchiveTask  extends TaskAbstract{
 
         $this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 
+        $this->sTokenSeperator  = $aConfig[ 'tokenseperator'];
+
         $this->oJobQueueEntity  = $oJobQueueEntity;
 
         $this->iJobQueueId      = $oJobQueueEntity->getId();
@@ -92,16 +96,22 @@ class ArchiveTask  extends TaskAbstract{
 
 		try {
 
+			$sProcess    = $this->sProcess;
+			$iJobQueueId = $this->iJobQueueId;
+			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
+
             $this->CreateArchiveDirectory();
             $this->ArchiveXml();
 
 			// Don't flag all entities as as started. This is done in a granular way for this process.
 
-			$this->ProcessBoxes();
+			$this->ProcessBoxes( $this->oJobQueueEntity  );
 
             // This is the final task so flag job as 'complete'
+			$this->oJobQueueEntity->setPid( null );
             $this->oJobQueueEntity->setStatus( 'completed' );
 			$this->oJobQueueDb->InsertUpdate( $this->oJobQueueEntity );
+			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
 
 		} catch (Exception $oException ) {
 			$this->HandleError( $oException, $this->oJobQueueEntity );
@@ -118,10 +128,9 @@ class ArchiveTask  extends TaskAbstract{
 
         $this->sJobArchivePath = $sDirectory;
 
-        $this->oLogger->Log( 'Creating directory ' . $sDirectory );
 
         if( file_exists( $sDirectory ) === false ){
-
+        	$this->oLogger->Log( 'Creating directory ' . $sDirectory );
             mkdir( $sDirectory );
             $this->oLogger->Log( 'Created directory ' . $sDirectory );
         }
@@ -167,7 +176,9 @@ class ArchiveTask  extends TaskAbstract{
 
         $sItemNumber      = $oItemEntity->getItemNumber();
 
-        $sImagePath       = $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
+        $sTokenSeperator = $this->sTokenSeperator;
+
+        $sImagePath       = $sBoxNumber . $sTokenSeperator . $sFolioNumber  . $sTokenSeperator . $sItemNumber;
 
         return $sImagePath;
 
@@ -188,26 +199,39 @@ class ArchiveTask  extends TaskAbstract{
 
         $sSourceImagePath      = $sSourceImageDirectory . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
 
-        $sTargetImageDirectory = $this->sJobArchivePath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
+        if( file_exists( $sSourceImagePath )){
 
-        if( file_exists( $sTargetImageDirectory ) === false ){
-            mkdir( $sTargetImageDirectory );
-            $this->oLogger->Log( 'Created directory ' . $sTargetImageDirectory );
+	        $sTargetImageDirectory = $this->sJobArchivePath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
+
+	        if( file_exists( $sTargetImageDirectory ) === false ){
+	            mkdir( $sTargetImageDirectory );
+	            $this->oLogger->Log( 'Created directory ' . $sTargetImageDirectory );
+	        }
+
+	        $sTargetImagePath      = $sTargetImageDirectory . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
+
+	        rename( $sSourceImagePath, $sTargetImagePath );
+
+	        $this->oLogger->Log( $sSourceImagePath . ' moved to ' . $sTargetImagePath );
+
+        }else{
+        	$this->oLogger->Log( $sSourceImagePath . ' no longer exists. Probably previously archived.' );
         }
 
-        $sTargetImagePath      = $sTargetImageDirectory . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
 
-        rename( $sSourceImagePath, $sTargetImagePath );
+        if( file_exists( $sSourceImageDirectory )){
 
-        $this->oLogger->Log( $sSourceImagePath . ' moved to ' . $sTargetImagePath );
+	        //Delete source 'box_' directory if empty
 
-        //Delete source 'box_' directory if empty
+	        $aFiles = scandir( $sSourceImageDirectory );
 
-        $aFiles = scandir( $sSourceImageDirectory );
+	        // If the parent directory is now empty then delete
 
-        if( count( $aFiles) < 3 ){
-            $this->oFile->DeleteDirectory( $sSourceImageDirectory );
-            $this->oLogger->Log( 'Deleted ' . $sSourceImageDirectory );
+	        if( count( $aFiles) < 3 ){
+	        	$this->oLogger->Log( $sSourceImageDirectory . ' is empty. Deleting ...');
+	            $this->oFile->DeleteDirectory( $sSourceImageDirectory );
+	            $this->oLogger->Log( 'Deleted ' . $sSourceImageDirectory );
+	        }
         }
 
 	}

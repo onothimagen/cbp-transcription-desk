@@ -118,7 +118,8 @@ class Folio extends DbAbstract{
 									, NOW()
 									, NOW()
 								)
-							ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id);';
+							ON DUPLICATE KEY UPDATE
+								id = LAST_INSERT_ID(id);';
 
 		$aBindArray = array (  (int) $oFolioEntity->getIdNumber()
 								 , $oFolioEntity->getBoxId()
@@ -167,27 +168,27 @@ class Folio extends DbAbstract{
 	 * @param string $sJobQueueId
 	 * @return ResultSet
 	 */
-	public function GetFolios(
-								$iBoxId
-							  , $sProcess
-							  , $sStatus ){
+	public function GetFolios(  $iBoxId
+							  , $sPreviousProcess
+							  , $sProcess ){
 
 		$sSql = 'SELECT
 					*
 				FROM
 					' . $this->sTableName . '
 				WHERE
-					box_id  = ?
+					box_id         = ?
 				AND
-					process = ?
-				AND
-					process_status  = ?;';
+					( ( process       = ?
+						AND
+					  process_status = "completed" )
+				OR
+					process        = ? )';
 
 
-		$aBindArray = array(
-							  $iBoxId
-							, $sProcess
-							, $sStatus
+		$aBindArray = array( $iBoxId
+						   , $sPreviousProcess
+						   , $sProcess
 							);
 
 		$rResult   = $this->Execute( $sSql, $aBindArray );
@@ -197,8 +198,23 @@ class Folio extends DbAbstract{
 	}
 
 
+	/*
+	 *
+	*/
+	public function ClearErrorLog( $iId ){
 
+		$sSql = 'DELETE FROM
+					cbp_error_log
+				WHERE
+		  			folio_id = ?';
 
+		$aBindArray = array ($iId );
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
+
+	}
 
 
 }

@@ -27,8 +27,8 @@ namespace Classes\Entities;
 class Box extends EntityAbstract{
 
 
-	private $job_queue_id;
-	private $box_number;
+	public $job_queue_id;
+	public $box_number;
 
 	/**
 	 * @return string
@@ -58,6 +58,53 @@ class Box extends EntityAbstract{
 		return $this->box_number;
 	}
 
-
+	/*
+	 *
+	*/
+	public function exchangeArray( $data ){
+		parent::exchangeArray( $data );
+		$this->job_queue_id = ( !empty( $data[ 'job_queue_id' ] ) ) ? $data[ 'job_queue_id' ] : null;
+		$this->box_number  = ( !empty( $data[ 'box_number' ] ) ) ? $data[ 'box_number' ] : null;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

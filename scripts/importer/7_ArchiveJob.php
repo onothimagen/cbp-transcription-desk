@@ -32,12 +32,12 @@ require_once 'bootstrap.inc.php';
 
 require_once 'Classes/7_ArchiveTask.php';
 
+$sStep = 'Archiving XML started';
+$oLogger->Step( $sStep );
+
 $oArchiveTask = new ArchiveTask(  $oDi
                                 , $aSectionConfig
                                 , $oJobQueueEntity );
-
-$sStep = 'Archiving XML started';
-$oLogger->Step( $sStep );
 
 $oArchiveTask->Execute();
 

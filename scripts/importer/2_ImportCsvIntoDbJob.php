@@ -38,13 +38,13 @@ require_once 'Classes/2_ImportCsvIntoDbTask.php';
 
 $oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToFolioEntity();
 
+$sStep = 'Import from CSV started';
+$oLogger->Step( $sStep );
+
 $oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
 											             , $oCsvRowToMetatDataEntityMapper
 														 , $aSectionConfig
 														 , $oJobQueueEntity );
-
-$sStep = 'Import from CSV started';
-$oLogger->Step( $sStep );
 
 $oImportCsvIntoDbTask->Execute();
 

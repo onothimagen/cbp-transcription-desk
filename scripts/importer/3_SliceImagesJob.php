@@ -32,12 +32,12 @@ require_once 'bootstrap.inc.php';
 
 require_once 'Classes/3_SliceImagesTask.php';
 
+$sStep = 'Image slicing started';
+$oLogger->Step( $sStep );
+
 $oSliceImagesTask = new SliceImagesTask(  $oDi
 										, $aSectionConfig
 										, $oJobQueueEntity );
-
-$sStep = 'Image slicing started';
-$oLogger->Step( $sStep );
 
 $oSliceImagesTask->Execute();
 

@@ -1,0 +1,60 @@
+<?php
+
+namespace Views;
+
+use \Models\JobqueueTable;
+
+require 'Models/JobqueueTable.php';
+
+$oTable = new JobqueueTable( $oAdapter );
+
+require 'configure.paginator.inc.php';
+
+if( $oPages->pageCount > 0 ){
+	?>
+	<div id="breadcrumbs">Latest Jobs</div>
+	<div id="table-container">
+	<?php
+		require 'pagination.inc.php';
+	?>
+	<p />
+
+
+
+	<table class="table">
+	    <tr>
+	        <th>ID</th>
+	        <th>Status</th>
+	        <th>Start Time</th>
+	        <th>End Time</th>
+	        <th>Created</th>
+	        <th>Process ID</th>
+	        <th>&nbsp;</th>
+	        <th>&nbsp;</th>
+	        <th>Error</th>
+	    </tr>
+	    <?php
+
+	    /* @var $oJobQueueEntity JobQueue */
+	    foreach ( $oPaginator as $oJobQueueEntity ): ?>
+	        <tr>
+	            <td><?php echo $oJobQueueEntity->id; ?></td>
+	            <td><?php echo $oJobQueueEntity->job_status; ?></td>
+	            <td><?php echo $oJobQueueEntity->job_start_time; ?></td>
+	            <td><?php echo $oJobQueueEntity->job_end_time; ?></td>
+	            <td><?php echo $oJobQueueEntity->created; ?></td>
+	            <td><?php echo $oJobQueueEntity->pid; ?></td>
+	            <td>
+	            	<button type="button" onclick="ajaxConnect( 'restart', <?php echo $oJobQueueEntity->id; ?>);">Re-run</button>
+	            </td>
+	            <td><a href="index.php?entity_type=boxes&job_queue_id=<?php echo $oJobQueueEntity->id; ?>">View boxes</td>
+	           <td><div class="error" alt="<?php echo $oJobQueueEntity->error; ?>"><?php echo $oJobQueueEntity->error; ?></div></td>
+	        </tr>
+	    <?php
+	    endforeach; ?>
+	</table>
+	</div>
+<?php
+}
+?>
+

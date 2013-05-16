@@ -1,0 +1,59 @@
+<?php
+
+use \Models\ItemTable;
+
+require 'Models/ItemTable.php';
+
+$oTable    = new ItemTable( $oAdapter );
+
+require 'configure.paginator.inc.php';
+
+if( $oPages->pageCount > 0 ){
+	?>
+	<div id="breadcrumbs">
+		<a href="index.php">Jobs</a> >
+		&nbsp;<a href="index.php?entity_type=boxes&job_queue_id=<?php echo $iJobQueueId; ?>">Job Queue ID:&nbsp;<?php echo $iJobQueueId; ?>&nbsp;Boxes</a>&nbsp;>
+		&nbsp;<a href="index.php?entity_type=folios&job_queue_id=<?php echo $iJobQueueId; ?>&box_id=<?php echo $iBoxId; ?>&box_number=<?php echo $sBoxNumber; ?>">Box Number:&nbsp;<?php echo $sBoxNumber; ?>&nbsp;Folios</a>&nbsp;>
+		&nbsp;Folio Number:&nbsp;<?php echo $sFolioNumber; ?>&nbsp;>&nbsp;Items
+	</div>
+	<div id="table-container">
+	<?php
+		require 'pagination.inc.php';
+	?>
+	<p />
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Folio Number</th>
+        <th>Process</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Updated</th>
+        <th>Created</th>
+        <th>Error</th>
+    </tr>
+    <?php
+
+    /* @var $oItemEntity ItemEntity */
+    foreach ( $oPaginator as $oItemEntity ): ?>
+        <tr>
+            <td><?php echo $oItemEntity->id; ?></td>
+            <td><?php echo $oItemEntity->folio_number; ?></td>
+            <td><?php echo $oItemEntity->process; ?></td>
+            <td><?php echo $oItemEntity->process_status; ?></td>
+            <td><?php echo $oItemEntity->process_start_time; ?></td>
+            <td><?php echo $oItemEntity->process_end_time; ?></td>
+            <td><?php echo $oItemEntity->updated; ?></td>
+            <td><?php echo $oItemEntity->created; ?></td>
+ 			<td><div class="error" alt="<?php echo $oItemEntity->error; ?>"><?php echo $oItemEntity->error; ?></div></td>
+        </tr>
+    <?php
+    endforeach; ?>
+</table>
+</div>
+<?php
+}else{
+ echo 'No Items found';
+}
+?>

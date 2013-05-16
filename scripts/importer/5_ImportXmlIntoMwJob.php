@@ -32,11 +32,12 @@ require_once 'bootstrap.inc.php';
 
 require_once 'Classes/5_ImportXmlIntoMwJobTask.php';
 
+$sStep = 'Importing XML into MW started';;
+$oLogger->Step( $sStep );
+
 $oImportXmlIntoMwTask = new ImportXmlIntoMwJobTask( $oDi
 												  , $aSectionConfig
 												  , $oJobQueueEntity );
-$sStep = 'Importing XML into MW started';;
-$oLogger->Step( $sStep );
 
 $oImportXmlIntoMwTask->Execute();
 

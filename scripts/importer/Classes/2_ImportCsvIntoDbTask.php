@@ -55,11 +55,15 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	private $sImageImportPath;
 
+	private $sArchivePath;
+
 	private $sTokenSeperator;
 
 	private $sBoxPrefix;
 
 	private $sItemRegex;
+
+	private $sFolioLimit;
 
 	/* @var BoxEntity */
 	private $oBoxEntity;
@@ -90,11 +94,15 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->sImageImportPath = $aConfig[ 'path.image.import' ];
 
+		$this->sArchivePath     = $aConfig[ 'path.archive' ];
+
 		$this->sTokenSeperator  = $aConfig[ 'tokenseperator' ];
 
 		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 
 		$this->sItemRegex       = $aConfig[ 'item.regex' ];
+
+		$this->sFolioLimit     = $aConfig[ 'import_folio_limit' ];
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
@@ -105,6 +113,8 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		$this->oItemEntity      = new ItemEntity();
 
 		$this->sProcess         = 'import';
+
+		$this->oJobQueueEntity  = $oJobQueueEntity;
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
@@ -125,11 +135,9 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 			$this->IterateCsvFileAndInsertRowsIntoDb( $hHandle );
 
-		} catch (Exception $oException ) {
-			$this->HandleError( $oException, $oJobQueueEntity );
+		} catch ( ImporterException $oException ) {
+			$this->HandleError( $oException, $this->oJobQueueEntity );
 		}
-
-
 
 	}
 
@@ -141,19 +149,23 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	 */
 	private function IterateCsvFileAndInsertRowsIntoDb( $hHandle ){
 
-		$iCurrentRow = 1;
+		$iCurrentRow  = 1;
 
-		$aAssocRow   = array();
+		$aAssocRow    = array();
 
-		$iJobQueueId = $this->iJobQueueId;
+		$iJobQueueId  = $this->iJobQueueId;
 
-		$oBoxEntity  = $this->oBoxEntity;
+		$oBoxEntity   = $this->oBoxEntity;
 
-		$sBoxNumber  = NULL;
+		$sBoxNumber   = NULL;
 
-		$iBoxId      = NULL;
+		$iBoxId       = NULL;
 
-		while ( $aRow = fgetcsv ( $hHandle, 4000, '|' ) ){
+		$sFolioLimit  = $this->sFolioLimit;
+
+		$iFolioCount = 0;
+
+		while ( ($aRow = fgetcsv ( $hHandle, 4000, '|' ) ) and $iFolioCount <  $sFolioLimit + 1 ){
 
 			$iNumberOfFields = count( $aRow );
 
@@ -196,10 +208,9 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 				// Add file names to the Box Item List array
 
-				$this->GetBoxItemList( $sBoxNumber );
-
 				try {
 					$oBoxEntity = $this->InsertBox( $sBoxNumber );
+					$this->GetBoxItemList( $sBoxNumber );
 
 				} catch ( ImporterException $oException ) {
 					$this->HandleError( $oException, $oBoxEntity );
@@ -219,6 +230,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 				// TODO Could items be subsequently added to a portfolio?
 
 				if( $oMappedFolioEntity !== false ){
+					$iFolioCount++;
 					$this->InsertItems( $oBoxEntity, $oMappedFolioEntity );
 				}
 
@@ -236,6 +248,25 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 			$this->oBoxDb->UpdateProcessStatus( $iBoxId, 'import', 'completed' );
 
+			$this->oBoxDb->ClearErrorLog( $iBoxId );
+
+		}
+
+		$this->CheckForAnyUnmatchedFiles();
+
+	}
+
+	/*
+	 *
+	 */
+	public function CheckForAnyUnmatchedFiles(){
+
+		$aFlattened = $this->ArrayFlatten( $this->aScannedFileNames );
+
+		if( count(  $aFlattened ) > 1 ){
+
+			$sUnMatchedList = implode( ', ', $aFlattened );
+			throw new ImporterException( 'There are file names in $this->aScannedFileNames that do not have corresponding metadata: ' . $sUnMatchedList );
 		}
 
 	}
@@ -315,14 +346,11 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$aFolioItemList = $this->GetFolioItemList( $oBoxEntity, $oMappedFolioEntity );
 
-
 		foreach ( $aFolioItemList as $sFolioItemNumber ){
 
 			$oItemEntity->setItemNumber( $sFolioItemNumber );
 
 			$this->oLogger->Log ( 'Inserting Item ' . $sFolioItemNumber );
-
-			$this->oLogger->Log ( '-----------------------------------' );
 
 			try {
 				$this->oItemDb->Insert( $oItemEntity );
@@ -339,6 +367,10 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->oFolioDb->UpdateProcessStatus( $iFolioId, 'import', 'completed' );
 
+		$this->oFolioDb->ClearErrorLog( $iFolioId );
+
+		$this->oLogger->Log ( '-----------------------------------' );
+
 	}
 
 	private function GetFolioItemList( BoxEntity $oBoxEntity, FolioEntity $oFolioEntity ){
@@ -349,27 +381,38 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		$sItemRegex       = $this->sItemRegex;
 		$aFileNames       = $this->aScannedFileNames[ $sBoxNumber ];
 
-		$aFolioItemList = array();
+		$aMatchedFolioItemList = array();
 
-		foreach ( $aFileNames as $sFileName ){
+		foreach ( $aFileNames as $iIndex => $sFileName ){
 
-				$aTokens             = explode( $sTokenSeperator, $sFileName );
+			$aTokens = explode( $sTokenSeperator, $sFileName );
 
-				if( $aTokens === false ){
-					throw new ImporterException( 'GetFolioItemList() did not return any tokens for $sFileName: ' . $sFileName . 'in box: ' . $sBoxNumber . ', folio:' . $sFolioNumber );
-				}
+			if( $aTokens === false ){
+				throw new ImporterException( 'GetFolioItemList() did not return any tokens for $sFileName: ' . $sFileName . 'in box: ' . $sBoxNumber . ', folio:' . $sFolioNumber );
+			}
 
-				$sExpr  = '/' . $sBoxNumber . $sTokenSeperator . $sFolioNumber . $sTokenSeperator . $sItemRegex . '/';
+			$sExpr  = '/' . $sBoxNumber . $sTokenSeperator . $sFolioNumber . $sTokenSeperator . $sItemRegex . '/';
 
-				$iMatch = preg_match( $sExpr , $sFileName, $matches );
+			$iMatch = preg_match( $sExpr , $sFileName, $matches );
 
-				if( $iMatch === 1 ){
-					$sItemNumber      = $matches[1];
-					$aFolioItemList[] = $sItemNumber;
-				}
+			if( $iMatch !== 1 ){
+				continue;
+			}
+
+			$sLogData = $sFileName . ' matched with metadata';
+
+			$this->oLogger->Log( $sLogData );
+
+			$sItemNumber             = $matches[1];
+			$aMatchedFolioItemList[] = $sItemNumber;
+
+			// Remove it from the master array
+
+			unset( $this->aScannedFileNames[ $sBoxNumber ][ $iIndex ] );
+
 		}
 
-		return $aFolioItemList;
+		return $aMatchedFolioItemList;
 
 	}
 
@@ -379,7 +422,29 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$sBoxPrefix       = $this->sBoxPrefix;
 
+		$iJobQueueId      = $this->iJobQueueId;
+
 		$sBoxDirectory    = $sImageImportPath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
+
+		$bDirExists = file_exists( $sBoxDirectory );
+
+		// If the directory is not there then just quickly check the archive
+
+		if( $bDirExists === false ){
+
+			$sArchiveBoxDirectory    = $this->sArchivePath . DIRECTORY_SEPARATOR . $iJobQueueId . DIRECTORY_SEPARATOR .  $sBoxPrefix . $sBoxNumber;
+
+			$bDirExists = file_exists( $sArchiveBoxDirectory );
+
+			// If it isn't there then we have a genuine problem so throw an exception
+
+			if( $bDirExists === false ){
+				throw new ImporterException( 'BoxDirectory ' . $sBoxDirectory . ' does not exist' );
+			}
+
+			$sBoxDirectory = $sArchiveBoxDirectory;
+
+		}
 
 		$aFileNames       = scandir( $sBoxDirectory );
 
@@ -393,7 +458,22 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		}
 
+		if( count( $this->aScannedFileNames[ $sBoxNumber ]) < 1 ){
+			throw new ImporterException( 'GetBoxItemList() could not find any files in box folder' . $sBoxNumber );
+		}
 
+
+	}
+
+	private function ArrayFlatten( $arr ) {
+		$arr = array_values($arr);
+		while (list($k,$v)=each($arr)) {
+			if (is_array($v)) {
+				array_splice($arr,$k,1,$v);
+				next($arr);
+			}
+		}
+		return $arr;
 	}
 
 

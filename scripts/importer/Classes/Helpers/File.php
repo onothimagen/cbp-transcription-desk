@@ -98,7 +98,7 @@ class File {
 	/*
 	 *
 	 */
-	public function CheckDirExists( $sName, $sFilePath ){
+	public function CheckDirExists( $sFilePath ){
 
 		$bFileExists = file_exists( $sFilePath );
 
@@ -116,30 +116,52 @@ class File {
 		$bFileExists = file_exists( $sFilePath );
 
 		if( $bFileExists === false ){
-			throw new ImporterException( $sName . ' ' . $sFilePath . ' does not exist<p />' );
+			throw new ImporterException( $sName . ' ' . $sFilePath . ' does not exist' );
 		}
 
 	}
 
-    public function PidExists( $iPid ){
+	/*
+	 *
+	 */
+	public function KillProcess( $iPid ){
+
+		if( $this->ServerOS() === 'LINUX'){
+			exec( 'kill ' . $iPid );
+			return;
+		}
+		exec( 'taskkill /PID ' . $iPid );
+		return;
+	}
+
+	/*
+	 * see http://ionfist.com/php/start-stop-process-from-php/
+	 *
+	 * @return boolean
+	 */
+    public function ProcessExists( $iPid ){
 
         if( $this->ServerOS() === 'LINUX'){
-            return file_exists( '/proc/' . $iPid );
+        	exec( 'ps ' . $iPid, $aState );
+			if( ( count( $aState ) >= 2 ) ){
+				return true;
+			}
+			return false;
         }
 
         $iPid = (int) $iPid;
 
         $aProcesses = explode( "\n", shell_exec( "tasklist.exe" ));
 
-        foreach( $aProcesses as $process ){
+        foreach( $aProcesses as $sProcess ){
 
-             if( strpos( $process, 'php' ) === 0 || strpos( $process, "===" ) === 0 ){
+             if( strpos( $sProcess, 'php' ) === 0 || strpos( $sProcess, "===" ) === 0 ){
                   continue;
              }
 
              $aMatches = false;
 
-             if( preg_match( "/(.*)\s+(\d+).*$/", $process ) ){
+             if( preg_match( "/(.*)\s+(\d+).*$/", $sProcess ) ){
                 $iRunningPid = $aMatches[ 2 ];
                 if( $iPid === (int) $iRunningPid ){
                     return true;
@@ -150,15 +172,15 @@ class File {
     }
 
     /*
-     *
+     *@return string
     */
     public function ServerOS(){
 
-    	$sys = strtoupper( PHP_OS );
+    	$sSystem = strtoupper( PHP_OS );
 
-    	if( substr( $sys, 0, 3 ) == 'WIN' ){
+    	if( substr( $sSystem, 0, 3 ) == 'WIN' ){
     		return 'WIN';
-    	}elseif( $sys == 'LINUX' ){
+    	}elseif( $sSystem == 'LINUX' ){
     		return 'LINUX';
     	}else{
     		return 'OTHER';

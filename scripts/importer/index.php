@@ -41,21 +41,22 @@ function disable_ob() {
 function GetId(){
 
 	if( isset( $_GET[ 'job_id' ] ) ){
-		$sJobId = (int) $_GET[ 'job_id' ];
+		$iJobId = (int) $_GET[ 'job_id' ];
+		return ' ' . $iJobId;
 	}elseif ( isset( $argv[ 1 ] ) ){
-		$sJobId = (int) $argv[ 1 ];
-		return ' ' . $sJobId;
+		$iJobId = (int) $argv[ 1 ];
+		return ' ' . $iJobId;
 	}
 	return '';
 }
 
 disable_ob();
 
-$sJobId = GetId();
+$iJobId = GetId();
 
 // Ensure that the php binary is added to the system path
 
-$sCommand     = 'php 1_InitiateJobs.php' . $sJobId;
+$sCommand = 'php 1_InitiateJobs.php' . $iJobId;
 
 passthru( $sCommand );
 

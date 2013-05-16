@@ -1,0 +1,65 @@
+<?php
+
+use \Models\BoxTable;
+
+require 'Models/BoxTable.php';
+
+$oTable    = new BoxTable( $oAdapter );
+
+require 'configure.paginator.inc.php';
+
+if( $oPages->pageCount > 0 ){
+
+?>
+
+<div id="breadcrumbs">
+<a href="index.php">Jobs</a>&nbsp;>
+&nbsp;Job Queue ID:&nbsp;<?php echo $iJobQueueId; ?>&nbsp;>&nbsp;Boxes
+</div>
+
+<div id="table-container">
+<?php
+	require 'pagination.inc.php';
+?>
+<p />
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Job Queue ID</th>
+        <th>Box Number</th>
+        <th>Process</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Updated</th>
+        <th>Created</th>
+        <th>&nbsp;</th>
+        <th>Error</th>
+    </tr>
+    <?php
+
+    /* @var $oBoxEntity Box */
+    foreach ( $oPaginator as $oBoxEntity ): ?>
+        <tr>
+            <td><?php echo $oBoxEntity->id; ?></td>
+            <td><?php echo $oBoxEntity->job_queue_id; ?></td>
+            <td><?php echo $oBoxEntity->box_number; ?></td>
+            <td><?php echo $oBoxEntity->process; ?></td>
+            <td><?php echo $oBoxEntity->process_status; ?></td>
+            <td><?php echo $oBoxEntity->process_start_time; ?></td>
+            <td><?php echo $oBoxEntity->process_end_time; ?></td>
+            <td><?php echo $oBoxEntity->updated; ?></td>
+            <td><?php echo $oBoxEntity->created; ?></td>
+            <td><a href="index.php?entity_type=folios&box_id=<?php echo $oBoxEntity->id; ?>&box_number=<?php echo $oBoxEntity->box_number; ?>&job_queue_id=<?php echo $iJobQueueId; ?>">View folios</td>
+            <td><div class="error" alt="<?php echo $oBoxEntity->error; ?>"><?php echo $oBoxEntity->error; ?></div></td>
+        </tr>
+    <?php
+    endforeach; ?>
+</table>
+</div>
+<?php
+}else{
+ echo 'No Boxes found';
+}
+?>
+
