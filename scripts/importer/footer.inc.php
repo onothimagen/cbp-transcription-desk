@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */

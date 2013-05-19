@@ -18,45 +18,42 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
 
+/*
+ * See respective Classes/*Task.php for more detailed information
+*
+*/
+
 namespace Classes;
 
-$sJobName = 'Slice Images';
+$sJobName = 'Verify Pages';
 
 require_once 'header.inc.php';
 
 require_once 'bootstrap.inc.php';
 
-require_once 'Classes/3_SliceImagesTask.php';
+require_once 'Classes/6_VerifyPagesTask.php';
 
-$sStep = 'Image slicing started';
+$sStep = 'Verifying items have been imported into MW started';
 $oLogger->Step( $sStep );
 
-$oSliceImagesTask = new SliceImagesTask(  $oDi
+$oVerifyPagesTask = new VerifyPagesTask(  $oDi
 										, $aSectionConfig
 										, $oJobQueueEntity );
 
-$oSliceImagesTask->Execute();
+$oVerifyPagesTask->Execute();
 
-$sStep = 'Image slicing completed';
+$sStep = 'Verifying items have been imported into MW completed';
 $oLogger->Step( $sStep );
 
-require '4_ExportXmlJob.php';
+require_once '7_ArchiveProcess.php';
+
 
 require_once 'footer.inc.php';
-
-
-
-
-
-
-
-
-
-
 
 
 

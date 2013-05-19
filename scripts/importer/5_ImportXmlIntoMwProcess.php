@@ -18,9 +18,15 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
+
+/*
+ * See respective Classes/*Task.php for more detailed information
+*
+*/
 
 namespace Classes;
 
@@ -44,7 +50,7 @@ $oImportXmlIntoMwTask->Execute();
 $sStep = 'Importing XML into MW completed';
 $oLogger->Step( $sStep );
 
-require_once '6_VerifyPagesJob.php';
+require_once '6_VerifyPagesProcess.php';
 
 require_once 'footer.inc.php';
 

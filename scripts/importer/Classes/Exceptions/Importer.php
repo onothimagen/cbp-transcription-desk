@@ -19,8 +19,10 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
+ * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @author diz@ysagoon.com
- * @copyright Based on comment from diz@ysagoon.com on http://php.net/manual/en/function.debug-backtrace.php
+ * @copyright Based on comment from @link diz@ysagoon.com on http://php.net/manual/en/function.debug-backtrace.php
  */
 
 namespace Classes\Exceptions;
@@ -31,18 +33,32 @@ class Importer extends \Exception {
 	protected $aBacktrace;
 	protected $sBasicMessage = null;
 
-	public function __construct( $message = null, $code = 0 ) {
-		parent::__construct( $message, $code );
+	/*
+	 * @param string $sMessage
+	 * @param in $iCode;
+	 */
+	public function __construct( $sMessage = null, $iCode = 0 ) {
+		parent::__construct( $sMessage, $iCode );
 		$this->aBacktrace = debug_backtrace();
 	}
 
+
+	/*
+	 * @return string
+	 */
 	public function getFullTrace() {
 		return strip_tags( $this->Backtrace( $this->aBacktrace ) );
 	}
 
+	/*
+	 * @param array | boolean $aBackTrace
+	 * @return string
+	 */
 	public function Backtrace( $aBackTrace = false ){
+
 		$output = '<div style=\'text-align: left; font-family: monospace;\'>' . "\n";
 		$output .= '<b>Backtrace:</b><br />'."\n";
+
 		if ($aBackTrace) {
 			$backtraces = $aBackTrace;
 		} else {

@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -41,6 +42,10 @@ use Classes\Entities\Item     as ItemEntity;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * This class moves all processed images and the XML file to the
+ * specified archive directory
+ */
 class ArchiveTask  extends TaskAbstract{
 
 	/* @var FolioEntity */
@@ -62,6 +67,12 @@ class ArchiveTask  extends TaskAbstract{
 
     private $sTokenSeperator;
 
+   /*
+    * @param Di             $oDi
+    * @param string[]       $aConfig
+    * @param JobQueueEntity $oJobQueueEntity
+    * @return void
+    */
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -90,7 +101,9 @@ class ArchiveTask  extends TaskAbstract{
 
 
 	/*
+	 * Entry point to start task
 	 *
+	 * @return void
 	 */
 	public function Execute(){
 
@@ -120,7 +133,9 @@ class ArchiveTask  extends TaskAbstract{
 	}
 
     /*
+     * Created a directory based on the Job ID
      *
+     * @return void
      */
     private function CreateArchiveDirectory(){
 
@@ -128,26 +143,37 @@ class ArchiveTask  extends TaskAbstract{
 
         $this->sJobArchivePath = $sDirectory;
 
+        if( !is_dir( $sDirectory ) ) {
 
-        if( file_exists( $sDirectory ) === false ){
         	$this->oLogger->Log( 'Creating directory ' . $sDirectory );
-            mkdir( $sDirectory );
+
+            if( !mkdir( $sDirectory, 0775, true )) {
+            	throw new ImporterException( 'Failed to create ' . $sDirectory );
+            }
+
             $this->oLogger->Log( 'Created directory ' . $sDirectory );
         }
     }
 
+    /*
+     * Move XML
+     *
+     * @return void
+     */
     private function ArchiveXml(){
 
         $sSourceXmlPath = $this->ConstructSourceXmlPath();
         $sTargetXmlPath = $this->ConstructTargetXmlPath();
 
-        rename( $sSourceXmlPath, $sTargetXmlPath );
+        if( !rename( $sSourceXmlPath, $sTargetXmlPath ) ) {
+        	throw new ImporterException( 'ArchiveXml(): unable to rename ' . $sSourceXmlPath . ' to ' . $sTargetXmlPath );
+        }
 
         $this->oLogger->Log( $sSourceXmlPath . ' moved to ' . $sTargetXmlPath );
     }
 
     /*
-     *
+     * @return string
      */
     private function ConstructSourceXmlPath(){
         return $this->sXMLExportPath . DIRECTORY_SEPARATOR . $this->iJobQueueId . '.xml';
@@ -161,7 +187,7 @@ class ArchiveTask  extends TaskAbstract{
     }
 
     /*
-     *
+     * @return string
      */
 	protected function ConstructPath(
 									  BoxEntity   $oBoxEntity
@@ -185,7 +211,9 @@ class ArchiveTask  extends TaskAbstract{
 	}
 
 	/*
+	 * Move all item images to the archive directory
 	 *
+	 * @return void
 	 */
 	protected function Process( $sImagePath ){
 
@@ -203,14 +231,20 @@ class ArchiveTask  extends TaskAbstract{
 
 	        $sTargetImageDirectory = $this->sJobArchivePath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
 
-	        if( file_exists( $sTargetImageDirectory ) === false ){
-	            mkdir( $sTargetImageDirectory );
+	        if( !is_dir( $sTargetImageDirectory ) ){
+
+	        	if( !mkdir( $sTargetImageDirectory, 0775, true )) {
+			    	throw new ImporterException( 'Failed to create ' . $sTargetImageDirectory );
+				}
+
 	            $this->oLogger->Log( 'Created directory ' . $sTargetImageDirectory );
 	        }
 
 	        $sTargetImagePath      = $sTargetImageDirectory . DIRECTORY_SEPARATOR . $sImagePath . '.jpg';
 
-	        rename( $sSourceImagePath, $sTargetImagePath );
+	        if( !rename( $sSourceImagePath, $sTargetImagePath ) ) {
+	        	throw new ImporterException( 'Process(): unable to rename ' . $sSourceImagePath . ' to ' . $sTargetImagePath );
+	        }
 
 	        $this->oLogger->Log( $sSourceImagePath . ' moved to ' . $sTargetImagePath );
 
@@ -225,12 +259,18 @@ class ArchiveTask  extends TaskAbstract{
 
 	        $aFiles = scandir( $sSourceImageDirectory );
 
+	        if( !$aFiles ) {
+	        	throw new ImporterException( 'Process(): unable to scan source image directory: ' . $sSourceImageDirectory );
+	        }
+
 	        // If the parent directory is now empty then delete
 
 	        if( count( $aFiles) < 3 ){
+
 	        	$this->oLogger->Log( $sSourceImageDirectory . ' is empty. Deleting ...');
 	            $this->oFile->DeleteDirectory( $sSourceImageDirectory );
 	            $this->oLogger->Log( 'Deleted ' . $sSourceImageDirectory );
+
 	        }
         }
 

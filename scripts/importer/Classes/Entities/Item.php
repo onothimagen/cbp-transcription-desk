@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -26,6 +27,7 @@ namespace Classes\Entities;
 
 class Item extends EntityAbstract{
 
+	// Ordinarily these would be private but need to be public for the installer Zend paginator
 
 	public $folio_id;
 	public $folio_number;
@@ -60,14 +62,23 @@ class Item extends EntityAbstract{
 		return $this->item_number;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getUpdated() {
+		return $this->updated;
+	}
+
 	/*
+	 * Required for the for the installer Zend paginator
 	 *
+	 * @return void
 	*/
 	public function exchangeArray( $data ){
 		parent::exchangeArray( $data );
 		$this->folio_id     = ( !empty( $data[ 'folio_id' ] ) ) ? $data[ 'folio_id' ] : null;
 		$this->item_number  = ( !empty( $data[ 'item_number' ] ) ) ? $data[ 'item_number' ] : null;
-		$this->folio_number  = ( !empty( $data[ 'folio_number' ] ) ) ? $data[ 'folio_number' ] : null;
+		$this->folio_number = ( !empty( $data[ 'folio_number' ] ) ) ? $data[ 'folio_number' ] : null;
 	}
 
 }

@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -28,15 +29,24 @@ use Classes\Entities\Box as BoxEntity;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+use Zend\Db\Adapter\Driver\Pdo\Result;
+use Zend\Db\Adapter\Adapter;
+
 class Box extends DbAbstract{
 
 
-	public function __construct( $oAdapter ){
+	public function __construct( Adapter $oAdapter ){
 		parent::__construct( $oAdapter );
 		$this->sTableName = 'cbp_boxes';
 	}
 
 	/*
+	 * Note: 'updated' value is not specified so it will default
+	 * to null. Therefore if inserted rather retrieved
+	 * it will have a null value for 'updated'
+	 *
+	 * A retrieved value will have an 'updated' value that is not null
+	 *
 	 * @return BoxEntity
 	 */
 	public function Insert ( BoxEntity $oBoxEntity ){
@@ -56,9 +66,9 @@ class Box extends DbAbstract{
 							    ?
 							  , ?
 							  , "import"
-							  , "started"
+							  , "completed"
 							  , NOW()
-							  , NOW()
+							  , NULL
 							)
 				 ON DUPLICATE KEY UPDATE
 							id = LAST_INSERT_ID( id );';
@@ -81,13 +91,13 @@ class Box extends DbAbstract{
 
 	/*
 	 * @param integer $iJobQueueId
-	* @param string $sProcess
-	* @param string $sStatus
-	* @return ResultSet
-	*/
-	public function GetBoxes( $iJobQueueId
-							, $sPreviousProcess
-							, $sProcess ){
+	 * @param string $sProcess
+	 * @param string $sStatus
+	 * @return Result
+	 */
+	public function GetBoxesToProcess( $iJobQueueId
+									 , $sPreviousProcess
+									 , $sProcess ){
 
 		$sSql = 'SELECT
 					   id
@@ -128,14 +138,17 @@ class Box extends DbAbstract{
 
 
 	/*
+	 * This looks for items that have completed their previous process or started their current process
+	 * They are ordered box, folio and item number so that the 'next', 'previous' in the export XML process
+	 * can be calculated sequentially in numerical order
+	 *
 	 * @param integer $iJobQueueId
-	* @param string $sProcess
-	* @param string $sStatus
-	* @return ResultSet
-	*/
+	 * @param string $sProcess
+	 * @param string $sStatus
+	 * @return Result
+	 */
 	public function GetJobItems( $iJobQueueId
 							   , $sPreviousProcess
-							   , $sStatus
 							   , $sProcess ){
 
 		$sSql = 'SELECT
@@ -185,25 +198,21 @@ class Box extends DbAbstract{
 				WHERE
 					cbp_boxes.job_queue_id   = ?
 				AND
-					(( cbp_items.process       = ?
-						AND
-					  cbp_items.process_status = ? )
-				OR
-					( cbp_items.process        = ?
-						AND
-					  cbp_items.process_status = "error" ))
+					( ( cbp_items.process       = ?
+							AND
+						cbp_items.process_status = "completed" )
+					OR
+						cbp_items.process        = ? )
 				ORDER BY
 					box_number ASC
 				  , folio_number ASC
 				  , item_number ASC;';
 
 
-		$aBindArray = array(
-							  $iJobQueueId
-							, $sPreviousProcess
-							, $sStatus
-							, $sProcess
-		);
+		$aBindArray = array( $iJobQueueId
+						   , $sPreviousProcess
+						   , $sProcess
+							);
 
 		$rResult   = $this->Execute( $sSql, $aBindArray );
 
@@ -212,12 +221,11 @@ class Box extends DbAbstract{
 
 
 	/*
-	 *
+	 * @param integer $iJobQueueId
+	 * @param string $sProcess
+	 * @return null
 	*/
-	public function FlagJobProcessAsStarted(
-											  $iJobQueueId
-											, $sProcess
-									       ){
+	public function FlagJobProcessAsStarted( $iJobQueueId, $sProcess ){
 
 		$aProcessList = array( 'slice'
 							 , 'export'
@@ -279,7 +287,9 @@ class Box extends DbAbstract{
 
 
 	/*
-	 *
+	 * @param integer $iJobQueueId
+	 * @param string $sProcess
+	 * @return Result
 	*/
 	public function FlagJobProcessAsCompleted( $iJobQueueId , $sProcess ){
 
@@ -350,7 +360,8 @@ class Box extends DbAbstract{
 
 
 	/*
-	 *
+	 * @param integer $iId
+	 * @return null
 	*/
 	public function ClearErrorLog( $iId ){
 

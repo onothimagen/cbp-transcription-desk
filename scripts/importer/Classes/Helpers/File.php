@@ -18,6 +18,7 @@
  *
  * @package CBP Transcriptions
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  Ben Parish
  */
@@ -30,11 +31,16 @@ class File {
 
 
 	/*
-	 *
+	 * @param string $sDirectory
+	 * @return void
 	 */
 	public function DeleteDirectory( $sDirectory ) {
 
 	    $aFiles = scandir( $sDirectory );
+
+	    if( !$aFiles ) {
+	    	throw new ImporterException( 'DeleteDirectory(): unable to scan directory: ' . $sDirectory );
+	    }
 
 		foreach ( $aFiles as $sFile ){
 			if ( $sFile != '.' && $sFile != '..'){
@@ -46,40 +52,59 @@ class File {
 				}
 
 				if ( file_exists( $sPath ) ){
-					unlink( $sPath );
+
+					if( !unlink( $sPath ) ) {
+						throw new ImporterException( 'DeleteDirectory() unable to unlink ' . $sPath );
+					}
+
 				}
 			}
 		}
 
 		if( is_dir( $sDirectory )){
-			rmdir( $sDirectory );
+
+			if( !rmdir( $sDirectory ) ) {
+				throw new ImporterException( 'DeleteDirectory() unable to unlink ' . $sDirectory );
+			}
+
 		}
 	}
 
 	/*
-	 *
+	 * @param string $sDirectory
+	 * @return void
 	 */
 	public function EmptyDirectory( $sDirectory ){
 
 		$aFiles = scandir( $sDirectory );
 
+		if( !$aFiles ) {
+			throw new ImporterException( 'EmptyDirectory(): unable to scan directory: ' . $sDirectory );
+		}
+
 		foreach ( $aFiles as $sFile ){
 			if ( $sFile != '.' && $sFile != '..'){
 
-				$sPath = $sDirectory . '/' . $sFile;
+				$sFilePath = $sDirectory . '/' . $sFile;
 
-				if( is_dir( $sPath ) ){
+				if( is_dir( $sFilePath ) ){
 					continue;
 				}
 
-				unlink( $sPath );
+				unlink( $sFilePath );
+
+				$bFileExists = file_exists( $sFilePath );
+
+				if( $bFileExists ){
+					throw new ImporterException( 'EmptyDirectory() unable to unlink ' . $sFilePath );
+				}
 			}
 		}
 	}
 
 
 	/*
-	 *
+	 * @return resource
 	*/
 	public function GetFileHandle( $sFilePath ){
 
@@ -95,34 +120,123 @@ class File {
 
 	}
 
+
+
 	/*
-	 *
+	 * @return boolean
 	 */
 	public function CheckDirExists( $sFilePath ){
 
-		$bFileExists = file_exists( $sFilePath );
+		if( !is_dir( $sFilePath ) ) {
 
-		if( $bFileExists === false ){
-			mkdir( $sFilePath );
+			if( !mkdir( $sFilePath, 0775, true )) {
+				throw new ImporterException( 'Failed to create ' . $sFilePath );
+			}
 		}
+
+		return true;
 
 	}
 
+
+
 	/*
-	 *
+	 * @return boolean
 	 */
 	public function CheckExists( $sName, $sFilePath ){
 
-		$bFileExists = file_exists( $sFilePath );
-
-		if( $bFileExists === false ){
+		if( file_exists( $sFilePath ) === false ){
 			throw new ImporterException( $sName . ' ' . $sFilePath . ' does not exist' );
 		}
+
+		return true;
 
 	}
 
 	/*
-	 *
+	 * @param string $sDirectory
+	 * @param string $sType Either 'directory' or 'file'
+	 * @return
+	 */
+	public function ScanDirectory( $sDirectory, $sType ){
+
+		if( $sType != 'directory' and $sType != 'file'){
+			throw new ImporterException( '$sType passed to ScanDirectory() is not \'file or\' \'directory\'' );
+		}
+
+		$aItemList = array();
+
+		$this->CheckDirExists( $sDirectory );
+
+		$aItems  = scandir( $sDirectory );
+
+		if( !$aItems ) {
+			throw new ImporterException( 'ScanDirectory(): unable to scan directory: ' . $sDirectory );
+		}
+
+		foreach ( $aItems as $sItem ){
+
+			if ( $sItem == '.' or $sItem == '..'){
+				continue;
+			}
+
+			if( $sType === 'directory' and is_dir( $sDirectory . DIRECTORY_SEPARATOR . $sItem ) ){
+				$aItemList[] = $sItem;
+				continue;
+			}
+
+			if( $sType === 'file' and is_file( $sDirectory . DIRECTORY_SEPARATOR . $sItem ) ){
+				$aItemList[] = $sItem;
+			}
+		}
+
+		return $aItemList;
+
+	}
+
+   /*
+    * @param string $sDirectory
+	* @param string $sType Either 'directory' or 'file'
+	* @return
+	*/
+	public function ScanImageDirectory( $sDirectory, $sBoxPrefix ){
+
+
+		$this->CheckDirExists( $sDirectory );
+
+		$aBoxList = array();
+
+		$aBoxes   = scandir( $sDirectory );
+
+		if( !$aBoxes ) {
+			throw new ImporterException( 'ScanDirectory(): unable to scan directory: ' . $sDirectory );
+		}
+
+		foreach ( $aBoxes as $sBox ){
+
+			if ( $sBox == '.' or $sBox == '..'){
+				continue;
+			}
+
+			if( is_dir( $sDirectory . DIRECTORY_SEPARATOR . $sBox ) ){
+
+				$sExpr = '/(' . $sBoxPrefix . '\d\d\d)\z/';
+
+				$iMatch = preg_match( $sExpr , $sBox, $matches );
+
+				if( $iMatch === 1  ){
+					$aBoxList[] = $matches[1];
+				}
+			}
+		}
+
+		return $aBoxList;
+	}
+
+	/*
+	 * @param int $iPid
+	 * @return void;
+	 * @todo Parse the output for verification
 	 */
 	public function KillProcess( $iPid ){
 
@@ -134,8 +248,11 @@ class File {
 		return;
 	}
 
+
+
 	/*
-	 * see http://ionfist.com/php/start-stop-process-from-php/
+	 * @link http://ionfist.com/php/start-stop-process-from-php/
+	 * @link http://stackoverflow.com/questions/1656350/php-check-process-id
 	 *
 	 * @return boolean
 	 */
@@ -162,7 +279,9 @@ class File {
              $aMatches = false;
 
              if( preg_match( "/(.*)\s+(\d+).*$/", $sProcess ) ){
+
                 $iRunningPid = $aMatches[ 2 ];
+
                 if( $iPid === (int) $iRunningPid ){
                     return true;
                 }
@@ -170,6 +289,8 @@ class File {
         }
         return false;
     }
+
+
 
     /*
      *@return string

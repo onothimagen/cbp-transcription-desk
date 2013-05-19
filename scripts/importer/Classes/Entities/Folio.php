@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -27,37 +28,39 @@ namespace Classes\Entities;
 
 class Folio extends EntityAbstract{
 
-	public $id_number                    = NULL;
-	public $box_id                       = NULL;
-	public $folio_number                 = NULL;
-	public $second_folio_number          = NULL;
-	public $category                     = NULL;
-	public $recto_verso                  = NULL;
-	public $creator                      = NULL;
-	public $recipient                    = NULL;
-	public $penner                       = NULL;
-	public $marginals                    = NULL;
-	public $corrections                  = NULL;
-	public $date_1                       = NULL;
-	public $date_2                       = NULL;
-	public $date_3                       = NULL;
-	public $date_4                       = NULL;
-	public $date_5                       = NULL;
-	public $date_6                       = NULL;
-	public $estimated_date               = NULL;
-	public $info_in_main_heading_field   = NULL;
-	public $main_heading                 = NULL;
-	public $sub_headings                 = NULL;
-	public $marginal_summary_numbering   = NULL;
-	public $number_of_pages              = NULL;
-	public $page_numbering               = NULL;
-	public $titles                       = NULL;
-	public $watermarks                   = NULL;
-	public $paper_producer               = NULL;
-	public $paper_producer_in_year       = NULL;
-	public $notes_public                 = NULL;
-	public $box_number                   = NULL;
-	public $item_number                  = NULL;
+	/* Ordinarily these would be private but need to be public for the installer Zend paginator */
+
+	public $id_number;
+	public $box_id;
+	public $folio_number;
+	public $second_folio_number;
+	public $category;
+	public $recto_verso;
+	public $creator;
+	public $recipient;
+	public $penner;
+	public $marginals;
+	public $corrections;
+	public $date_1;
+	public $date_2;
+	public $date_3;
+	public $date_4;
+	public $date_5;
+	public $date_6;
+	public $estimated_date;
+	public $info_in_main_heading_field;
+	public $main_heading;
+	public $sub_headings;
+	public $marginal_summary_numbering;
+	public $number_of_pages;
+	public $page_numbering;
+	public $titles;
+	public $watermarks;
+	public $paper_producer;
+	public $paper_producer_in_year;
+	public $notes_public;
+	public $box_number;
+	public $item_number;
 
 	/**
 	 * @param int $id_number
@@ -506,7 +509,9 @@ class Folio extends EntityAbstract{
 
 
 	/*
+	 * Required for the for the installer Zend paginator
 	 *
+	 * @return void
 	*/
 	public function exchangeArray( $data ){
 		parent::exchangeArray( $data );

@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -27,7 +28,8 @@ namespace Classes\Db;
 use Classes\Entities\JobQueue   as JobQueueEntity;
 use Classes\Exceptions\Importer as ImporterException;
 
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\Driver\Pdo\Result;
+use Zend\Db\Adapter\Adapter;
 
 class JobQueue extends DbAbstract{
 
@@ -35,14 +37,15 @@ class JobQueue extends DbAbstract{
 	/*
 	 *
 	*/
-	public function __construct( $oAdapter ){
+	public function __construct( Adapter $oAdapter ){
 		parent::__construct( $oAdapter );
 		$this->sTableName = 'cbp_job_queue';
 	}
 
 
 	/*
-	 *
+	 * @param JobQueueEntity
+	 * @return JobQueueEntity
 	 */
 	public function InsertUpdate ( JobQueueEntity $oJobQueueEntity ){
 
@@ -102,8 +105,9 @@ class JobQueue extends DbAbstract{
 
 
 	/*
-	 *
-	*/
+	 * @param JobQueueEntity
+	 * @return JobQueueEntity
+	 */
 	public function UpdateJobQueue( JobQueueEntity $oJobQueueEntity ){
 
         $iId     = $oJobQueueEntity->getId();
@@ -144,7 +148,7 @@ class JobQueue extends DbAbstract{
 
 	/*
 	 *
-	 * @return ResultSet | boolean
+	 * @return Result
 	 */
 	public function GetIncompleteJobs( $iSpecifiedJobId = null){
 
@@ -157,7 +161,7 @@ class JobQueue extends DbAbstract{
 		$sql = 'SELECT
 					*
 				FROM
-					cbp_job_queue
+					' . $this->sTableName . '
 				WHERE
 					job_end_time IS NULL
 				' . $sWhereClause . '
@@ -177,14 +181,14 @@ class JobQueue extends DbAbstract{
 
 	/*
 	 *
-	 * @return ResultSet | boolean
+	 * @return Result | boolean
 	 */
 	public function GetJob( $iJobId ){
 
 		$sSql = 'SELECT
 					*
 				FROM
-					cbp_job_queue
+					' . $this->sTableName . '
 				WHERE
 				    id = ?;';
 
@@ -203,14 +207,14 @@ class JobQueue extends DbAbstract{
 
 	/*
 	*
-	* @return ResultSet | boolean
+	* @return Result | boolean
 	*/
 	public function GetAllJobs(){
 
 		$sSql = 'SELECT
 					*
 				FROM
-					cbp_job_queue;';
+					' . $this->sTableName . ';';
 
 		$rResult = $this->Execute( $sSql);
 
@@ -237,6 +241,53 @@ class JobQueue extends DbAbstract{
 		$this->Execute( $sSql, $aBindArray );
 
 		return;
+
+	}
+
+	/*
+	 * @return  Result | boolean
+	 */
+	public function IsJobEmpty( $iId ){
+
+		$sSql = 'SELECT *
+
+				FROM
+					' . $this->sTableName . '
+				LEFT JOIN
+				    cbp_boxes
+				ON
+					cbp_job_queue.id   = cbp_boxes.job_queue.id
+				WHERE
+					cbp_job_queue.id   = ?';
+
+		$aBindArray = array ( $iId );
+
+		$this->Execute( $sSql, $aBindArray );
+
+		if( $rResult->count() > 0 ){
+			return $rResult;
+		}
+
+		return false;
+
+	}
+
+	/*
+	 *@return void
+	 */
+	public function RemoveJob( $iId ){
+
+		$sSql = 'DELETE FROM
+					' . $this->sTableName . '
+				WHERE
+		  			id = ?';
+
+		$aBindArray = array ( $iId );
+
+		$this->Execute( $sSql, $aBindArray );
+
+		return;
+
 
 	}
 

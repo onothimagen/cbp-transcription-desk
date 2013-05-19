@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -25,6 +26,8 @@
 namespace Classes;
 
 use Zend\Di\Di;
+
+use Zend\Db\Adapter\Driver\Pdo\Result;
 
 use Classes\Db\JobQueue as JobQueueDb;
 use Classes\Db\Box      as BoxDb;
@@ -46,6 +49,14 @@ use Classes\Helpers\MwXml;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * Provides universally and commonly used:
+ * - Members
+ * - Result sets
+ * - Methods for getting a job's boxs, folios and items
+ *   and applying processes and recording exceptions to each
+ *   in a granular way
+ */
 abstract class TaskAbstract{
 
 	/* @var Di */
@@ -103,7 +114,10 @@ abstract class TaskAbstract{
 
 
 	/*
+	 * This method enables the exception to bubble up the hierarchy so that the error can be recorded
+	 * for each parent in the chain
 	 *
+	 * @return void
 	*/
 	protected function HandleError( ImporterException $oException, EntityAbstract $oEntity ){
 
@@ -158,13 +172,17 @@ abstract class TaskAbstract{
 			exit( $oException->getMessage() );
         }
 
+        // Escalate it further up
+
 		throw new ImporterException( $sError );
 
 
 	}
 
 	/*
+	 * Process all job's boxes
 	 *
+	 *@return void
 	*/
 	protected function ProcessBoxes( JobQueueEntity $oJobQueueEntity ){
 
@@ -174,6 +192,7 @@ abstract class TaskAbstract{
 
 		if( $rBoxes->count() < 1 ){
 			$this->oLogger->Log( 'ProcessBoxes(): No boxes could be found with ' . $this->sPreviousProcess . ' completed' );
+			exit();
 		}
 
 		/* @var $oBoxEntity BoxEntity */
@@ -201,9 +220,11 @@ abstract class TaskAbstract{
 	}
 
 	/*
+	 * Process all box's folios
 	 *
+	 * @param BoxEntity $oBoxEntity
+	 * @return void
 	*/
-
 	protected function ProcessFolios( BoxEntity $oBoxEntity ){
 
 		$iBoxId  = $oBoxEntity->getId();
@@ -237,7 +258,11 @@ abstract class TaskAbstract{
 	}
 
 	/*
+	 * Process all folio's items
 	 *
+	 * @param BoxEntity $oBoxEntity
+	 * @param FolioEntity $oFolioEntity
+	 * @return void
 	*/
 	protected function ProcessItems( BoxEntity $oBoxEntity, FolioEntity $oFolioEntity ){
 
@@ -276,42 +301,47 @@ abstract class TaskAbstract{
 	}
 
 	/*
-	 *
+	 * @param int $iJobQueueId
+	 * @return Result
 	*/
 	protected function GetBoxes( $iJobQueueId ){
 
-		return $this->oBoxDb->GetBoxes( $iJobQueueId
-									  , $this->sPreviousProcess
-									  , $this->sProcess );
+		return $this->oBoxDb->GetBoxesToProcess( $iJobQueueId
+											   , $this->sPreviousProcess
+											   , $this->sProcess );
 	}
 
 	/*
-	 *
+	 * @param int $iBoxId
+	 * @return Result
 	*/
 	protected function GetFolios( $iBoxId ){
 
-		return $this->oFolioDb->GetFolios(
-										  $iBoxId
-										, $this->sPreviousProcess
-										, $this->sProcess );
+		return $this->oFolioDb->GetFoliosToProcess( $iBoxId
+												  , $this->sPreviousProcess
+												  , $this->sProcess );
 	}
 
 	/*
-	 *
+	 * @param int $iFolioId
+	 * @return Result
 	*/
 	protected function GetItems( $iFolioId ){
 
-		return $this->oItemDb->GetJobItems(
-										  $iFolioId
-										, $this->sPreviousProcess
-										, $this->sProcess );
+		return $this->oItemDb->GetJobItemsToProcess( $iFolioId
+										  		   , $this->sPreviousProcess
+										  		   , $this->sProcess );
 	}
 
+
+
+
 	/*
+	 * Stub method for problems with IDE autocomplete. Can be deleted.
 	 *
+	 * @return void
 	*/
-	protected function PseudoSetterForAutoComplete(
-													  JobQueueDb  $oJobQueueDb
+	protected function PseudoSetterForAutoComplete(   JobQueueDb  $oJobQueueDb
 													, BoxDb       $oBoxDb
 													, FolioDb     $oFolioDb
 													, ItemDb      $oItemDb

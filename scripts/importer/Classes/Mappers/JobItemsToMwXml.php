@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -31,6 +32,10 @@ use Classes\Db\MediaWiki as MediaWikiDb;
 
 use Zend\Di\Di;
 
+/*
+ * Builds an XML DOM document
+ *
+ */
 class JobItemsToMwXml{
 
 	/* @var MediaWikiDb */
@@ -87,6 +92,11 @@ class JobItemsToMwXml{
 							, '121707' => 'Forum'
 							);
 
+	/*
+	 * Creates a blank DOM document and creates the XML container ready for populating
+	 *
+	 * @return void
+	 */
 	public function __construct( MediaWikiDb $oMediaWikiDb, array $aConfig ){
 
 		/* @var $oMediaWikiDb MediaWikiDb */
@@ -110,9 +120,14 @@ class JobItemsToMwXml{
 
 
 
-	/*
-	 *
-	 */
+   /*
+	* Creates and metadata text and default page text
+	* Appends these to the DOM Document
+	*
+	* @param  FolioItemEntity $oNextEntity
+	* @param  FolioItemEntity $oEntity
+	* @param  FolioItemEntity $oPrevEntity
+	*/
 	public function CreateItemPages(  FolioItemEntity $oNextEntity
 									, FolioItemEntity $oEntity
 									, FolioItemEntity $oPrevEntity ){
@@ -121,17 +136,17 @@ class JobItemsToMwXml{
 		$this->oEntity     = $oEntity;
 		$this->oPrevEntity = $oPrevEntity;
 
-		// Create MetaData Text
+		// Create MetaData Text and append it to DOM document
 
-		$sMetaDataText  = $this->CreateMetaDataText();
+		$sMetaDataText  = $this->CreateItemsMetaDataText();
 
-		$oFolioTextNode = $this->CreatePageElement( $sMetaDataText );
+		$oFolioTextNode = $this->CreateItemPageElement( $sMetaDataText );
 
-		// Create Page Text
+		// Create Page Text and append it to DOM document
 
-		$oPageText      = $this->CreatePageText();
+		$oPageText      = $this->CreateDefaultPageText();
 
-		$oPageTextNode  = $this->CreatePageElement( $oPageText );
+		$oPageTextNode  = $this->CreateItemPageElement( $oPageText );
 
 	}
 
@@ -141,15 +156,21 @@ class JobItemsToMwXml{
 
 
 	/*
+	 * Creates a series XML elements populated with default values
+	 * and the text passed in which will be either
+	 * be the meta data or page's default text
+	 *
+	 * @param  string
 	 * @return DOMDocument
 	 */
-	private function CreatePageElement( $sText ){
+	private function CreateItemPageElement( $sText ){
 
 		$oEntity      = $this->oEntity;
 		$oDomDocument = $this->oDocument;
 
 		$sItemPath = $this->CreateItemPath( $oEntity );
 
+		/* Do not add pages that already exist in MediaWiki */
 		if( $this->oMediaWikiDb->DoesItemPageExist( $sItemPath ) ){
 			return $oDomDocument;
 		}
@@ -220,9 +241,11 @@ class JobItemsToMwXml{
 
 
 	/*
+	 * Creates a pipe seperated key - value pair list
 	 *
+	 * @return string
 	 */
-	private function CreateMetaDataText(){
+	private function CreateItemsMetaDataText(){
 
 		$oEntity     = $this->oEntity;
 
@@ -283,9 +306,9 @@ class JobItemsToMwXml{
 	}
 
 	/*
-	 *
+	 * @return string
 	 */
-	private function CreatePageText(){
+	private function CreateDefaultPageText(){
 
 		$sItemPath = $this->CreateItemPath( $this->oEntity );
 
@@ -306,7 +329,10 @@ TEXTBLOCK;
 
 
 	/*
+	 * Provide a path for the page text edit link
+	 * e.g. JB/101/234/001
 	 *
+	 * @return string
 	 */
 	private function CreateItemPath( FolioItemEntity $oEntity ){
 
@@ -325,6 +351,8 @@ TEXTBLOCK;
 
 
 	/*
+	 * Pre-populate DOm document with default XML
+	 *
 	 * @return DOMDocument
 	*/
 	private function InitialiseDocument(){

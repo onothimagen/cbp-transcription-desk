@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -26,19 +27,22 @@ namespace Classes\Db;
 
 use Classes\Entities\ErrorLog as ErrorLogEntity;
 
+use Zend\Db\Adapter\Driver\Pdo\Result;
+use Zend\Db\Adapter\Adapter;
+
 class ErrorLog extends DbAbstract{
 
 
 	/*
 	 *
 	*/
-	public function __construct( $oAdapter ){
+	public function __construct( Adapter $oAdapter ){
 		parent::__construct( $oAdapter );
 		$this->sTableName = 'cbp_error_log';
 	}
 
 	/*
-	 *
+	 * @return void
 	 */
 	public function Insert ( ErrorLogEntity $oErrorLogEntity ){
 

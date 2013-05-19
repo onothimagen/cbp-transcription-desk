@@ -18,8 +18,10 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  Ben Parish
+ * @todo The error logger creates an empty file whether or not there any errors. Someway to clean up is needed
  */
 
 namespace Classes\Helpers;
@@ -50,6 +52,12 @@ class Logger {
 
 	private $iJobQueueId;
 
+	/*
+	 * @param ZendLogger $oInfoLogger
+	 * @param ZendLogger $oExceptionLogger
+	 * @param string[] $aConfig
+	 * @return void
+	 */
 	public function __construct(   ZendLogger $oInfoLogger
 								 , ZendLogger $oExceptionLogger
 								 ,            $aConfig ){
@@ -61,7 +69,14 @@ class Logger {
 
 	}
 
-	public function SetContext( $sContext, $iJobQueueId = null ){
+	/*
+	 * Configures the logger writers, using the context (process) to determine the output file's directory
+	 *
+	 * @param string $sContext
+	 * @param integer $iJobQueueId|null
+	 * @return void
+	 */
+	public function ConfigureLogger( $sContext, $iJobQueueId = null ){
 
         // We don't want to keep adding identical writers
 
@@ -81,9 +96,11 @@ class Logger {
 		$sFolderLocation 	= $sRootFolder . DIRECTORY_SEPARATOR . $sContext;
 
 		if( !is_dir( $sFolderLocation ) ){
+
 			if( !mkdir( $sFolderLocation, 0, true )) {
 			    throw new ImporterException( 'Failed to create ' . $sFolderLocation );
 			}
+
 		}
 
 		$this->sLogName      	= $this->CreateLogFileName( $sFolderLocation, '.log' );
@@ -91,18 +108,10 @@ class Logger {
 
 		if( file_exists( $this->sLogName ) === false ){
 			touch( $this->sLogName );
-			//if(  $this->ServerOS() === 'UNIX' ){
-				//chmod( $this->sLogName, 0770 );
-				//chgrp( $this->sLogName, $this->sSystemGroup );
-			//}
 		}
 
 		if( file_exists( $this->sErrorLogName ) === false ){
 			touch( $this->sErrorLogName );
-			//if(  $this->ServerOS() === 'UNIX' ){
-				//chmod( $this->sErrorLogName, 0770 );
-				//chgrp( $this->sErrorLogName, $this->sSystemGroup );
-			//}
 		}
 
 		$oInfoWriter			= new Stream( $this->sLogName );
@@ -114,7 +123,15 @@ class Logger {
 
 	}
 
+
+	/*
+	 * Formats the exception, mails it and writes it to the log
+	 *
+	 * @param ImporterException $oException
+	 * @return void
+	 */
 	public function LogException( ImporterException $oException ){
+
 		$sExceptionText = "\r\n" . $this->ComposeSectionHeader()
 		                . 'Exception Logged : '     .$this->CreateFormattedDate() . "\r\n"
 		                . $oException->getMessage() . "\r\n"
@@ -126,6 +143,12 @@ class Logger {
 
     }
 
+
+
+    /*
+     * @param string $sExceptionText
+     * @return void
+     */
     private function MailException ( $sExceptionText ){
     	if( $this->sAdminEmail !== '' ){
 			mail( $this->sAdminEmail, 'Exception', $sExceptionText );
@@ -133,15 +156,30 @@ class Logger {
     }
 
 
+
+    /*
+     * Hypehen ruler for highlighting
+     *
+     * @return string
+     */
     private function ComposeSectionHeader(){
     	return str_repeat( '-', self::LINE_WIDTH )    . "\r\n";
     }
 
 
+    /*
+     * @return string
+     */
     private function CreateFormattedDate(){
     	return date( 'Y-m-d H:i:s' );
     }
 
+
+    /*
+     * A step is a higher level reporting step and formatted with section header highlighting -----
+     *
+     * @param string $sStep
+     */
     public function Step( $sStep ){
 
     	$sLogText =  "\r\n" . $this->ComposeSectionHeader()
@@ -154,28 +192,39 @@ class Logger {
 
     }
 
-
+	/*
+	 * Formats for output depending on whether via the browser
+	 *
+	 * @param string $sStep
+	 * @return void
+	 */
     public function OutPutToDisplay( $sStep ){
 
     	// Only needed if running in the browser
 
     	if( isset ( $_SERVER[ 'HTTP_HOST' ]) ){
+
     		$sStep = str_replace("\r\n", '<br />', $sStep );
 			$sStep = str_replace("\n", '<br />', $sStep );
 			echo $sStep . '<br />';
+
 	    	//Ensure browser's minimal character chunk for display is reached
 	    	echo str_pad( '', 4096 ) . "\n";
 	    	ob_flush();
 	    	flush();  // needed ob_flush
+
     	}else{
 	    	echo $sStep . "\n";
 	    	echo str_pad( '', 4096 ) . "\n";
     	}
 
-
     }
 
-
+	/*
+	 * Write to file and output to display
+	 *
+	 * @param string $sLogData
+	 */
     public function Log( $sLogData ){
 
     	$this->oInfoLogger->log( ZendLogger::INFO, $sLogData . "\r\n" );
@@ -183,6 +232,11 @@ class Logger {
     }
 
 
+    /*
+     * @param string $sLogName
+     * @param string $sExtension
+     * @return string
+     */
     private function CreateLogFileName( $sLogName, $sExtension ) {
 
     	$iJobQueueId = $this->iJobQueueId;
@@ -196,7 +250,7 @@ class Logger {
 
 
     /*
-     *
+     * @return string
     */
     private function ServerOS(){
 

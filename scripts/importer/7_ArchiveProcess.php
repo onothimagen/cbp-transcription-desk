@@ -18,39 +18,39 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
 
+/*
+ * See respective Classes/*Task.php for more detailed information
+*
+*/
+
 namespace Classes;
 
-$sJobName = 'Export XML to DB';
+$sJobName = 'Verify Pages';
 
 require_once 'header.inc.php';
 
 require_once 'bootstrap.inc.php';
 
-require_once 'Classes/4_ExportXMLTask.php';
+require_once 'Classes/7_ArchiveTask.php';
 
-$sStep = 'XML export started';
+$sStep = 'Archiving XML started';
 $oLogger->Step( $sStep );
 
-$oExportXmlTask = new ExportXMLTask( $oDi
-								   , $aSectionConfig
-								   , $oJobQueueEntity );
+$oArchiveTask = new ArchiveTask(  $oDi
+                                , $aSectionConfig
+                                , $oJobQueueEntity );
 
+$oArchiveTask->Execute();
 
-$oExportXmlTask->Execute();
-
-$sStep = 'XML export completed';
+$sStep = 'Archiving XML completed';
 $oLogger->Step( $sStep );
-
-require_once '5_ImportXmlIntoMwJob.php';
 
 require_once 'footer.inc.php';
-
-
-
 
 
 

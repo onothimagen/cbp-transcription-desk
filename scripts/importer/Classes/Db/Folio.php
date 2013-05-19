@@ -18,14 +18,17 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
 
 namespace Classes\Db;
 
-use \Classes\Entities\Folio as FolioEntity;
-use \Zend\Db\ResultSet\ResultSet;
+use Classes\Entities\Folio as FolioEntity;
+
+use Zend\Db\Adapter\Driver\Pdo\Result;
+use Zend\Db\Adapter\Adapter;
 
 class Folio extends DbAbstract{
 
@@ -33,12 +36,19 @@ class Folio extends DbAbstract{
 	/*
 	 *
 	 */
-	public function __construct( $oAdapter ){
+	public function __construct( Adapter $oAdapter ){
 		parent::__construct( $oAdapter );
 		$this->sTableName = 'cbp_folios';
 	}
 
+
 	/*
+	 * Note: 'updated' value is not specified so it will default
+	 * to null. Therefore if inserted rather retrieved
+	 * it will have a null value for 'updated'
+	 *
+	 * A retrieved value will have an 'updated' value that is not null
+	 *
 	 * @return FolioEntity;
 	 */
 	public function Insert( FolioEntity $oFolioEntity ){
@@ -80,7 +90,6 @@ class Folio extends DbAbstract{
 									, process
 									, process_status
 									, process_start_time
-									, updated
 								)
 				VALUES
 								(
@@ -115,7 +124,6 @@ class Folio extends DbAbstract{
 									, ?
 									, \'import\'
 									, \'started\'
-									, NOW()
 									, NOW()
 								)
 							ON DUPLICATE KEY UPDATE
@@ -152,7 +160,7 @@ class Folio extends DbAbstract{
 								 , $oFolioEntity->getNotesPublic()
 								);
 
-		$Result = $this->Execute( $sSql, $aBindArray );
+		$rResult = $this->Execute( $sSql, $aBindArray );
 
 		$iInsertId = $this->oAdapter->getDriver()->getLastGeneratedValue();
 
@@ -166,9 +174,9 @@ class Folio extends DbAbstract{
 
 	/*
 	 * @param string $sJobQueueId
-	 * @return ResultSet
+	 * @return Result
 	 */
-	public function GetFolios(  $iBoxId
+	public function GetFoliosToProcess(  $iBoxId
 							  , $sPreviousProcess
 							  , $sProcess ){
 
@@ -198,8 +206,9 @@ class Folio extends DbAbstract{
 	}
 
 
+
 	/*
-	 *
+	 * @return void
 	*/
 	public function ClearErrorLog( $iId ){
 

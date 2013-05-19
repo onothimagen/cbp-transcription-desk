@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -42,6 +43,10 @@ use Classes\Entities\Item     as ItemEntity;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * This class checks that the pages imported in the previous process
+ * exist in mediawiki as pages
+ */
 class VerifyPagesTask  extends TaskAbstract{
 
 	/* @var FolioEntity */
@@ -52,6 +57,14 @@ class VerifyPagesTask  extends TaskAbstract{
 
 	private $sPagePrefix;
 
+
+
+   /*
+	* @param Di            $oDi
+	* @param string[]       $aConfig
+	* @param JobQueueEntity $oJobQueueEntity
+	* @return void
+	*/
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -71,14 +84,16 @@ class VerifyPagesTask  extends TaskAbstract{
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
-        $this->oLogger->SetContext( 'jobs', $this->iJobQueueId );
+        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 	}
 
 
 
 	/*
+	 * Entry point to start task
 	 *
+	 * @return void
 	 */
 	public function Execute(){
 
@@ -95,7 +110,9 @@ class VerifyPagesTask  extends TaskAbstract{
 	}
 
 	/*
+	 * The page's title in mediawiki to search for
 	 *
+	 * @return string
 	 */
 	protected function ConstructPath(
 									  BoxEntity   $oBoxEntity
@@ -115,7 +132,9 @@ class VerifyPagesTask  extends TaskAbstract{
 	}
 
 	/*
+	 * Search for the page's title in mediawiki
 	 *
+	 * @return void
 	 */
 	protected function Process( $sPageTitle ){
 
@@ -132,7 +151,9 @@ class VerifyPagesTask  extends TaskAbstract{
 	}
 
 	/*
+	 * Stub method for problems with IDE autocomplete. Can be deleted.
 	 *
+	 * @return void
 	*/
 	protected function PseudoSetterForVerifyAutoComplete( MediaWikiDb $oMediaWikiDb ){
 

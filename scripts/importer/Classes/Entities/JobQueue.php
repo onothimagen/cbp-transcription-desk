@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -25,6 +26,8 @@
 namespace Classes\Entities;
 
 class JobQueue extends EntityAbstract{
+
+	// Ordinarily these would be private but need to be public for the installer Zend paginator
 
 	public $user_id;
 	public $job_status;
@@ -129,8 +132,10 @@ class JobQueue extends EntityAbstract{
 	}
 
 	/*
+	 * Required for the for the installer Zend paginator
 	 *
-	 */
+	 * @return void
+	*/
 	public function exchangeArray( $data ){
 		parent::exchangeArray( $data );
 		$this->user_id        = ( !empty( $data[ 'user_id' ] ) ) ? $data[ 'user_id' ] : null;

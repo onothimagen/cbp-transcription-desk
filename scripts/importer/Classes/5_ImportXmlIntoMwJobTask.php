@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -35,13 +36,23 @@ use Classes\Entities\JobQueue   as JobQueueEntity;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * This class takes the mediawiki import file created in the previous process
+ * and passes it to mediawiki's import utility
+ *
+ */
 class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 	private $sXMLExportPath;
 
 	private $sMwImporterPath;
 
-
+   /*
+	* @param Di            $oDi
+	* @param string[]       $aConfig
+	* @param JobQueueEntity $oJobQueueEntity
+	* @return void
+	*/
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -60,14 +71,16 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
         $this->oJobQueueEntity  = $oJobQueueEntity;
         $this->iJobQueueId      = $oJobQueueEntity->getId();
 
-        $this->oLogger->SetContext( 'jobs', $this->iJobQueueId );
+        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 	}
 
 
 
 	/*
+	 * Entry point to start task
 	 *
+	 * @return void
 	 */
 	public function Execute(){
 
@@ -97,7 +110,9 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 
 	/*
+	 * Runs mediawiki's import utility against the generated XML file
 	 *
+	 * @return void
 	 */
 	private function ImportXmlIntoMw(){
 
@@ -132,6 +147,30 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

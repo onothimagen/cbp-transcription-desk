@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -45,6 +46,16 @@ use Classes\Helpers\Logger;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * Scan file sytem for new boxes and their images
+ * This can be throttled to import only a specified number of boxes at a time
+ * Iterate through records in Metatada-Table.txt and create a multi-dimensional array for rows corresponding to the boxes scanned
+ * Iterate through the meta data array
+ * 	Insert each box
+ * 		Insert each folio within the box
+ * 			Find matches with the scanned files corresponding to folio
+ */
+
 class ImportCsvIntoDbTask extends TaskAbstract{
 
 
@@ -57,13 +68,13 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	private $sArchivePath;
 
-	private $sTokenSeperator;
-
 	private $sBoxPrefix;
 
 	private $sItemRegex;
 
-	private $sFolioLimit;
+	private $sBoxLimit;
+
+	private $sTokenSeperator;
 
 	/* @var BoxEntity */
 	private $oBoxEntity;
@@ -77,10 +88,17 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	/* @var ErrorLogEntity */
 	private $oErrorLogEntity;
 
-	private $iCurrentFolioId;
+	private $aScannedFileNames   = array();
 
-	private $aScannedFileNames = array();
+	private $aBoxFolioCollection = array();
 
+	/*
+	* @param Di                     $oDi
+	* @param CsvRowToFolioEntity    $oCsvRowToFolioEntityMapper
+	* @param string[]               $aConfig
+	* @param JobQueueEntity         $oJobQueueEntity
+	* @return void
+	*/
 	public function __construct(  Di				  $oDi
 								, CsvRowToFolioEntity $oCsvRowToFolioEntityMapper
 								,                     $aConfig
@@ -96,13 +114,13 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->sArchivePath     = $aConfig[ 'path.archive' ];
 
-		$this->sTokenSeperator  = $aConfig[ 'tokenseperator' ];
-
 		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 
 		$this->sItemRegex       = $aConfig[ 'item.regex' ];
 
-		$this->sFolioLimit     = $aConfig[ 'import_folio_limit' ];
+		$this->sBoxLimit        = $aConfig[ 'import_box_limit' ];
+
+		$this->sTokenSeperator  = $aConfig[ 'tokenseperator'];
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
@@ -118,22 +136,28 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
-        $this->oLogger->SetContext( 'jobs', $this->iJobQueueId );
+        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 	}
 
+
+
 	/*
+	 * Entry point to start task
 	 *
+	 * @return void
 	 */
 	public function Execute(){
 
 		// No started flag is needed because we do not have the records to flag!
 
 		try {
-			$sFilePath = $this->sCsvFilePath;
-			$hHandle   = $this->oFile->GetFileHandle( $sFilePath );
 
-			$this->IterateCsvFileAndInsertRowsIntoDb( $hHandle );
+			$this->GetJobBoxes();
+
+			$this->GetFoliosFromCsvFile();
+
+			$this->IterateFolioCollectionAndInsertRowsIntoDb();
 
 		} catch ( ImporterException $oException ) {
 			$this->HandleError( $oException, $this->oJobQueueEntity );
@@ -142,34 +166,187 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	}
 
 
+	/*
+	 * @todo perhaps scanning image upload directory should use stricter regex match $sBoxPrefix_\d\d\d
+	 * @return string[]
+	 */
+	private function GetJobBoxes(){
+
+		$sImageImportPath    = $this->sImageImportPath;
+
+		$sBoxLimit           = $this->sBoxLimit;
+
+		$sBoxPrefix          = $this->sBoxPrefix;
+
+		$bHasUserSpecifiedId = $this->HasUserSpecifiedId();
+
+		/* If user has specified path, then reprocess boxes */
+
+		if( $bHasUserSpecifiedId ){
+
+			/* Get previously imported boxes */
+
+			$aBoxes = $this->GetBoxCollection();
+
+			/* If no boxes imported  fallback to directory re-scan */
+
+			if( count ( $aBoxes ) < 1 ){
+				$aBoxes = $this->oFile->ScanImageDirectory( $sImageImportPath, $sBoxPrefix );
+			}
+
+		}else{
+			$aBoxes = $this->oFile->ScanImageDirectory( $sImageImportPath, $sBoxPrefix );
+		}
+
+
+		if( count ( $aBoxes ) < 1 ){
+			throw new ImporterException( 'ScanImageDirectory() could not find any boxes in the image upload folder ' . $sImageImportPath );
+		}
+
+		$counter          = 0;
+
+		foreach ( $aBoxes as $sBoxNumber ){
+
+			$sBoxDirectory = $this->GetBoxDirectory ( $sBoxNumber );
+
+			$aFiles        = $this->oFile->ScanDirectory( $sBoxDirectory, 'file' );
+
+			if( count( $aFiles ) < 1 ){
+				throw new ImporterException( 'ScanBoxDirectory() could not find any files in box folder ' . $sBoxNumber );
+			}
+
+			$sBoxNumber = str_replace( $sBoxPrefix, '', $sBoxNumber );
+
+			foreach ( $aFiles as $sFileName ){
+
+				$this->oLogger->Log('Processing file ' . $sFileName );
+
+				$aParsedFileName = $this->ParseFileName( $sFileName );
+
+				$sFolioNumber    = $aParsedFileName[ 'folio' ];
+				$sItemNumber     = $aParsedFileName[ 'item' ];
+
+				$this->aScannedFileNames[ $sBoxNumber ][ $sFolioNumber][] = $sItemNumber;
+
+			}
+
+			$counter++;
+
+			if( $counter > $sBoxLimit ){
+				break;
+			}
+		}
+
+	}
 
 
 	/*
-	 *
+	 * @return string[]
 	 */
-	private function IterateCsvFileAndInsertRowsIntoDb( $hHandle ){
+	private function GetBoxCollection (){
 
-		$iCurrentRow  = 1;
+		$iJobQueueId = $this->iJobQueueId;
 
-		$aAssocRow    = array();
+		$rBoxes      = $this->GetBoxes( $iJobQueueId );
 
-		$iJobQueueId  = $this->iJobQueueId;
+		$sBoxPrefix  = $this->sBoxPrefix;
 
-		$oBoxEntity   = $this->oBoxEntity;
+		$aBoxes = array();
 
-		$sBoxNumber   = NULL;
+		/* @var $oBoxEntity BoxEntity */
+		while ( $oBoxEntity = $rBoxes->getResource()->fetchObject( 'Classes\Entities\Box' ) ){
+			$aBoxes[] = $sBoxPrefix . $oBoxEntity->getBoxNumber();
+		}
 
-		$iBoxId       = NULL;
+		return $aBoxes;
 
-		$sFolioLimit  = $this->sFolioLimit;
+	}
 
-		$iFolioCount = 0;
+	/*
+	 * @return string
+	*/
+	private function GetBoxDirectory( $sBoxNumber ){
 
-		while ( ($aRow = fgetcsv ( $hHandle, 4000, '|' ) ) and $iFolioCount <  $sFolioLimit + 1 ){
+		$sImageImportPath = $this->sImageImportPath;
+		$sArchivePath	  = $this->sArchivePath;
+		$iJobQueueId      = $this->iJobQueueId;
+
+		$sBoxDirectory = $sImageImportPath . DIRECTORY_SEPARATOR . $sBoxNumber;
+
+		if( file_exists( $sBoxDirectory === false) ){
+
+			$sArchiveBoxDirectory = $sArchivePath . DIRECTORY_SEPARATOR . $iJobQueueId . DIRECTORY_SEPARATOR .  $sBoxNumber;
+
+			// If it isn't there then we have a genuine problem so throw an exception
+
+			if( file_exists( $sArchiveBoxDirectory ) === false ){
+				throw new ImporterException( 'GetBoxDirectory(): BoxDirectory ' . $sBoxDirectory . ' does not exist' );
+			}
+
+			$sBoxDirectory = $sArchiveBoxDirectory;
+
+		}
+
+		return $sBoxDirectory;
+	}
+
+	/*
+	 * @param string $sFileName
+	 * @return string[]
+	 */
+	private function ParseFileName( $sFileName ){
+
+		$sItemRegex = $this->sItemRegex;
+
+		$sExpr  = '/' . $sItemRegex . '/';
+
+		$iMatch = preg_match( $sExpr , $sFileName, $matches );
+
+		if( $iMatch !== 1 or count($matches) < 4 ){
+			throw new ImporterException( $sFileName . ' does not match with configured item.regex ' . $sItemRegex );
+		}
+
+		$aFileTokens = array( 'box'   => $matches[1]
+							, 'folio' => $matches[2]
+							, 'item'  => $matches[3]
+							);
+
+		return $aFileTokens;
+
+	}
+
+	/*
+	 * Scans the meta data table and adds new boxes and folios to the respective tables
+	* If no new boxes are found then it deletes the job and exits
+	*
+	* @return array[ string[] ]
+	* @todo Could remove any log files created as well
+	* @todo This method is too bulky and needs refactoring
+	*/
+	private function GetFoliosFromCsvFile(){
+
+		$sFilePath           = $this->sCsvFilePath;
+
+		$hHandle             = $this->oFile->GetFileHandle( $sFilePath );
+
+		$sBoxPrefix          = $this->sBoxPrefix;
+
+		$iCurrentRow         = 1;
+
+		$aBoxFolioCollection = array();
+		$aAssocRow           = array();
+
+		$sBoxLimit           = $this->sBoxLimit;
+
+		$iBoxCount           = 0;
+
+		while ( $aRow = fgetcsv ( $hHandle, 4000, '|' ) ){
+
+			/* Add each row to an associative array */
 
 			$iNumberOfFields = count( $aRow );
 
-			// Skip carriage returns
+			/* Skip carriage returns */
 			if( $iNumberOfFields < 2){
 				continue;
 			}
@@ -178,6 +355,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 			// First row provides the array keys
 			if( $iCurrentRow == 1 ){
+
 				for ( $i = 0; $i < $iNumberOfFields; $i++ ){
 					$aHeader[ $i ] = $aRow[ $i ];
 				}
@@ -192,88 +370,137 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 			// Do some validation so we skip records with appended letters e.g 098a
 			// TODO Need to differentiate between invalid records and faulty ones
 
-			if( preg_match( '/^\d\d\d\z/', $aAssocRow[ 'Box number' ] ) === 0 ){
+			$sBoxNumber   = $aAssocRow[ 'Box number' ];
+			$sFolioNumber = $aAssocRow[ 'Folio number' ];
+
+			if( preg_match( '/^\d\d\d\z/', $sBoxNumber ) === 0 ){
 				continue;
 			}
 
-			if( preg_match( '/^\d\d\d\z/', $aAssocRow[ 'Folio number' ] ) === 0 ){
+			if( preg_match( '/^\d\d\d\z/', $sFolioNumber ) === 0 ){
 				continue;
 			}
 
-			// New Box so insert it
+			/* Is the box in amongst our scanned boxes */
 
-			if( $sBoxNumber != $aAssocRow[ 'Box number' ] ){
-
-				$sBoxNumber = $aAssocRow[ 'Box number' ];
-
-				// Add file names to the Box Item List array
-
-				try {
-					$oBoxEntity = $this->InsertBox( $sBoxNumber );
-					$this->GetBoxItemList( $sBoxNumber );
-
-				} catch ( ImporterException $oException ) {
-					$this->HandleError( $oException, $oBoxEntity );
-				}
-
+			if( array_key_exists( $sBoxNumber, $this->aScannedFileNames )){
+				$this->aBoxFolioCollection[ $sBoxNumber ][$sFolioNumber] = $aAssocRow;
 			}
 
-			$iCurrentRow++;
+		}
 
-			// Insert Folio Items
+	}
+
+	/*
+	 * Scans the meta data table and adds new boxes and folios to the respective tables
+	 * If no new boxes are found then it deletes the job and exits
+	 *
+	 * @return void
+	 * @todo Could remove any log files created as well
+	 * @todo This method is too bulky and needs refactoring
+	 */
+	private function IterateFolioCollectionAndInsertRowsIntoDb(){
+
+		$iJobQueueId  = $this->iJobQueueId;
+
+		$oBoxEntity   = $this->oBoxEntity;
+
+		$aBoxFolioCollection = $this->aBoxFolioCollection;
+
+		foreach( $aBoxFolioCollection as $sBoxNumber => $aBoxFolios ){
 
 			try {
 
-				$oMappedFolioEntity = $this->InsertFolio( $oBoxEntity, $aAssocRow );
+				$oBoxEntity = $this->InsertBox( $sBoxNumber );
 
-				// If false then the $oMappedFolioEntityrecord already exists so exit
-				// TODO Could items be subsequently added to a portfolio?
+				echo $sBoxNumber;
 
-				if( $oMappedFolioEntity !== false ){
-					$iFolioCount++;
-					$this->InsertItems( $oBoxEntity, $oMappedFolioEntity );
+				/* If Box has already been added then DO NOT skip
+				 * Something may have gone wrong previously so we need to
+				 * reprocess everything
+				 */
+
+				// Delete any entries in the error log because we are starting anew
+				$iBoxId = $oBoxEntity->getId();
+				$this->oBoxDb->ClearErrorLog( $iBoxId );
+
+
+				try {
+
+					foreach ( $aBoxFolios as $aBoxFolio ){
+
+						$oFolioEntity = $this->InsertFolio( $oBoxEntity, $aBoxFolio );
+
+						/* If Folio has already been added then DO NOT skip
+						 * Something may have gone wrong previously so we need to
+						 * reprocess everything
+						 */
+
+						// Delete any entries in the error log because we are starting anew
+						$iFolioId = $oFolioEntity->getId();
+						$this->oFolioDb->ClearErrorLog( $iFolioId );
+
+						$this->ScanAndInsertFolioItems( $oBoxEntity, $oFolioEntity );
+
+					}
+
+
+				} catch ( ImporterException $oException ) {
+
+					// Escalate error to the parent box
+					$this->HandleError( $oException, $oFolioEntity );
+
 				}
+
 
 			} catch ( ImporterException $oException ) {
 
-				// Escalate error to the Box
-				$this->HandleError( $oException, $oMappedFolioEntity );
-
+				// Escalate error to the parent job
+				$this->HandleError( $oException, $oBoxEntity );
 			}
 
-			// If we have reached this point then all available folios in this box have been completed
-			// TODO Update a process log
+		}
 
-			$iBoxId = $oBoxEntity->getId();
+		/* Reached the end. Check there are not unmatched files */
 
-			$this->oBoxDb->UpdateProcessStatus( $iBoxId, 'import', 'completed' );
-
-			$this->oBoxDb->ClearErrorLog( $iBoxId );
+		foreach ( $this->aScannedFileNames as $iBox => $aFolios ){
+			if( count ( $aFolios ) > 0 ){
+				$aFlattenedScannedFileNames = $this->FlattenedScannedFileNames();
+				throw new ImporterException( 'The following images could not be matched with meta data ' . $aFlattenedScannedFileNames );
+			}
 
 		}
 
-		$this->CheckForAnyUnmatchedFiles();
+
 
 	}
 
 	/*
-	 *
+	 * @return string[]
 	 */
-	public function CheckForAnyUnmatchedFiles(){
+	private function FlattenedScannedFileNames(){
 
-		$aFlattened = $this->ArrayFlatten( $this->aScannedFileNames );
+		$sFileNameList = '';
 
-		if( count(  $aFlattened ) > 1 ){
+		$sTokenSeperator = $this->sTokenSeperator;
 
-			$sUnMatchedList = implode( ', ', $aFlattened );
-			throw new ImporterException( 'There are file names in $this->aScannedFileNames that do not have corresponding metadata: ' . $sUnMatchedList );
+		foreach ( $this->aScannedFileNames as $aBoxNumber => $aFolios){
+
+			foreach ( $aFolios as $sFolioNumber => $aItemNumbers ){
+
+				foreach ( $aItemNumbers as $sItemNumber){
+
+					$sFileNameList .= $aBoxNumber . $sTokenSeperator . $sFolioNumber . $sTokenSeperator . $sItemNumber . ', ';
+				}
+			}
+
 		}
 
+		return $sFileNameList;
 	}
 
-
 	/*
-	 * @return BoxEntity
+	 * @return BoxEntity|boolean
 	 */
 	private function InsertBox( $sBoxNumber ){
 
@@ -287,11 +514,25 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$oBoxEntity->setBoxNumber( $sBoxNumber );
 
-		$this->oLogger->Log ( 'Inserting Box ' . $sBoxNumber );
 
-		// Returns the new BoxId or the existing one if already there
+		/* Returns the new $oBoxEntity or the existing one if already there */
 
+		/* @var $oBoxEntity  BoxEntity */
 		$oBoxEntity = $this->oBoxDb->Insert( $oBoxEntity );
+
+		/* Already exists so updated and not inserted */
+
+		$sBoxUpdated = $oBoxEntity->getUpdated();
+
+		/* We still need to return a BoxEntity because
+		 * there will be more than row with that Box number
+		 */
+
+		if( $sBoxUpdated === null ){
+			$this->oLogger->Log ( 'Box ' . $sBoxNumber . ' already exists' );
+		}else{
+			$this->oLogger->Log ( 'Box ' . $sBoxNumber . 'has been inserted' );
+		}
 
 		return $oBoxEntity;
 	}
@@ -299,32 +540,41 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 
 	/*
+	 * Populates the FolioEntity and the inserts it
 	 *
+	 * @param BoxEntity $oBoxEntity
+	 * @param string[] $aAssocRow
+	 * @return FolioEntity $oFolioEntity
 	 */
-	private function InsertFolio( BoxEntity $oBoxEntity, $aAssocRow ){
+	private function InsertFolio( BoxEntity $oBoxEntity, $aBoxFolio ){
 
-		$iBoxId = $oBoxEntity->getId();
 
 		$oCsvRowToFolioMapper = $this->oCsvRowToFolioEntityMapper;
 
-		$oMappedFolioEntity   = $oCsvRowToFolioMapper->Map( $aAssocRow );
+		$oMappedFolioEntity   = $oCsvRowToFolioMapper->Map( $aBoxFolio );
 
 		if( $oMappedFolioEntity instanceof FolioEntity === false ){
 			throw new ImporterException( '$oMappedFolioEntity returned from mapper is not an instance of FolioEntity' );
 		}
+
+		$iBoxId = $oBoxEntity->getId();
 
 		$oMappedFolioEntity->setBoxId( $iBoxId );
 
 		/* @var $oMappedFolioEntity FolioEntity */
 		$oMappedFolioEntity = $this->oFolioDb->Insert( $oMappedFolioEntity );
 
-		if( $oMappedFolioEntity->getId() === $this->iCurrentFolioId ){
-			return false;
+		/* Already exists so updated and not inserted */
+
+		$sFolioUpdated = $oMappedFolioEntity->getUpdated();
+
+		$sFolioNumber  = $oMappedFolioEntity->getFolioNumber();
+
+		if( $sFolioUpdated === null ){
+			$this->oLogger->Log ( 'Folio ' . $sFolioNumber . ' already exists' );
+		}else{
+			$this->oLogger->Log ( 'Inserting Folio ' . $oMappedFolioEntity->getFolioNumber() );
 		}
-
-		$this->iCurrentFolioId =  $oMappedFolioEntity->getId();
-
-		$this->oLogger->Log ( 'Inserting Folio ' . $oMappedFolioEntity->getFolioNumber() );
 
 		return $oMappedFolioEntity;
 
@@ -334,34 +584,56 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 
 	/*
+	 * Loops through the scanned items found e.g. 001, 002 for the specified box and folio
+	 * and inserts them into cbp_items
 	 *
+	 * @param BoxEntity $oBoxEntity
+	 * @param FolioEntity $oFolioEntity
+	 * @return void
 	 */
-	private function InsertItems( BoxEntity $oBoxEntity, FolioEntity $oMappedFolioEntity ){
+	private function ScanAndInsertFolioItems( BoxEntity $oBoxEntity, FolioEntity $oMappedFolioEntity ){
 
-		$oItemEntity    = $this->oItemEntity;
+		$sBoxNumber           = $oBoxEntity->getBoxNumber();
+		$sFolioNumber         = $oMappedFolioEntity->getFolioNumber();
 
-		$iFolioId       = $oMappedFolioEntity->getId();
+		$aScannedItemNumbers  = $this->aScannedFileNames[ $sBoxNumber ][ $sFolioNumber];
 
-		$oItemEntity->setFolioId( $iFolioId );
+		if( $aScannedItemNumbers < 1 ){
+			throw new ImporterException( 'ScanAndInsertFolioItems() could find no corresponding files in $this->aScannedFileNames for box number ' . $sBoxNumber . ' and folio number ' . $sFolioNumber );
+		}
 
-		$aFolioItemList = $this->GetFolioItemList( $oBoxEntity, $oMappedFolioEntity );
+		$oItemEntity = $this->oItemEntity;
 
-		foreach ( $aFolioItemList as $sFolioItemNumber ){
+		foreach ( $aScannedItemNumbers as $sItemNumber ){
 
-			$oItemEntity->setItemNumber( $sFolioItemNumber );
+			$oItemEntity->SetAllPropertiesToNull();
 
-			$this->oLogger->Log ( 'Inserting Item ' . $sFolioItemNumber );
+			$oItemEntity->setItemNumber( $sItemNumber );
 
-			try {
-				$this->oItemDb->Insert( $oItemEntity );
+			$iFolioId     = $oMappedFolioEntity->getId();
 
-			} catch ( ImporterException $oException ) {
+			$oItemEntity->setFolioId( $iFolioId );
 
-				$this->HandleError( $oException, $oItemEntity );
+			$oItemEntity  = $this->oItemDb->Insert( $oItemEntity );
 
+			/* Already exists so updated and not inserted */
+
+			$sItemUpdated = $oItemEntity->getUpdated();
+
+			if( $sItemUpdated === null ){
+				$this->oLogger->Log ( 'Item ' . $sItemNumber . ' already exists' );
+				continue;
 			}
 
+			$this->oLogger->Log ( 'Inserted Item ' . $sItemNumber );
+
 		}
+
+		/* Remove the item from the array so reduce the size */
+
+		unset( $this->aScannedFileNames[ $sBoxNumber ][ $sFolioNumber] );
+
+		unset( $this->aBoxFolioCollection[ $sBoxNumber ][$sFolioNumber] );
 
 		// If we have reached this point then flag this folio as completed
 
@@ -373,108 +645,17 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	}
 
-	private function GetFolioItemList( BoxEntity $oBoxEntity, FolioEntity $oFolioEntity ){
+	/*
+	 * @return boolean
+	 */
+    private function HasUserSpecifiedId(){
+    	global $argv;
 
-		$sBoxNumber       = $oBoxEntity->getBoxNumber();
-		$sFolioNumber	  = $oFolioEntity->getFolioNumber();
-		$sTokenSeperator  = $this->sTokenSeperator;
-		$sItemRegex       = $this->sItemRegex;
-		$aFileNames       = $this->aScannedFileNames[ $sBoxNumber ];
-
-		$aMatchedFolioItemList = array();
-
-		foreach ( $aFileNames as $iIndex => $sFileName ){
-
-			$aTokens = explode( $sTokenSeperator, $sFileName );
-
-			if( $aTokens === false ){
-				throw new ImporterException( 'GetFolioItemList() did not return any tokens for $sFileName: ' . $sFileName . 'in box: ' . $sBoxNumber . ', folio:' . $sFolioNumber );
-			}
-
-			$sExpr  = '/' . $sBoxNumber . $sTokenSeperator . $sFolioNumber . $sTokenSeperator . $sItemRegex . '/';
-
-			$iMatch = preg_match( $sExpr , $sFileName, $matches );
-
-			if( $iMatch !== 1 ){
-				continue;
-			}
-
-			$sLogData = $sFileName . ' matched with metadata';
-
-			$this->oLogger->Log( $sLogData );
-
-			$sItemNumber             = $matches[1];
-			$aMatchedFolioItemList[] = $sItemNumber;
-
-			// Remove it from the master array
-
-			unset( $this->aScannedFileNames[ $sBoxNumber ][ $iIndex ] );
-
-		}
-
-		return $aMatchedFolioItemList;
-
-	}
-
-	private function GetBoxItemList( $sBoxNumber ){
-
-		$sImageImportPath = $this->sImageImportPath;
-
-		$sBoxPrefix       = $this->sBoxPrefix;
-
-		$iJobQueueId      = $this->iJobQueueId;
-
-		$sBoxDirectory    = $sImageImportPath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
-
-		$bDirExists = file_exists( $sBoxDirectory );
-
-		// If the directory is not there then just quickly check the archive
-
-		if( $bDirExists === false ){
-
-			$sArchiveBoxDirectory    = $this->sArchivePath . DIRECTORY_SEPARATOR . $iJobQueueId . DIRECTORY_SEPARATOR .  $sBoxPrefix . $sBoxNumber;
-
-			$bDirExists = file_exists( $sArchiveBoxDirectory );
-
-			// If it isn't there then we have a genuine problem so throw an exception
-
-			if( $bDirExists === false ){
-				throw new ImporterException( 'BoxDirectory ' . $sBoxDirectory . ' does not exist' );
-			}
-
-			$sBoxDirectory = $sArchiveBoxDirectory;
-
-		}
-
-		$aFileNames       = scandir( $sBoxDirectory );
-
-		foreach ( $aFileNames as $sFileName ){
-
-			if ( $sFileName != '.' && $sFileName != '..'){
-
-				$this->aScannedFileNames[ $sBoxNumber ][] = $sFileName;
-
-			}
-
-		}
-
-		if( count( $this->aScannedFileNames[ $sBoxNumber ]) < 1 ){
-			throw new ImporterException( 'GetBoxItemList() could not find any files in box folder' . $sBoxNumber );
-		}
-
-
-	}
-
-	private function ArrayFlatten( $arr ) {
-		$arr = array_values($arr);
-		while (list($k,$v)=each($arr)) {
-			if (is_array($v)) {
-				array_splice($arr,$k,1,$v);
-				next($arr);
-			}
-		}
-		return $arr;
-	}
+        if( isset( $_GET[ 'job_id' ] ) or isset( $argv[ 1 ] ) ) {
+            return true;
+        }
+        return false;
+    }
 
 
 }

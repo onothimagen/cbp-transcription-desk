@@ -3,7 +3,7 @@
 ;/*
 
 [common]
-active.environment	 = development
+active.section	     = development
 mediawiki.version    = 1.20.2
 export.version       = 0.7
 database.adapter     = Pdo_Mysql
@@ -14,8 +14,8 @@ box.prefix           = 'BOX_'
 tokenseperator       = '_'
 page.path            = 'td';
 page.prefix          = 'JB';
-item.regex           = '(\d\d\d[rv]?_?\d?).jpg'
-import_folio_limit	 = 20
+item.regex           = '(\d\d\d)_(\d\d\d)_(\d\d\d[rv]?_?\d?).jpg'
+import_box_limit	 = 1
 
 path.image.export    = 'zimages'
 path.mw.importer     = 'w/maintenance/importDump.php'

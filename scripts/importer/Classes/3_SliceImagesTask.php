@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -42,6 +43,11 @@ use Classes\Helpers\Logger;
 
 use Classes\Exceptions\Importer as ImporterException;
 
+/*
+ * This drills down from the job, box, folio and item, creates a file name and slices it
+ * using methods in the TaskAbstract
+ *
+ */
 class SliceImagesTask  extends TaskAbstract{
 
 	private $sBoxPrefix;
@@ -58,6 +64,13 @@ class SliceImagesTask  extends TaskAbstract{
 
 	private $sArchivePath;
 
+
+	/*
+	 * @param Di                $oDi
+	 * @param string[]          $aConfig
+	 * @param JobQueueEntity    $oJobQueueEntity
+	 * @return void
+	 */
 	public function __construct(  Di             $oDi
 								,                $aConfig
 								, JobQueueEntity $oJobQueueEntity ){
@@ -79,14 +92,16 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$this->sPreviousProcess = 'import';
 
-        $this->oLogger->SetContext( 'jobs', $this->iJobQueueId );
+        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 	}
 
 
 
 	/*
+	 * Entry point to start task
 	 *
+	 * @return void
 	 */
 	public function Execute(){
 
@@ -97,8 +112,6 @@ class SliceImagesTask  extends TaskAbstract{
 			$iJobQueueId = $this->iJobQueueId;
 			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
 			$this->CheckPaths();
-
-			// Don't flag all entities as started. This is done in a granular way for this process.
 
 			$this->ProcessBoxes( $this->oJobQueueEntity  );
 			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
@@ -112,22 +125,27 @@ class SliceImagesTask  extends TaskAbstract{
 
 	/*
 	 *
+	 * @return void
 	*/
 	private function CheckPaths(){
 
 		$this->oFile->CheckExists( 'ImageImportPath', $this->sImageImportPath );
 		$this->oFile->CheckDirExists( $this->sImageExportPath );
 		$this->oFile->CheckDirExists( $this->sArchivePath );
-		$this->oFile->CheckDirExists( $this->sSlicerPath );
+		$this->oFile->CheckExists( 'SlicerPath', $this->sSlicerPath );
 	}
 
+
+
 	/*
+	 * Returns a full image path for the supplied box, folio and item
+	 * It checks whether the image has already been processed and that it exists
 	 *
+	 * @return string
 	 */
-	protected function ConstructPath(
-									  BoxEntity   $oBoxEntity
+	protected function ConstructPath( BoxEntity   $oBoxEntity
 									, FolioEntity $oFolioEntity
-									, ItemEntity  $oItemEntity ){
+								    , ItemEntity  $oItemEntity ){
 
 		$sBoxNumber        = $oBoxEntity->getBoxNumber();
 
@@ -150,7 +168,7 @@ class SliceImagesTask  extends TaskAbstract{
 
 		// Check whether slices already exixt
 
-		$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . '_' . $sFolioNumber  . '_' . $sItemNumber;
+		$sImagePath  = $sBoxNumber . DIRECTORY_SEPARATOR . $sBoxNumber . $sTokenSeperator . $sFolioNumber  . $sTokenSeperator . $sItemNumber;
 
 		// Check to see whether images have already been processes
 
@@ -181,29 +199,33 @@ class SliceImagesTask  extends TaskAbstract{
 
 		// Fall back to Archive directory if needed
 
-		$bDirExists = file_exists( $sFullImageImportPath );
-
-		if( $bDirExists === false ){
+		if( file_exists( $sFullImageImportPath ) === false ){
 
 			$sFullImageArchivePath   = $sJobArchivePath . DIRECTORY_SEPARATOR . $iJobQueueId . $sItemName;
 
 			$this->oLogger->Log( $sFullImageImportPath . ' no longer exists. Now checking archive ' . $sFullImageArchivePath );
 
-			$bDirExists = file_exists( $sFullImageArchivePath );
-
-			if( $bDirExists ){
+			if( file_exists( $sFullImageArchivePath ) ){
 
 				//Before we move file, create the parent BOX directory otherwise it will complain
 
 				$sTargetImageDirectory = $this->sImageImportPath . DIRECTORY_SEPARATOR . $sBoxPrefix . $sBoxNumber;
 
-				if( file_exists( $sTargetImageDirectory ) === false ){
-					mkdir( $sTargetImageDirectory );
+				if( !is_dir( $sTargetImageDirectory ) ) {
+
+					if( !mkdir( $sTargetImageDirectory, 0775, true )) {
+						throw new ImporterException( 'ConstructPath(): Failed to create ' . $sTargetImageDirectory );
+					}
+
 					$this->oLogger->Log( 'Created directory ' . $sTargetImageDirectory );
 				}
 
 				$this->oLogger->Log( 'Moving archived image back from ' . $sFullImageArchivePath . ' to ' .  $sFullImageImportPath );
-				rename( $sFullImageArchivePath, $sFullImageImportPath );
+
+				if( !rename( $sFullImageArchivePath, $sFullImageImportPath ) ) {
+					throw new ImporterException( 'ConstructPath(): unable to rename ' . $sFullImageArchivePath . ' to ' . $sFullImageImportPath );
+				}
+
 			}
 
 			// Otherwise move it back from the archive
@@ -224,7 +246,10 @@ class SliceImagesTask  extends TaskAbstract{
 	}
 
 	/*
+	 * Perform the actual slice operation. See TaskAbstract.
 	 *
+	 * @param string $sInputImagePath
+	 * @return void
 	 */
 	protected function Process( $sInputImagePath ){
 
@@ -272,7 +297,6 @@ class SliceImagesTask  extends TaskAbstract{
 		}
 
 		$this->oLogger->Log( $sPerlOutput );
-
 
 	}
 

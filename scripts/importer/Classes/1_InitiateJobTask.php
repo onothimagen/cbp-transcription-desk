@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -37,26 +38,88 @@ use Classes\Db\JobQueue as JobQueueDb;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Driver\Pdo\Result;
 
+/*
+ * This class is called by 1_InitiateJob.php
+ * It creates a new Job by retrieving an existing one from the DB or creating a new one
+ * If another existing job is running it will exit
+ * If the same job is currently running under another process than that process will be killed
+ */
 class InitiateJobsTask extends TaskAbstract{
 
 	private $rIncompleteJobs;
 
-	public function __construct( Di $oDi ){
+	private $sImageImportPath;
+
+	private $sBoxPrefix;
+
+	/*
+	 * @param Di $oDi
+	 * @param string[] $aConfig
+	 * @return void
+	 */
+	public function __construct( Di $oDi, $aConfig ){
 
 		parent::__construct( $oDi );
 
-		$this->sProcess = 'initiate_jobs';
+		$this->sProcess         = 'initiate_jobs';
 
-        $this->oLogger->SetContext( 'jobs' );
+		$this->sImageImportPath = $aConfig[ 'path.image.import' ];
+
+		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
+
+        $this->oLogger->ConfigureLogger( 'jobs' );
 
 	}
 
+
+
 	/*
-	 * @return JobQueueEntity
+	 * Entry point to start task
+	 *
+	 * @return JobQueueEntity|boolean
 	 */
 	public function Execute(){
 
-		// Has a specific job been specified?
+		$this->BackOutofJobIfNoImages();
+
+		return $this->CreateJob();
+	}
+
+
+
+
+	/*
+	 * Checks to see if there are any new boxes and exit if none are found
+	*
+	* @return void
+	*/
+	private function BackOutofJobIfNoImages(){
+
+		$sImageImportPath = $this->sImageImportPath;
+		$sBoxPrefix       = $this->sBoxPrefix;
+
+		$aBoxes           = $this->oFile->ScanImageDirectory( $sImageImportPath, $sBoxPrefix );
+
+		if( count ( $aBoxes ) > 0 ){
+			return;
+		}
+
+		$sLogData = 'No boxes found. Exiting ....';
+
+		$this->oLogger->Log( $sLogData );
+
+		// Nothing more to do
+		exit ();
+
+	}
+
+
+	/*
+	 * @return JobQueueEntity|boolean
+	 */
+	private function CreateJob(){
+
+		/* Has a specific job been specified? */
 
 		$iSpecifiedJobId = $this->GetSpecifiedId();
 
@@ -87,20 +150,19 @@ class InitiateJobsTask extends TaskAbstract{
 			return $oJobQueueEntity;
 		}
 
-        $this->rIncompleteJobs = $this->GetIncompleteJobs();
+		$this->rIncompleteJobs = $this->GetIncompleteJobs();
 
-		// If all jobs are complete so start a new job
+		/* If all jobs are complete so start a new job */
 
-        if( $this->rIncompleteJobs === false ){
-            $oJobQueueEntity = $this->CreateNewJob();
-            return $oJobQueueEntity;
-        }
+		if( $this->rIncompleteJobs === false ){
+			$oJobQueueEntity = $this->CreateNewJob();
+			return $oJobQueueEntity;
+		}
 
 		$sLogData  = 'There are existing incomplete jobs. Exiting...';
 		$this->oLogger->Log( $sLogData );
 
-        return false;
-
+		return false;
 	}
 
 
@@ -157,6 +219,7 @@ class InitiateJobsTask extends TaskAbstract{
 		return $oJobQueueEntity;
 
 	}
+
 
 	/*
 	 * @return JobQueueEntity
@@ -304,6 +367,49 @@ class InitiateJobsTask extends TaskAbstract{
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -18,33 +18,51 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
 
+/*
+ * See respective Classes/*Task.php for more detailed information
+*
+*/
+
 namespace Classes;
 
-$sJobName = 'Verify Pages';
+$sJobName = 'Slice Images';
 
 require_once 'header.inc.php';
 
 require_once 'bootstrap.inc.php';
 
-require_once 'Classes/7_ArchiveTask.php';
+require_once 'Classes/3_SliceImagesTask.php';
 
-$sStep = 'Archiving XML started';
+$sStep = 'Image slicing started';
 $oLogger->Step( $sStep );
 
-$oArchiveTask = new ArchiveTask(  $oDi
-                                , $aSectionConfig
-                                , $oJobQueueEntity );
+$oSliceImagesTask = new SliceImagesTask(  $oDi
+										, $aSectionConfig
+										, $oJobQueueEntity );
 
-$oArchiveTask->Execute();
+$oSliceImagesTask->Execute();
 
-$sStep = 'Archiving XML completed';
+$sStep = 'Image slicing completed';
 $oLogger->Step( $sStep );
+
+require '4_ExportXmlProcess.php';
 
 require_once 'footer.inc.php';
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -18,44 +18,80 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
 
+/*
+ * See respective Classes/*Task.php for more detailed information
+*
+*/
+
 namespace Classes;
 
-date_default_timezone_set( 'Europe/London' );
+use Classes\Db\JobQueue;
 
-$sJobName = 'Initiate Jobs';
+use Classes\Exceptions\Importer as ImporterException;
+
+$sJobName = 'Import CSV Into DB';
 
 require_once 'header.inc.php';
 
 require_once 'bootstrap.inc.php';
 
-require_once 'Classes/1_InitiateJobsTask.php';
+require_once 'Classes/2_ImportCsvIntoDbTask.php';
 
-$oInitiateJobsTask = new InitiateJobsTask( $oDi );
+$oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToFolioEntity();
 
-$oJobQueueEntity = $oInitiateJobsTask->Execute();
-
-if( $oJobQueueEntity === false){
-	exit;
-}
-
-$sJobId          = $oJobQueueEntity->getId();
-
-$sStep = 'Job ' . $sJobId . ' initiated';
-
-echo $sStep;
-
+$sStep = 'Import from CSV started';
 $oLogger->Step( $sStep );
 
+$oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
+											             , $oCsvRowToMetatDataEntityMapper
+														 , $aSectionConfig
+														 , $oJobQueueEntity );
 
-/* Initiation of the Job was successful so start import of the CSV */
+$oImportCsvIntoDbTask->Execute();
 
-require '2_ImportCsvIntoDbJob.php';
+$sStep = 'Import from CSV completed';
+$oLogger->Step( $sStep );
+
+/* Import of the Folio and Items was successful so start slicing the images */
+require '3_SliceImagesProcess.php';
 
 require_once 'footer.inc.php';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

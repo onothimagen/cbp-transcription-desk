@@ -18,8 +18,18 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
+ */
+
+/*
+ * This file performs the following components used throughout the application:
+ * - Configures Zend autoloading
+ * - Load the configuration settings from config.ini.php
+ * - Configures the Logger
+ * - Configures the DB adapter
+ * - Configures the Zend dependency injector
  */
 
 
@@ -89,8 +99,8 @@ if( isset ( $_SERVER['HTTP_HOST' ] ) ){
 // Override this with 'active.environment' is it has been set.
 // Set the 'active.environment' when running PHP CLI
 
-if( isset( $aConfig['common'][ 'active.environment' ] ) and $aConfig['common'][ 'active.environment' ] !== '' ){
-	$sConfigSection = $aConfig['common'][ 'active.environment' ];
+if( isset( $aConfig['common'][ 'active.section' ] ) and $aConfig['common'][ 'active.section' ] !== '' ){
+	$sConfigSection = $aConfig['common'][ 'active.section' ];
 }
 
 // Load common config items
@@ -131,7 +141,7 @@ $oExceptionLogger	= new Zend\Log\Logger;
 
 $oLogger            = new Classes\Helpers\Logger( $oInfoLogger, $oExceptionLogger, $aSectionConfig );
 
-$oLogger->SetContext( 'jobs' );
+$oLogger->ConfigureLogger( 'jobs' );
 
 
 /*****************************************

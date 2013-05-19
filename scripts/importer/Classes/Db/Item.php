@@ -18,6 +18,7 @@
  *
  * @package CBP Transcription
  * @subpackage Importer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
  */
@@ -26,20 +27,23 @@ namespace Classes\Db;
 
 use Classes\Entities\Item as ItemEntity;
 
+use Zend\Db\Adapter\Driver\Pdo\Result;
+use Zend\Db\Adapter\Adapter;
+
 class Item extends DbAbstract{
 
 
 	/*
 	 *
 	*/
-	public function __construct( $oAdapter ){
+	public function __construct( Adapter $oAdapter ){
 		parent::__construct( $oAdapter );
 		$this->sTableName = 'cbp_items';
 	}
 
 
 	/*
-	 *
+	 *@return integer
 	 */
 	public function Insert ( ItemEntity  $oItemEntity ){
 
@@ -79,17 +83,19 @@ class Item extends DbAbstract{
 
 		$iItemId = $this->oAdapter->getDriver()->getLastGeneratedValue();
 
-		return $iItemId;
+		$oItemEntity->setId( $iItemId );
+
+		return $oItemEntity;
 
 	}
 
 
 	/*
-	 *
+	 * @return ResultSet
 	 */
-	public function GetJobItems(  $iFolioId
-								, $sPreviousProcess
-								, $sProcess ){
+	public function GetJobItemsToProcess( $iFolioId
+										, $sPreviousProcess
+										, $sProcess ){
 
 		$sSql = 'SELECT
 					*
