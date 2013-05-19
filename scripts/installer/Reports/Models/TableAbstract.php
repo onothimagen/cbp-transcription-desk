@@ -18,8 +18,10 @@
  *
  * @package CBP Transcription
  * @subpackage Installer
+ * @version 1.0
  * @author Ben Parish <b.parish@ulcc.ac.uk>
  * @copyright 2013  University College London
+ * @link http://zf2.readthedocs.org/en/latest/tutorials/tutorial.pagination.html
  */
 
 namespace Models;

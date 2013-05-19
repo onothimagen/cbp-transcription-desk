@@ -70,7 +70,11 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 	private $sBoxPrefix;
 
-	private $sItemRegex;
+	private $sRegexBox;
+
+	private $sRegexFolio;
+
+	private $sRegexItem;
 
 	private $sBoxLimit;
 
@@ -116,7 +120,11 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 
-		$this->sItemRegex       = $aConfig[ 'item.regex' ];
+		$this->sRegexBox        = $aConfig[ 'regex.box' ];
+
+		$this->sRegexFolio      = $aConfig[ 'regex.folio' ];
+
+		$this->sRegexItem       = $aConfig[ 'regex.item' ];
 
 		$this->sBoxLimit        = $aConfig[ 'import_box_limit' ];
 
@@ -300,10 +308,12 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$sExpr  = '/' . $sItemRegex . '/';
 
-		$iMatch = preg_match( $sExpr , $sFileName, $matches );
+		$sExpr  = '/(' .$sRegexBox . ')' . $sTokenSeperator . '(' . $sRegexFolio . ')' . $sTokenSeperator . '(' . $sRegexItem . $sTokenSeperator . ')' . '.jpg' . '/';
+
+		$iMatch = preg_match( $sExpr, $sFileName, $matches );
 
 		if( $iMatch !== 1 or count($matches) < 4 ){
-			throw new ImporterException( $sFileName . ' does not match with configured item.regex ' . $sItemRegex );
+			throw new ImporterException( $sFileName . ' does not match with configured: ' . $sExpr );
 		}
 
 		$aFileTokens = array( 'box'   => $matches[1]
@@ -330,6 +340,10 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		$hHandle             = $this->oFile->GetFileHandle( $sFilePath );
 
 		$sBoxPrefix          = $this->sBoxPrefix;
+
+		$sRegexBox           = $this->sRegexBox;
+
+		$sRegexFolio         = $this->sRegexFolio;
 
 		$iCurrentRow         = 1;
 
@@ -373,11 +387,11 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 			$sBoxNumber   = $aAssocRow[ 'Box number' ];
 			$sFolioNumber = $aAssocRow[ 'Folio number' ];
 
-			if( preg_match( '/^\d\d\d\z/', $sBoxNumber ) === 0 ){
+			if( preg_match( '/' . $sRegexBox . '/', $sBoxNumber ) === 0 ){
 				continue;
 			}
 
-			if( preg_match( '/^\d\d\d\z/', $sFolioNumber ) === 0 ){
+			if( preg_match( '/'. $sRegexFolio . '/', $sFolioNumber ) === 0 ){
 				continue;
 			}
 
@@ -412,8 +426,6 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 			try {
 
 				$oBoxEntity = $this->InsertBox( $sBoxNumber );
-
-				echo $sBoxNumber;
 
 				/* If Box has already been added then DO NOT skip
 				 * Something may have gone wrong previously so we need to
