@@ -142,11 +142,15 @@ class VerifyPagesTask  extends TaskAbstract{
 
 		$sPageTitle = $sPagePrefix . '/' . $sPageTitle;
 
+		$this->oLogger->Log ( 'Checking whether ' . $sPageTitle . ' exists in mediawiki'  );
+
 		$bIsItemInMediaWiki = $this->oMediaWikiDb->DoesItemPageExist( $sPageTitle );
 
 		if( $bIsItemInMediaWiki === false){
 			throw new ImporterException( $sPageTitle . ' was not found in MediaWiki' );
 		}
+
+		$this->oLogger->Log ( $sPageTitle . ' found in mediawiki'  );
 
 	}
 

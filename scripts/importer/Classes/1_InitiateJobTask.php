@@ -80,8 +80,6 @@ class InitiateJobsTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		$this->BackOutofJobIfNoImages();
-
 		return $this->CreateJob();
 	}
 
@@ -149,6 +147,10 @@ class InitiateJobsTask extends TaskAbstract{
 
 			return $oJobQueueEntity;
 		}
+
+		/* Check if there are any images to process */
+
+		$this->BackOutofJobIfNoImages();
 
 		$this->rIncompleteJobs = $this->GetIncompleteJobs();
 
