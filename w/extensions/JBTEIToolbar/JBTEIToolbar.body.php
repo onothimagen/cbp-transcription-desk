@@ -56,7 +56,7 @@ class JBTEIToolbarHooks {
 		 * TODO: Need to be able to override this in LocalSettings.php
 		 */
 
-		if (   preg_match( '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^', $pageTitle ) ){
+		if (   preg_match( '^\w+\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^', $pageTitle ) ){
 			return TRUE;
 		}
 

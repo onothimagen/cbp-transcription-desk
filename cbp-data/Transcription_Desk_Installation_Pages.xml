@@ -1,8 +1,8 @@
 <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.7/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.7/ http://www.mediawiki.org/xml/export-0.7.xsd" version="0.7" xml:lang="en-gb">
   <siteinfo>
-    <sitename>Transcribe Bentham: Transcription Desk</sitename>
+    <sitename>Transcription Desk X</sitename>
     <base>http://w02.benpro.wf.ulcc.ac.uk/td/Main_Page</base>
-    <generator>MediaWiki 1.20.2</generator>
+    <generator>MediaWiki 1.20.5</generator>
     <case>first-letter</case>
     <!-- pages in this export: 
     
@@ -656,7 +656,13 @@ This Mediawiki with Transcription Desk tools is now installed. The Transcription
 ===Things you might like to do now===
 
 ====Transcription Desk tasks ====
-# [[Run the demo image uploader]] (not connected yet!). When this is completed a [[demo image]] will be available for you to test the zoom viewer tools work.
+# Copy /scripts/importer/configure.inc.example.php to configure.inc.php
+# Edit configure.inc.php with your local database settings, host, path.prefix and admin.email
+# Ensure that the paths in the configuration exist. Ensure that apache user can write to these directories.
+# Import the importer schema /scripts/importer/schemas/importer_schema.sql into your mediawiki database
+# [http://{{SERVERNAME}}/scripts/installer/index.php Run the demo image uploader].
+# Click the 'Run new job' button
+# When this is completed a [[TD/001/001/001]] will be available for you to test the zoom viewer tools work.
 # Read a description of  [[Help:Transcription Desk Back End|how to configure the back end]] to receive and process images and metadata for use in this system
 
 ====MediaWiki tasks====

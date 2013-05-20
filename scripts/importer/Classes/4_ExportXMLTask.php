@@ -36,7 +36,7 @@ use Classes\Db\Box   as BoxDb;
 use Classes\Db\Folio as FolioDb;
 use Classes\Db\Item  as ItemDb;
 
-use Classes\Mappers\MwXml;
+use Classes\Mappers\JoBItemsToMwXml;
 
 use Classes\Exceptions\Importer as ImporterException;
 
@@ -57,7 +57,7 @@ class ExportXMLTask extends TaskAbstract{
 
 	private $sArchivePath;
 
-	/* @var JoBItemsToMwXml */
+	/* @var $oMapper JoBItemsToMwXml  */
 	private $oMapper;
 
 
@@ -76,7 +76,6 @@ class ExportXMLTask extends TaskAbstract{
 		$this->sXMLExportPath   = $aConfig[ 'path.xml.export' ];
 		$this->sArchivePath     = $aConfig[ 'path.archive' ];
 
-		/* @var MwXml */
 		$this->oMapper          = $oDi->get( 'Classes\Mappers\JobItemsToMwXml' );
 
 		$this->sProcess         = 'export';
@@ -108,6 +107,7 @@ class ExportXMLTask extends TaskAbstract{
 
 			/* An array of Folio item entities */
 			$aFolioCollection        = $this->GetFolioItems();
+
 
 			$aFolioCollectionMarkers = $this->GetFolioCollectionRanges( $aFolioCollection );
 
@@ -317,9 +317,9 @@ class ExportXMLTask extends TaskAbstract{
 	 *
 	 * @return void
 	*/
-	protected function ExportXMLPseudoSetterForAutoComplete( MwXml $oMwXml ){
+	protected function ExportXMLPseudoSetterForAutoComplete( JoBItemsToMwXm $oMapper  ){
 
-		$this->oMapper = $oMwXml;
+		$this->oMapper = $oMapper;
 
 	}
 

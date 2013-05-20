@@ -541,9 +541,9 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		 */
 
 		if( $sBoxUpdated === null ){
-			$this->oLogger->Log ( 'Box ' . $sBoxNumber . ' already exists' );
-		}else{
 			$this->oLogger->Log ( 'Box ' . $sBoxNumber . 'has been inserted' );
+		}else{
+			$this->oLogger->Log ( 'Box ' . $sBoxNumber . ' already exists' );
 		}
 
 		return $oBoxEntity;
@@ -583,9 +583,9 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		$sFolioNumber  = $oMappedFolioEntity->getFolioNumber();
 
 		if( $sFolioUpdated === null ){
-			$this->oLogger->Log ( 'Folio ' . $sFolioNumber . ' already exists' );
-		}else{
 			$this->oLogger->Log ( 'Inserting Folio ' . $oMappedFolioEntity->getFolioNumber() );
+		}else{
+			$this->oLogger->Log ( 'Folio ' . $sFolioNumber . ' already exists' );
 		}
 
 		return $oMappedFolioEntity;
@@ -632,7 +632,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 			$sItemUpdated = $oItemEntity->getUpdated();
 
-			if( $sItemUpdated === null ){
+			if( $sItemUpdated !== null ){
 				$this->oLogger->Log ( 'Item ' . $sItemNumber . ' already exists' );
 				continue;
 			}

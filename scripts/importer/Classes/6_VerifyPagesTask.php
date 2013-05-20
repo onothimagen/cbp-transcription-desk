@@ -147,6 +147,7 @@ class VerifyPagesTask  extends TaskAbstract{
 		$bIsItemInMediaWiki = $this->oMediaWikiDb->DoesItemPageExist( $sPageTitle );
 
 		if( $bIsItemInMediaWiki === false){
+			$this->oLogger->Log ( $sPageTitle . ' could not be found in mediawiki. Exiting Job....'  );
 			throw new ImporterException( $sPageTitle . ' was not found in MediaWiki' );
 		}
 

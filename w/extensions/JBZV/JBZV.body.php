@@ -54,7 +54,7 @@ class JBZVHooks{
 		if( isset( $wgJBZVTitleOptions ) === false ){
 			$wgJBZVTitleOptions = array(
 										  'site_name'		    => 'Transcribe Bentham'
-										, 'regx_pattern'        => '^[.*](\d\d\d)\/(\d\d\d)\/(\d\d\d).*$'
+										, 'regx_pattern'        => '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
 										, 'dir_token_indexes'   => array( 1)
 										, 'name_token_indexes'  => array( 1, 2, 3 )
 										, 'file_name_seperator' => '_'
@@ -227,7 +227,7 @@ class JBZVHooks{
      * Example:
      *
      * Set the pattern in LocalSettings.php
-     * $wgJBZVTitleOptions['regx_pattern'] = '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
+     * $wgJBZVTitleOptions['regx_pattern'] = '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
      *
 	 * Extracts 002, 006, 001
 	 * from 'JB/002/006/001 - Transcribe Bentham: Transcription Desk'

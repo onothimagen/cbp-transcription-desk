@@ -23,6 +23,8 @@
 * @author Richard Davis <r.davis@ulcc.ac.uk>
 */
 
+$wgScriptPath       = "/td";
+
 #############################################################
 # CUSTOMISATION SETTINGS
 #############################################################
@@ -33,7 +35,7 @@ $wgArticlePath = "/td/$1";
 $wgUsePathInfo = true;        # Enable use of pretty URLs
 
 
-# BP Enabled by default. We need to switch this off because the bentham modern template is not HTML 5
+# Enabled by default. We need to switch this off because the bentham modern template is not HTML 5
 # HTML Tidy will complain that script tags do not contain a 'type' attribute Html->inlineScript()
 $wgHtml5 = false;
 
@@ -115,7 +117,11 @@ $wgGroupPermissions['sysop' ]          [ 'editmetadata'] = true;      #permissio
 # CBP TRANSCRIPTION EXTENSIONS
 ##############################################################
 
-$root_path 	= 'Path to your virtual host root';
+$root_path 	= '';
+
+if( $root_path === ''){
+ echo 'Please configure $root_path in LocalSettings.php<p />';
+}
 
 $transcription_extensions_path 	= $root_path . 'w/extensions/';
 
@@ -124,7 +130,7 @@ $wgJBZVimagesRootDir        = '/zimages';
 
 $wgJBZVTitleOptions = array(
 							  'site_name'           => 'Transcribe Bentham'
-							, 'regx_pattern'        => '^JB\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
+							, 'regx_pattern'        => '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
 							, 'dir_token_indexes'   => array( 1 )
 							, 'name_token_indexes'  => array( 1, 2, 3 )
 							, 'file_name_seperator' => '_'

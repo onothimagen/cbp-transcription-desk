@@ -15,11 +15,11 @@ if( !defined( 'MEDIAWIKI' ) )
  * @todo document
  * @ingroup Skins
  */
-class SkinCbpTranscription extends SkinTemplate {
+class SkinCbpTranscriptionEnhanced extends SkinTemplate {
 
-	var $skinname  		= 'cbp-transcription';
-	var $stylename 		= 'cbp-transcription';
-	var $template  		= 'CbpTranscriptionTemplate';
+	var $skinname  		= 'cbp-transcription-enhanced';
+	var $stylename 		= 'cbp-transcription-enhanced';
+	var $template  		= 'CbpTranscriptionEnhancedTemplate';
 	var $useHeadElement = true;
 
 	/*
@@ -33,11 +33,11 @@ class SkinCbpTranscription extends SkinTemplate {
 
 	public function initPage( OutputPage $out ) {
 		global $wgLocalStylePath;
-		$this->skinname  = 'cbp-transcription';
-		$this->stylename = 'cbp-transcription';
-		$this->template  = 'CbpTranscriptionTemplate';
+		$this->skinname  = 'cbp-transcription-enhanced';
+		$this->stylename = 'cbp-transcription-enhanced';
+		$this->template  = 'CbpTranscriptionEnhancedTemplate';
 
-		$out->addModules( 'skins.cbp-transcription' );
+		$out->addModules( 'skins.cbp-transcription-enhanced' );
 
 		parent::initPage( $out );
 
@@ -47,9 +47,10 @@ class SkinCbpTranscription extends SkinTemplate {
 	function setupSkinUserCss( OutputPage $out ){
 
 		$out->addStyle( 'common/shared.css', 'screen' );
-		$out->addStyle( 'cbp-transcription/main.css', 'screen' );
-		$out->addStyle( 'cbp-transcription/print.css', 'print' );
-		$out->addStyle( 'cbp-transcription/rtl.css', 'screen', '', 'rtl' );
+		$out->addStyle( 'cbp-transcription-enhanced/main.css', 'screen' );
+		$out->addStyle( 'cbp-transcription-enhanced/print.css', 'print' );
+		$out->addStyle( 'cbp-transcription-enhanced/rtl.css', 'screen', '', 'rtl' );
+
 	}
 }
 
@@ -57,7 +58,7 @@ class SkinCbpTranscription extends SkinTemplate {
  * @todo document
  * @ingroup Skins
  */
-class CbpTranscriptionTemplate extends QuickTemplate {
+class CbpTranscriptionEnhancedTemplate extends QuickTemplate {
 	var $skin;
 	/**
 	 * Template filter callback for Modern skin.
@@ -139,7 +140,7 @@ class CbpTranscriptionTemplate extends QuickTemplate {
 <!-- removed h1 from here -->
 <h1>
 <a href="<?php $this->text('stylepath');?>/../">
-<img src="<?php $this->text('stylepath'); ?>/cbp-transcription/logo.gif" alt="Transcribe Bentham: A Collaborative Initiative" style="border: 0;"/>
+<img src="<?php $this->text('stylepath'); ?>/cbp-transcription-enhanced/logo.gif" alt="Transcribe Bentham: A Collaborative Initiative" style="border: 0;"/>
 </a></h1>
    </div>
 

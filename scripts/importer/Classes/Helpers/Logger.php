@@ -97,7 +97,7 @@ class Logger {
 
 		if( !is_dir( $sFolderLocation ) ){
 
-			if( !mkdir( $sFolderLocation, 0, true )) {
+			if( !mkdir( $sFolderLocation, 0775, true )) {
 			    throw new ImporterException( 'Failed to create ' . $sFolderLocation );
 			}
 

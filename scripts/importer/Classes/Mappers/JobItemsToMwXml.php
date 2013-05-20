@@ -293,7 +293,6 @@ class JobItemsToMwXml{
 
 						);
 
-
 		foreach ( $aFields as $sKey => $sValue ){
 
 			$sText .= '| ' . $sKey . ' = ' . $sValue . "\n";
