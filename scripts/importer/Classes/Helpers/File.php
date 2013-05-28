@@ -29,6 +29,15 @@ use Classes\Exceptions\Importer as ImporterException;
 
 class File {
 
+	private $sFileGroup;
+
+	/*
+	* @param string[] $aConfig
+	* @return void
+	*/
+	public function __construct( $aConfig ){
+		$this->sFileGroup = $aConfig[ 'file.group' ];
+	}
 
 	/*
 	 * @param string $sDirectory
@@ -132,6 +141,8 @@ class File {
 			if( !mkdir( $sFilePath, 0775, true )) {
 				throw new ImporterException( 'Failed to create ' . $sFilePath );
 			}
+
+			chgrp( $sFilePath, $this->sFileGroup );
 		}
 
 		return true;

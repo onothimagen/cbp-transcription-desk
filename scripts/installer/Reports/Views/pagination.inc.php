@@ -43,6 +43,12 @@ if( $oPages->pageCount > 1 ){
 
 	$sCurrentPageNumber = $oPaginator->getCurrentPageNumber();
 
+	if( property_exists( $oPages, 'last' ) ){
+		?>
+			<a href="index.php?<?php echo $sQuery . '&page_num=' . $oPages->first; ?>">First</a>
+		<?php
+	}
+
 	if( property_exists( $oPages, 'previous' ) ){
 		?>
 		<a href="index.php?<?php echo $sQuery . '&page_num=' . $oPages->previous; ?>">Prev</a>
@@ -66,6 +72,12 @@ if( $oPages->pageCount > 1 ){
 	if( property_exists( $oPages, 'next' ) ){
 		?>
 		<a href="index.php?<?php echo $sQuery . '&page_num=' . $oPages->next; ?>">Next</a>
+		<?php
+	}
+
+	if( property_exists( $oPages, 'last' ) ){
+		?>
+			<a href="index.php?<?php echo $sQuery . '&page_num=' . $oPages->last; ?>">Last</a>
 		<?php
 	}
 }

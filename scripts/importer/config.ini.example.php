@@ -8,6 +8,7 @@ mediawiki.version    = 1.20.5
 export.version       = 0.7
 database.adapter     = Pdo_Mysql
 database.params.host = localhost
+file.group           = webgroup
 site.name            = Transcription Desk
 home_page.name       = Transcribe
 box.prefix           = BOX_

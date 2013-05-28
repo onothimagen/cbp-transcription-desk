@@ -92,8 +92,6 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$this->sPreviousProcess = 'import';
 
-        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
-
 	}
 
 
@@ -108,6 +106,9 @@ class SliceImagesTask  extends TaskAbstract{
 		// Pre-check paths
 
 		try {
+
+	        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
+
 			$sProcess    = $this->sProcess;
 			$iJobQueueId = $this->iJobQueueId;
 			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );

@@ -67,8 +67,6 @@ class InitiateJobsTask extends TaskAbstract{
 
 		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 
-        $this->oLogger->ConfigureLogger( 'jobs' );
-
 	}
 
 
@@ -80,7 +78,19 @@ class InitiateJobsTask extends TaskAbstract{
 	 */
 	public function Execute(){
 
-		return $this->CreateJob();
+		try {
+
+			$this->oLogger->ConfigureLogger( 'jobs' );
+
+			return $this->CreateJob();
+
+
+		} catch ( ImporterException $oException ) {
+
+			exit( $oException->getMessage() );
+
+		}
+
 	}
 
 
@@ -123,7 +133,7 @@ class InitiateJobsTask extends TaskAbstract{
 
 		if( $iSpecifiedJobId !== false ){
 
-			// Are there any other jobs running other than the job being restarted
+			/* Are there any other jobs running other than the job being restarted? If there are then stop*/
 
 			$this->rIncompleteJobs = $this->GetIncompleteJobs( $iSpecifiedJobId );
 
@@ -140,8 +150,6 @@ class InitiateJobsTask extends TaskAbstract{
 				$this->oLogger->Log( $sLogData );
 				return false;
 			}
-
-			$this->KillJobProcess( $oJobQueueEntity );
 
 			$this->oJobQueueDb->ClearErrorLog( $iSpecifiedJobId );
 
@@ -192,11 +200,9 @@ class InitiateJobsTask extends TaskAbstract{
 		$sLogData = $iPid . ' is still running';
 		$this->oLogger->Log( $sLogData );
 
-		$iPid     = $oJobQueueEntity->getId();
-
 		$this->oFile->KillProcess( $iPid );
 
-		$sLogData = $iPid . ' has been killed';
+		$sLogData = 'Process ID ' . $iPid . ' has been killed';
 		$this->oLogger->Log( $sLogData );
 	}
 
@@ -222,36 +228,6 @@ class InitiateJobsTask extends TaskAbstract{
 
 	}
 
-
-	/*
-	 * @return JobQueueEntity
-	*/
-	private function GetExistingJob( ){
-
-		// If all processes have ended then start a new job
-		// else restart the oldest incomplete job
-
-		$oJobQueueEntity        = $this->GetOldestJob();
-
-		$bIsProcessStillRunning = $this->IsProcessStillRunning( $oJobQueueEntity );
-
-		if( $bIsProcessStillRunning ){
-			return false;
-		}
-
-		// Flag the job has started
-
-		$oJobQueueEntity->setStatus( 'started' );
-
-		$this->UpdateJobQueue( $oJobQueueEntity );
-
-		$sJobId    = $oJobQueueEntity->getId();
-
-        $sLogData  = 'Job ' . $sJobId . ' restarted';
-		$this->oLogger->Log( $sLogData );
-
-		return $oJobQueueEntity;
-	}
 
 	/*
 	 * @return boolean
@@ -292,6 +268,26 @@ class InitiateJobsTask extends TaskAbstract{
 		}
 
 		$oJobQueueEntity = $this->MapResultSetToEntity( $rUserSpecifiedJob );
+
+		/* Kill any existing pid */
+		$this->KillJobProcess( $oJobQueueEntity );
+
+		$sAction = $this->GetAction();
+
+		if( $sAction == 'stop' ){
+			$sLogData  = 'Job ' . $Id . ' has been stopped';
+			$this->oLogger->Log( $sLogData );
+			exit();
+		}
+
+		$iProcessId = getmypid();
+
+		$oJobQueueEntity->setPid( $iProcessId );
+		$oJobQueueEntity = $this->oJobQueueDb->InsertUpdate( $oJobQueueEntity );
+
+		$sJobId    = $oJobQueueEntity->getId();
+		$sLogData  = 'Job ' . $sJobId . ' re-started';
+		$this->oLogger->Log( $sLogData );
 
 		return $oJobQueueEntity;
 
@@ -359,13 +355,22 @@ class InitiateJobsTask extends TaskAbstract{
     	global $argv;
 
         if( isset( $_GET[ 'job_id' ] ) ){
-        	$sJobId = (int) $_GET[ 'job_id' ];
-            return $sJobId;
+            return  (int) $_GET[ 'job_id' ];
         }elseif ( isset( $argv[ 1 ] ) ){
-        	$sJobId = (int) $argv[ 1 ];
-            return $sJobId;
+        	return (int) $argv[ 1 ];
         }
         return false;
+    }
+
+    function GetAction(){
+    	global $argv;
+
+    	if( isset( $_GET[ 'action' ] ) ){
+    		return $_GET[ 'action' ];
+    	}elseif ( isset( $argv[ 2 ] ) ){
+    		return $argv[ 2 ];
+    	}
+    	return '';
     }
 
 }

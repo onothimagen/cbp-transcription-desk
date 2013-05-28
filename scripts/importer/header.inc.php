@@ -25,7 +25,8 @@
 ignore_user_abort(TRUE); // run script in background
 set_time_limit(0); // run script forever
 
-function UserspecifiedJobid(){
+function GetUserSpecifiedJobId(){
+	global $argv;
 
 	if( isset( $_GET[ 'job_id' ] ) ){
 		$iJobId = (int) $_GET[ 'job_id' ];
@@ -37,7 +38,22 @@ function UserspecifiedJobid(){
 	return '';
 }
 
-$iJobId = UserspecifiedJobid();
+function GetAction(){
+	global $argv;
+
+	if( isset( $_GET[ 'action' ] ) ){
+		$sAction = $_GET[ 'action' ];
+		return ' ' . $sAction;
+	}elseif ( isset( $argv[ 2 ] ) ){
+		$sAction = $argv[ 2 ];
+		return ' ' . $sAction;
+	}
+	return '';
+}
+
+$iJobId  = GetUserSpecifiedJobId();
+
+$sAction = GetAction();
 
 function disable_ob() {
 
@@ -89,50 +105,5 @@ if( isset ( $_SERVER['HTTP_HOST' ] ) ){
 	<body>
 <?php
 }
+// NOTE: Do not add carriage returns below, otherwise there will be many blank lines appearing in the console before any output
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

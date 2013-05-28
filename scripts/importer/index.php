@@ -28,7 +28,7 @@ require_once 'header.inc.php';
 
 /* Ensure that the php binary is added to the system path */
 
-$sCommand = 'php 1_InitiateJob.php' . $iJobId;
+$sCommand = 'php 1_InitiateJob.php' . $iJobId . $sAction;
 
 passthru( $sCommand );
 

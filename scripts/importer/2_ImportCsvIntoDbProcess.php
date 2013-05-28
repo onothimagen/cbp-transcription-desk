@@ -47,10 +47,10 @@ $oCsvRowToMetatDataEntityMapper = new Mappers\CsvRowToFolioEntity();
 $sStep = 'Import from CSV started';
 $oLogger->Step( $sStep );
 
-$oImportCsvIntoDbTask           = new ImportCsvIntoDbTask( $oDi
-											             , $oCsvRowToMetatDataEntityMapper
-														 , $aSectionConfig
-														 , $oJobQueueEntity );
+$oImportCsvIntoDbTask = new ImportCsvIntoDbTask(  $oDi
+												, $oCsvRowToMetatDataEntityMapper
+												, $aSectionConfig
+												, $oJobQueueEntity );
 
 $oImportCsvIntoDbTask->Execute();
 

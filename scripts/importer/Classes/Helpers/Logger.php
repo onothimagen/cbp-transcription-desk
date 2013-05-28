@@ -35,6 +35,7 @@ class Logger {
 
 	private $sLogPath;
 	private $sAdminEmail;
+	private $sFileGroup;
 	private $sFolderLocation;
 	private $sLogName;
 	private $sErrorLogName;
@@ -66,6 +67,7 @@ class Logger {
 		$this->oExceptionLogger	= $oExceptionLogger;
 		$this->sLogPath         = $aConfig[ 'path.logs' ];
 		$this->sAdminEmail      = $aConfig[ 'admin.email' ];
+		$this->sFileGroup       = $aConfig[ 'file.group' ];
 
 	}
 
@@ -84,22 +86,26 @@ class Logger {
             return;
         }
 
-        $this->sContext = $sContext;
+        $this->sContext    = $sContext;
 
 		$this->iJobQueueId = $iJobQueueId;
 
-		$sContext = strtolower( $sContext );
+		$sContext          = strtolower( $sContext );
 
-		$sContext = str_replace( ' ', '_', $sContext );
+		$sContext          = str_replace( ' ', '_', $sContext );
 
-		$sRootFolder 		= $this->sLogPath;
-		$sFolderLocation 	= $sRootFolder . DIRECTORY_SEPARATOR . $sContext;
+		$sRootFolder 	   = $this->sLogPath;
+		$sFolderLocation   = $sRootFolder . DIRECTORY_SEPARATOR . $sContext;
+
+		$sFileGroup        = $this->sFileGroup;
 
 		if( !is_dir( $sFolderLocation ) ){
 
 			if( !mkdir( $sFolderLocation, 0775, true )) {
 			    throw new ImporterException( 'Failed to create ' . $sFolderLocation );
 			}
+
+			chgrp( $sFolderLocation, $sFileGroup );
 
 		}
 
@@ -108,10 +114,22 @@ class Logger {
 
 		if( file_exists( $this->sLogName ) === false ){
 			touch( $this->sLogName );
+			chmod( $this->sLogName, 0664 );
+			chgrp( $this->sLogName, $sFileGroup );
+		}
+
+		if( is_writable( $this->sLogName ) === false ){
+			throw new ImporterException( 'The info logging file ' . $this->sLogName . ' is not writeable' );
 		}
 
 		if( file_exists( $this->sErrorLogName ) === false ){
 			touch( $this->sErrorLogName );
+			chmod( $this->sErrorLogName, 0664 );
+			chgrp( $this->sErrorLogName, $sFileGroup );
+		}
+
+		if( is_writable( $this->sErrorLogName ) === false ){
+			throw new ImporterException( 'The error logging file ' . $this->sErrorLogName . ' is not writeable' );
 		}
 
 		$oInfoWriter			= new Stream( $this->sLogName );

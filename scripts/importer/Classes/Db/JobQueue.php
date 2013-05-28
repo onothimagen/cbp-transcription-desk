@@ -147,6 +147,7 @@ class JobQueue extends DbAbstract{
 
 
 	/*
+	 * Checks to see if there are any jobs (other than the supplied job ID) that have not completed
 	 *
 	 * @return Result
 	 */

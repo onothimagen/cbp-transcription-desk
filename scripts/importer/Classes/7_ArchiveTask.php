@@ -109,8 +109,11 @@ class ArchiveTask  extends TaskAbstract{
 
 		try {
 
+			$this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
+
 			$sProcess    = $this->sProcess;
 			$iJobQueueId = $this->iJobQueueId;
+
 			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
 
             $this->CreateArchiveDirectory();
@@ -123,7 +126,9 @@ class ArchiveTask  extends TaskAbstract{
             // This is the final task so flag job as 'complete'
 			$this->oJobQueueEntity->setPid( null );
             $this->oJobQueueEntity->setStatus( 'completed' );
+
 			$this->oJobQueueDb->InsertUpdate( $this->oJobQueueEntity );
+
 			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
 
 		} catch (Exception $oException ) {

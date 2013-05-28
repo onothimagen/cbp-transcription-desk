@@ -166,6 +166,8 @@ $oAdapter = new Zend\Db\Adapter\Adapter( $aDbConfig );
 
 $oDi = new Zend\Di\Di();
 
+$oDi->instanceManager()->setParameters( 'Classes\Helpers\File', array( 'aConfig'          => $aSectionConfig ) );
+
 $oDi->instanceManager()->setParameters( 'Classes\Helpers\Logger', array(
 										    							'oInfoLogger'      => $oInfoLogger
 																   	  , 'oExceptionLogger' => $oExceptionLogger

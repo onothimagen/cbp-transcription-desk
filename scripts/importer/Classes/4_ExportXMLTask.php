@@ -84,8 +84,6 @@ class ExportXMLTask extends TaskAbstract{
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
-        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
-
 	}
 
 
@@ -98,6 +96,8 @@ class ExportXMLTask extends TaskAbstract{
 	public function Execute(){
 
 		try {
+
+	        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 			$sProcess    = $this->sProcess;
 			$iJobQueueId = $this->iJobQueueId;

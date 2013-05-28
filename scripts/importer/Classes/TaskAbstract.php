@@ -80,7 +80,7 @@ abstract class TaskAbstract{
 	/* @var $oFile FileHelper */
 	protected $oFile;
 
-	/* @var Logger */
+	/* @var $oLogger Logger */
 	protected $oLogger;
 
 	protected $sProcess;

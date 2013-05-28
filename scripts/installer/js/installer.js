@@ -1,12 +1,28 @@
 // Doesn't work with Opera
 //http://www.codekites.com/ajax-based-streaming-without-polling/
 
+$xhrPool = [];
+
+function abortAll(){
+	
+	if( $xhrPool.length > 0 ){
+		document.getElementById('loader').style.display = 'none';
+        window.clearTimeout( scrollConsole );
+        // Make sure it reaches the end
+        ScrollConsole();
+	}
+	
+	for( x in $xhrPool ){
+		$xhrPool[x].abort();
+		$xhrPool.splice(x, 1);
+	}
+}
+
 function ajaxConnect( action, id ){
 	
 	StartScroll();
 
     var ie           = false;
-    var xhr;
     
     var ajaxURL      = '';
     
@@ -23,27 +39,31 @@ function ajaxConnect( action, id ){
 	   case "restart" :
 		   var ajaxURL    = '/scripts/importer/index.php' + job_id_param + '&' + Math.random();
 	      break;
-	   case "stop" :
-		   var ajaxURL    = '/scripts/importer/stop.php?' + job_id_param;
+	   case "stop" :	   
+	        var ajaxURL    = '/scripts/importer/index.php' + job_id_param + '&action=stop';
+	        abortAll();
 	      break;
 	   default :
 	     alert( 'action not specified in ajaxConnect()' );
     }
    
-    var returnText = '';;
+    var returnText = '';
+    
 
     try{
-        xhr = new XDomainRequest();
+        var xhr = new XDomainRequest();
         ie = true;
     } catch (e) {
       try{
-          xhr = new XMLHttpRequest();
+         var xhr = new XMLHttpRequest();
       } catch (e){
         // Something went wrong
         alert("Your browser broke!");
         return false;
       }
     }
+    
+    $xhrPool.push( xhr );
 
     if (ie) {
     	clearConsole();
@@ -57,6 +77,11 @@ function ajaxConnect( action, id ){
         
         xhr.onload = function() {
             document.getElementById('loader').style.display = 'none';
+            
+            var index = $xhrPool.indexOf( xhr );
+            if (index > -1) {
+                $xhrPool.splice(index, 1);
+            }
         };
         
         xhr.send(null);
@@ -89,14 +114,18 @@ function ajaxConnect( action, id ){
 
             // Stop scrolling console when all output has been displayed.
             if( xhr.readyState == 4  ){
+            	document.getElementById( 'loader' ).style.display = 'none';
+                var index = $.xhrPool.indexOf( xhr );
+                if ( index > -1 ) {
+                    $.xhrPool.splice( index, 1 );
+                }
                 window.clearTimeout( scrollConsole );
                 // Make sure it reaches the end
                 ScrollConsole();
-                document.getElementById( 'loader' ).style.display = 'none';
             }
         }
         xhr.open( "GET", ajaxURL, true );
-        xhr.send('');
+        xhr.send( "" );
         window.clearTimeout( scrollConsole );
         ScrollConsole();
     }
@@ -129,7 +158,7 @@ function StartScroll(){
 
 	ScrollConsole();
 
-	// Don't make this to slow otherwise animation is lost
+	// Don't make this too slow otherwise animation is lost
 
 	scrollConsole = setTimeout( "StartScroll()", 1000 );
 

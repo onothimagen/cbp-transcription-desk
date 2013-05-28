@@ -146,8 +146,6 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		$this->iJobQueueId      = $oJobQueueEntity->getId();
 
-        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
-
 		$this->sRegex  			= '/('  . $this->sRegexBox . ')' . $this->sTokenSeperator . '(' . $this->sRegexFolio . ')'
 										. $this->sTokenSeperator  . '(' . $this->sRegexItem  . ')' . '.jpg' . '/';
 	}
@@ -164,6 +162,8 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		// No started flag is needed because we do not have the records to flag!
 
 		try {
+
+	        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 			$this->GetJobBoxes();
 
@@ -206,6 +206,8 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 
 		if( $bHasUserSpecifiedId ){
 
+			$this->oLogger->Log ( 'User has specified Job ID: ' . $iJobQueueId . ', Looking for previously processed boxes ');
+
 			/* Get previously imported boxes */
 
 			$aBoxes = $this->GetBoxCollection();
@@ -213,7 +215,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 			/* If no boxes imported fallback to directory re-scan */
 
 			if( count ( $aBoxes ) < 1 ){
-				$this->oLogger->Log ( 'Cannot find any boxes in cbp_boxes table, scanning ' . $sImageImportPath );
+				$this->oLogger->Log ( 'Cannot find any existing boxes in cbp_boxes table, so scanning directory ' . $sImageImportPath );
 				$aBoxes = $this->oFile->ScanImageDirectory( $sImageImportPath, $sBoxPrefix );
 			}
 
@@ -541,7 +543,7 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 		 */
 
 		if( $sBoxUpdated === null ){
-			$this->oLogger->Log ( 'Box ' . $sBoxNumber . 'has been inserted' );
+			$this->oLogger->Log ( 'Box ' . $sBoxNumber . ' has been inserted' );
 		}else{
 			$this->oLogger->Log ( 'Box ' . $sBoxNumber . ' already exists' );
 		}
@@ -605,13 +607,14 @@ class ImportCsvIntoDbTask extends TaskAbstract{
 	 */
 	private function ScanAndInsertFolioItems( BoxEntity $oBoxEntity, FolioEntity $oMappedFolioEntity ){
 
+		$sBoxPrefix           = $this->sBoxPrefix;
 		$sBoxNumber           = $oBoxEntity->getBoxNumber();
 		$sFolioNumber         = $oMappedFolioEntity->getFolioNumber();
 
 		$aScannedItemNumbers  = $this->aScannedFileNames[ $sBoxNumber ][ $sFolioNumber];
 
 		if( $aScannedItemNumbers < 1 ){
-			throw new ImporterException( 'ScanAndInsertFolioItems() could find no corresponding files in $this->aScannedFileNames for box number ' . $sBoxNumber . ' and folio number ' . $sFolioNumber );
+			throw new ImporterException( 'ScanAndInsertFolioItems() could not find the meta data items: box number ' . $sBoxNumber . ' and folio number ' . $sFolioNumber . ' in the scanned files for box number ' . $sBoxPrefix . $sBoxNumber );
 		}
 
 		$oItemEntity = $this->oItemEntity;

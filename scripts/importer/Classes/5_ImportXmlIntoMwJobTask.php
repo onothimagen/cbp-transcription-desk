@@ -63,15 +63,12 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 
 		$this->sMwImporterPath  = $aConfig[ 'path.mw.importer' ];
 
-
         $this->sProcess         = 'import_mw';
 
         $this->sPreviousProcess = 'export';
 
         $this->oJobQueueEntity  = $oJobQueueEntity;
         $this->iJobQueueId      = $oJobQueueEntity->getId();
-
-        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
 
 	}
 
@@ -85,12 +82,19 @@ class ImportXmlIntoMwJobTask extends TaskAbstract{
 	public function Execute(){
 
 		try {
-			$sProcess = $this->sProcess;
+	        $this->oLogger->ConfigureLogger( 'jobs', $this->iJobQueueId );
+
+			$sProcess    = $this->sProcess;
 			$iJobQueueId = $this->iJobQueueId;
+
 			$this->oBoxDb->FlagJobProcessAsStarted( $iJobQueueId, $sProcess );
+
 			$this->CheckPaths();
+
 			$this->ImportXmlIntoMw();
+
 			$this->oBoxDb->FlagJobProcessAsCompleted( $iJobQueueId, $sProcess );
+
 		} catch ( ImporterException $oException ) {
 			$this->HandleError( $oException, $this->oJobQueueEntity );
 		}
