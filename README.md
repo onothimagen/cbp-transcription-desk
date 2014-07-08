@@ -8,12 +8,11 @@ Mediawiki based transcription tools
 
 ### Installing Mediawiki
 
-NOTE. Below, is a very summarised instructions for the the installation of MediaWiki
-      For full instructions goto:
+Below, is a very summarised instructions for the the installation of MediaWiki. For full instructions goto:
 
 [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
-Download the latest version of Mediawiki. The Transcription Desk has been tested with 1.20.5.
+[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.20.5.
 
 The extensions and skin may not work with versions earlier than 1.20.x
 
