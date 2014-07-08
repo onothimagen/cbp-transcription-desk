@@ -8,8 +8,7 @@ Mediawiki based transcription tools
 
 ### Installing Mediawiki
 
-NOTE. Below, is a very summarised instructions for the the installation of MediaWiki
-      For full instructions goto:
+Below, is a very summarised instructions for the the installation of MediaWiki. For full instructions goto:
 
 [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
