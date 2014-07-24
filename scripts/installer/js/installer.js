@@ -23,9 +23,7 @@ function ajaxConnect( action, id ){
 	StartScroll();
 
     var ie           = false;
-    
     var ajaxURL      = '';
-    
     var job_id_param = '';
     
     if( id != null ){
