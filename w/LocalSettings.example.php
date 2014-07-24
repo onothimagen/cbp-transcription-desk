@@ -40,8 +40,6 @@ $wgValidSkinNames[ 'benthammodern' ]            = "BenthamModern";
 $wgValidSkinNames[ 'cbptranscription' ]         = "CbpTranscription";
 $wgValidSkinNames[ 'cbptranscriptionenhanced' ] = "CbpTranscriptionEnhanced";
 
-$wgDefaultSkin = 'benthammodern';
-
 $wgDefaultSkin = 'cbptranscription';
 
 # BP Enabled by default. We need to switch this off because the bentham modern template is not HTML 5
@@ -135,7 +133,7 @@ $wgExtensionAssetsPath = $IP . '/extensions/';
 $wgJBZVimagesRootDir   = '/zimages';
 
 $wgJBZVTitleOptions = array(
-                               'site_name'          => 'Transcribe Bentham'
+                              'site_name'           => 'Transcribe Bentham'
                             , 'regx_pattern'        => '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
                             , 'dir_token_indexes'   => array( 1 )
                             , 'name_token_indexes'  => array( 1, 2, 3 )
