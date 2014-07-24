@@ -28,7 +28,7 @@ Copy the Mediawiki files to a subdirectory of your website root e.g. /w
 
 Configure .htaccess and upload to your website root.
 
-Run installer wizard by going to your website root. The default settings can be used.
+Run the MediaWiki installer wizard by going to your website root. The default settings can be used.
 
 On completion, move the generated file LocalSettings.php to your media wiki directory e.g. /w
 
