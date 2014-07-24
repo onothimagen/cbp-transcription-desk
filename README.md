@@ -20,9 +20,9 @@ Below, is a very summarised instructions for the the installation of MediaWiki. 
 
 [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
-[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.20.5.
+[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.23.1.
 
-The extensions and skin may not work with versions earlier than 1.20.x
+The extensions and skin may not work with versions earlier than 1.23.x
 
 Copy the Mediawiki files to a subdirectory of your website root e.g. /w
 
@@ -163,6 +163,15 @@ Make sure that the following directories:
 Now click on the link 'Transcription Desk' as shown in your mediawiki ( described above ). A console should pop up in a new browser window. Click on the button 'Run new job'. The progress of the install should be displayed in the console. If all goes well then the last console message displayed will be 'Import into MW successful'.
 
 If you look in the directory you set as 'path.image.export' in config.ini.php, you should see the images tiles in their respective directories.
+
+
+### View and zoom the tiled image ###
+
+Go your siite home page. For example:
+
+ http://cbp-transcription-desk.local/w/index.php/Main_Page
+
+Now click on the link to TD/001/001/001. This should display a zoom window containing the tiled images.
 
 
 
