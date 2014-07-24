@@ -10,6 +10,14 @@
 if( !defined( 'MEDIAWIKI' ) )
 	die( -1 );
 
+global $wgResourceModules, $wgStylePath, $wgStyleDirectory;
+
+$wgResourceModules['skins.cbp-transcription-enhanced'] = array(
+					'scripts' => 'cbp-transcription-enhanced/cbp-transcription-enhanced.js',
+					'remoteBasePath' => &$GLOBALS['wgStylePath'],
+					'localBasePath' => &$GLOBALS['wgStyleDirectory'],
+);
+
 /**
  * Inherit main code from SkinTemplate, set the CSS and template filter.
  * @todo document
@@ -47,9 +55,9 @@ class SkinCbpTranscriptionEnhanced extends SkinTemplate {
 	function setupSkinUserCss( OutputPage $out ){
 
 		$out->addStyle( 'common/shared.css', 'screen' );
-		$out->addStyle( 'cbp-transcription-enhanced/main.css', 'screen' );
-		$out->addStyle( 'cbp-transcription-enhanced/print.css', 'print' );
-		$out->addStyle( 'cbp-transcription-enhanced/rtl.css', 'screen', '', 'rtl' );
+		$out->addStyle( 'CbpTranscriptionEnhanced/main.css', 'screen' );
+		$out->addStyle( 'CbpTranscriptionEnhanced/print.css', 'print' );
+		$out->addStyle( 'CbpTranscriptionEnhanced/rtl.css', 'screen', '', 'rtl' );
 
 	}
 }
@@ -140,7 +148,7 @@ class CbpTranscriptionEnhancedTemplate extends QuickTemplate {
 <!-- removed h1 from here -->
 <h1>
 <a href="<?php $this->text('stylepath');?>/../">
-<img src="<?php $this->text('stylepath'); ?>/cbp-transcription-enhanced/logo.gif" alt="Transcribe Bentham: A Collaborative Initiative" style="border: 0;"/>
+<img src="<?php $this->text('stylepath'); ?>/CbpTranscriptionEnhanced/logo.gif" alt="Transcribe Bentham: A Collaborative Initiative" style="border: 0;"/>
 </a></h1>
    </div>
 
@@ -427,4 +435,6 @@ global $wgUser;
 	}
 
 } // end of class
-?>
+
+
+
