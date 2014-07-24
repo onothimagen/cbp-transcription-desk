@@ -63,16 +63,16 @@ require_once( $wgLocalStylePath . 'CbpTranscriptionEnhanced/CbpTranscriptionEnha
 #############################################################
 
 # Disable for everyone.
-# $wgGroupPermissions[ '*' ][ 'edit' ]     			= false;
+$wgGroupPermissions[ '*' ][ 'edit' ]    = false;
 
 # Disable for users, too: by default 'user' is allowed to edit, even if '*' is not.
-#$wgGroupPermissions[ 'user' ][ 'edit' ]    			= false;
+$wgGroupPermissions[ 'user' ][ 'edit' ] = false;
 
 # Make it so users with confirmed e-mail addresses are in the group.
-$wgAutopromote[ 'emailconfirmed' ] 				= APCOND_EMAILCONFIRMED;
+$wgAutopromote[ 'emailconfirmed' ]      = APCOND_EMAILCONFIRMED;
 
 # Hide group from user list.
-$wgImplicitGroups[] 							= 'emailconfirmed';
+$wgImplicitGroups[]                     = 'emailconfirmed';
 
 # Finally, set it to true for the desired group.
 $wgGroupPermissions[ 'emailconfirmed' ][ 'edit' ] 	= true;
@@ -135,11 +135,11 @@ $wgExtensionAssetsPath = $IP . '/extensions/';
 $wgJBZVimagesRootDir   = '/zimages';
 
 $wgJBZVTitleOptions = array(
-							  'site_name'           => 'Transcribe Bentham'
-							, 'regx_pattern'        => '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
-							, 'dir_token_indexes'   => array( 1 )
-							, 'name_token_indexes'  => array( 1, 2, 3 )
-							, 'file_name_seperator' => '_'
+                               'site_name'          => 'Transcribe Bentham'
+                            , 'regx_pattern'        => '^TD\/(\d\d\d)\/(\d\d\d)\/(\d\d\d)^'
+                            , 'dir_token_indexes'   => array( 1 )
+                            , 'name_token_indexes'  => array( 1, 2, 3 )
+                            , 'file_name_seperator' => '_'
 );
 
 require_once( $wgExtensionAssetsPath . '/JBZV/JBZV.php' );
