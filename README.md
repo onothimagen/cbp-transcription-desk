@@ -20,9 +20,9 @@ Below, is a very summarised instructions for the the installation of MediaWiki. 
 
 [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
-[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.20.5.
+[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.23.1.
 
-The extensions and skin may not work with versions earlier than 1.20.x
+The extensions and skin may not work with versions earlier than 1.23.x
 
 Copy the Mediawiki files to a subdirectory of your website root e.g. /w
 
