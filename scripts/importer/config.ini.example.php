@@ -1,20 +1,24 @@
 ;<?php
 ;die(); // For further security
+;?>
 ;/*
 
 [common]
 active.section	     = development
-mediawiki.version    = 1.20.5
+mediawiki.version    = 1.23.1
 export.version       = 0.7
 database.adapter     = Pdo_Mysql
 database.params.host = localhost
 file.group           = webgroup
 site.name            = Transcription Desk
-home_page.name       = Transcribe
-box.prefix           = BOX_
-tokenseperator       = _
+homepage.name        = Transcribe
 page.path            = td;
 page.prefix          = TD;
+
+;For example  BOX_001/001_001_001.jpg
+
+box.prefix           = BOX_
+tokenseperator       = _
 regex.box            = \d\d\d
 regex.folio			 = \w+
 regex.item           = \d\d\d[rv]?_?\d?
@@ -44,4 +48,3 @@ database.params.dbname   = transcription
 
 
 ;*/
-;?>

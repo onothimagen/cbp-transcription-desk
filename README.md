@@ -4,11 +4,15 @@
 Mediawiki based transcription tools
 
 
-## Installation instructions
+## Mediawiki Configuration instructions
 
 ### Requirements
 
-In addition to the requirements needed to install MediaWiki, your server will also need to have Perl available
+In addition to the requirements needed to install MediaWiki, your server will also need
+
+* To have Perl available with the ImageMagick module enabled
+* To have the Apache user able to write to directories
+* Ensure that passthru has not been disabled in php.ini ( see disable_functions )
 
 ### Install Mediawiki
 
@@ -55,6 +59,8 @@ If you are experiencing problems, try inserting the following line at the top of
 ini_set( 'display_errors', 'On' );
 ```
 
+At this point, it is advisable that you back up your database. The following steps will make changes to the database. If you have a backup, you can roll back if any of the following steps goes wrong.
+
 Create a 'zimages' directory in the root of your site. You should see the following in your site root:
 
 ```
@@ -93,11 +99,15 @@ w
 ```
 
 
-### Import Transcription Desk 'Sample Image' Instructions Page
+### How to Import Transcription Desk 'Sample Image' Instructions Page into Mediawiki
+
+WARNING: If you have not yet backed up your database so you can roll back if there are problems with the installer.
 
 ```
 cd w/maintenance
+```
 
+```
 php importDump.php ../../cbp-data/Transcription_Desk_Installation_Pages.xml
 ```
 
@@ -110,4 +120,75 @@ You might want to run rebuildrecentchanges.php to regenerate RecentChanges
 
 Refresh the main page. A 'Transcription Desk' link should appears in the left panel under 'Navigation'.
 
-Before you click on it, rename ./scripts/importer/config.ini.example.php to ./scripts/importer/config.ini.php
+Please follow the instructions below before clicking on the link.
+
+
+## How to slice and import images into Mediawiki ##
+
+### Rename the configuration file ###
+
+Rename:
+
+```
+./scripts/importer/config.ini.example.php
+```
+to
+```
+./scripts/importer/config.ini.php
+```
+
+### Edit the configuration file ###
+
+The configuration file config.ini.php is an ini file with several sections.
+
+The first section is [common]. This contains configuration items common to or shared between all environments.
+
+After that there can be any number of sections for each environment being deployed to. There are some placeholders for common environment names and some example configuration items under [development : common].
+
+The importer identifies the environment to use by using the 'active.section' value. The environment sections inherit all values from the [common] section which can then be overridden.
+
+For the purposes of running the demo installer, most sections can be left as is apart from 'path.prefix', which should be an absolute path to your website's root, and the 'database.params' for your local database configuration.
+
+Make sure that the following directories:
+
+* path.image.export
+* path.xml.export
+* path.logs
+* path.archive
+
+..are writeable by the web server.
+
+### Run the installer ###
+
+Now click on the link 'Transcription Desk' as shown in your mediawiki ( described above ). A console should pop up in a new browser window. Click on the button 'Run new job'. The progress of the install should be displayed in the console. If all goes well then the last console message displayed will be 'Import into MW successful'.
+
+If you look in the directory you set as 'path.image.export' in config.ini.php, you should see the images tiles in their respective directories.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
