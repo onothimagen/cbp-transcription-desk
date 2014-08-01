@@ -14,6 +14,7 @@ site.name            = Transcription Desk
 homepage.name        = Transcribe
 page.path            = td;
 page.prefix          = TD;
+perl.path            =
 
 ;For example  BOX_001/001_001_001.jpg
 
