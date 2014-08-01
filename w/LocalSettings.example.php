@@ -16,7 +16,7 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *
-* Append this to then end of LocalSettings.php
+* Append this to the end of LocalSettings.php
 *
 * @package MediaWiki
 * @author Ben Parish <b.parish@ulcc.ac.uk>

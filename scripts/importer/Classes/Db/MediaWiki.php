@@ -45,20 +45,27 @@ class MediaWiki extends DbAbstract{
 	 */
 	public function DoesItemPageExist( $sPageTitle ){
 
-		$sPageTitleMeta = 'Meta:' . $sPageTitle;
+		$sPageTitleMeta = 'Metadata:' . $sPageTitle;
 
 		$sSql = 'SELECT
 					page_id
 				FROM
 					' . $this->sTableName . '
 				WHERE
-					page_title = ?
+					page_title = BINARY :page_title
 				OR
-					page_title = ?';
+					page_title = BINARY :page_title_meta';
 
 		$aBindArray = array( $sPageTitle, $sPageTitleMeta );
 
-		$rResult = $this->Execute( $sSql, $aBindArray );
+        $stmt = $this->oAdapter->createStatement( $sSql);
+
+        $stmt->prepare($sSql );
+
+		$params = array( ':page_title'      => $sPageTitle
+		                ,':page_title_meta' => $sPageTitleMeta);
+
+		$rResult = $stmt->execute( $params );
 
 		/* There should be a basic and meta page */
 

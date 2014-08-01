@@ -55,6 +55,8 @@ class SliceImagesTask  extends TaskAbstract{
 	/* @var $oFolioItemEntity FolioEntity */
 	private $oFolioItemEntity;
 
+    private $sPerlPath;
+
 	private $sSlicerPath;
 
 	private $sTokenSeperator;
@@ -77,7 +79,8 @@ class SliceImagesTask  extends TaskAbstract{
 
 		parent::__construct( $oDi );
 
-		$this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
+        $this->sPerlPath        = $aConfig[ 'perl.path' ];
+        $this->sBoxPrefix       = $aConfig[ 'box.prefix' ];
 		$this->sImageImportPath = $aConfig[ 'path.image.import' ];
 		$this->sImageExportPath = $aConfig[ 'path.image.export' ];
 		$this->sArchivePath     = $aConfig[ 'path.archive' ];
@@ -265,13 +268,21 @@ class SliceImagesTask  extends TaskAbstract{
 
 		$sSlicerPath      = $this->sSlicerPath;
 
+        $sPerlPath        = $this->sPerlPath;
+
+        if( empty( $sPerlPath ) ){
+            $sPerlPath = 'perl';
+        }
+
 		$this->oFile->CheckExists( 'ImagePath', $sInputImagePath );
 
 		$this->oFile->CheckDirExists( $sImageExportPath );
 
 		$this->oFile->CheckExists( 'SlicerPath', $sSlicerPath );
 
-		$sCommand = 'perl ' . $sSlicerPath . ' --input_file ' . $sInputImagePath . ' --output_path ' . $sImageExportPath;
+        $this->oFile->CheckExists( 'PerlPath', $sPerlPath );
+
+		$sCommand = $sPerlPath . ' ' . $sSlicerPath . ' --input_file ' . $sInputImagePath . ' --output_path ' . $sImageExportPath;
 
 		$sCommand = str_replace('\\', '/', $sCommand );
 

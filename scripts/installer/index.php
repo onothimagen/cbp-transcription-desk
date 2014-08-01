@@ -54,7 +54,7 @@ function GetEntityType(){
 <html>
   <head>
     <title>Installer</title>
-	<script type="text/javascript" src="/w/resources/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/w/resources/lib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="js/installer.js"></script>
 	<script type="text/javascript" src="js/jquery.qtip.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/installer.css" />

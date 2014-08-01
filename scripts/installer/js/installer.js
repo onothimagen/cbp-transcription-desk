@@ -4,14 +4,14 @@
 $xhrPool = [];
 
 function abortAll(){
-	
+
 	if( $xhrPool.length > 0 ){
 		document.getElementById('loader').style.display = 'none';
-        window.clearTimeout( scrollConsole );
+
         // Make sure it reaches the end
         ScrollConsole();
 	}
-	
+
 	for( x in $xhrPool ){
 		$xhrPool[x].abort();
 		$xhrPool.splice(x, 1);
@@ -19,17 +19,16 @@ function abortAll(){
 }
 
 function ajaxConnect( action, id ){
-	
-	StartScroll();
+
 
     var ie           = false;
     var ajaxURL      = '';
     var job_id_param = '';
-    
+
     if( id != null ){
     	job_id_param = '?job_id=' + id;
     }
-    
+
     switch ( action ) {
  	   case "start" :
 		   var ajaxURL    = '/scripts/importer/index.php' + '?' + Math.random();
@@ -37,16 +36,16 @@ function ajaxConnect( action, id ){
 	   case "restart" :
 		   var ajaxURL    = '/scripts/importer/index.php' + job_id_param + '&' + Math.random();
 	      break;
-	   case "stop" :	   
+	   case "stop" :
 	        var ajaxURL    = '/scripts/importer/index.php' + job_id_param + '&action=stop';
 	        abortAll();
 	      break;
 	   default :
 	     alert( 'action not specified in ajaxConnect()' );
     }
-   
+
     var returnText = '';
-    
+
 
     try{
         var xhr = new XDomainRequest();
@@ -60,7 +59,7 @@ function ajaxConnect( action, id ){
         return false;
       }
     }
-    
+
     $xhrPool.push( xhr );
 
     if (ie) {
@@ -68,24 +67,22 @@ function ajaxConnect( action, id ){
         xhr.timeout = 1000000;
         xhr.open( "GET", ajaxURL, true);
         document.getElementById( 'loader' ).style.display = 'block';
-        
+
         xhr.onprogress = function() {
             ajaxReturnText( xhr.responseText );
         };
-        
+
         xhr.onload = function() {
             document.getElementById('loader').style.display = 'none';
-            
+
             var index = $xhrPool.indexOf( xhr );
             if (index > -1) {
                 $xhrPool.splice(index, 1);
             }
         };
-        
+
         xhr.send(null);
 
-        window.clearTimeout( scrollConsole );
-        
         // Make sure it reaches the end
         ScrollConsole();
 
@@ -104,7 +101,7 @@ function ajaxConnect( action, id ){
             if( xhr.readyState > 2 && xhr.status == 200 ){
 
             	returnText = xhr.responseText;
-            	
+
             	returnText = returnText.replace(/\r\n?|\n/g, "<br />" );
 
                	ajaxReturnText( returnText );
@@ -113,18 +110,16 @@ function ajaxConnect( action, id ){
             // Stop scrolling console when all output has been displayed.
             if( xhr.readyState == 4  ){
             	document.getElementById( 'loader' ).style.display = 'none';
-                var index = $.xhrPool.indexOf( xhr );
+                var index = $xhrPool.indexOf( xhr );
                 if ( index > -1 ) {
-                    $.xhrPool.splice( index, 1 );
+                    $xhrPool.splice( index, 1 );
                 }
-                window.clearTimeout( scrollConsole );
                 // Make sure it reaches the end
                 ScrollConsole();
             }
         }
         xhr.open( "GET", ajaxURL, true );
         xhr.send( "" );
-        window.clearTimeout( scrollConsole );
         ScrollConsole();
     }
 }
@@ -139,29 +134,10 @@ function ajaxReturnText( ajaxOutput){
 
 
 function ScrollConsole(){
-
-	var scrollHeight =  $('#console').prop( "scrollHeight" );
-
-	var scrollTop    = $('#console').prop( "scrollTop" );
-
-	var distance     = scrollTop + ( scrollHeight - scrollTop );
-
-	$('#console').animate({ scrollTop: distance }, 500);
-
+   var console = $('#console');
+   var height = console[0].scrollHeight;
+   console.scrollTop( height );
 }
-
-var scrollConsole;
-
-function StartScroll(){
-
-	ScrollConsole();
-
-	// Don't make this too slow otherwise animation is lost
-
-	scrollConsole = setTimeout( "StartScroll()", 1000 );
-
-}
-
 
 $(document).ready(function() {
 

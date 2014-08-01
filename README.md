@@ -13,32 +13,37 @@ In addition to the requirements needed to install MediaWiki, your server will al
 * To have Perl available with the ImageMagick module enabled
 * To have the Apache user able to write to directories
 * Ensure that passthru has not been disabled in php.ini ( see disable_functions )
+* Ensure that both Apache and PHP are configured to allow long running scripts
 
-### Install Mediawiki
+### Download Mediawiki
 
-Below, is a very summarised instructions for the the installation of MediaWiki. For full instructions goto:
+NOTE: These are very basic instructions for the the installation of MediaWiki. For full instructions see [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
-[http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
-
-[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.23.1.
+[Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.23.2.
 
 The extensions and skin may not work with versions earlier than 1.23.x
 
 Copy the Mediawiki files to a subdirectory of your website root e.g. /w
 
-Configure .htaccess and upload to your website root.
+### Download Transcription Desk files
+
+Download the Transcription Desk files from this repository.
+
+Copy .htaccess to your website's root. It has been configured to use 'w' as the mediawiki directory. If you have used a different directory name then configure it to use this instead.
+
+### Install Mediawiki
 
 Run the MediaWiki installer wizard by going to your website root. The default settings can be used.
 
-On completion, move the generated file LocalSettings.php to your media wiki directory e.g. /w
+At this point, it is advisable that you back up your database. The following steps will make changes to the database. If you have a backup, you can roll back if any of the following steps goes wrong.
 
-Make sure $wgScriptPath is configured as follows:
+On completion of the install, you will be prompted to download the generated file LocalSettings.php. Save it to your Mediawiki directory e.g. /w
+
+Make sure $wgScriptPath is configured with your Mediawiki install directory name. For example, using the default '/w' folder:
 
 ```
 $wgScriptPath       = "/w"
 ```
-
-'w' is the real directory containing your wiki files
 
 Then ensure you add:
 
@@ -59,9 +64,7 @@ If you are experiencing problems, try inserting the following line at the top of
 ini_set( 'display_errors', 'On' );
 ```
 
-At this point, it is advisable that you back up your database. The following steps will make changes to the database. If you have a backup, you can roll back if any of the following steps goes wrong.
-
-Create a 'zimages' directory in the root of your site. You should see the following in your site root:
+Create a 'zimages' directory in the root of your site. You should then see the following in your site root:
 
 ```
 w
@@ -69,16 +72,9 @@ zimages
 .htaccess
 ```
 
-
 ### Install Transcription Desk files
 
-Download the Transcription Desk files from this repository.
-
-Copy over the contents of the '/w/extensions' and '/w/skins' directories to the respective 'skins; and 'extensions' directories in your mediawiki sub-directory
-
-### Configure skins and extensions
-
-Take a look at '/w/LocalSettings.example.php file to see examples of how to configure the extensions and skin in your LocalSettings.php file.
+From the Transcription Desk files downloaded earlier from the repository, copy over the contents of the '/w/extensions' and '/w/skins' directories to the respective 'skins; and 'extensions' directories in your mediawiki sub-directory
 
 In addition to the 'skins' and 'extensions' directories there are the following directories:
 
@@ -98,10 +94,16 @@ w
 .htaccess
 ```
 
+### Configure skins and extensions
+
+Take a look at '/w/LocalSettings.example.php file to see examples of how the extensions and skin are configured. Append them to the end of the LocalSettings.php file generated and saved earlier in a previous step.
+
 
 ### How to Import Transcription Desk 'Sample Image' Instructions Page into Mediawiki
 
 WARNING: If you have not yet backed up your database so you can roll back if there are problems with the installer.
+
+Enter the following commands from the command line:
 
 ```
 cd w/maintenance
@@ -118,9 +120,13 @@ Done!
 You might want to run rebuildrecentchanges.php to regenerate RecentChanges
 ```
 
+Log in as the Mediawiki adminstrator.
+
 Refresh the main page. A 'Transcription Desk' link should appears in the left panel under 'Navigation'.
 
 Please follow the instructions below before clicking on the link.
+
+At this point, a further database backup is recommended.
 
 
 ## How to slice and import images into Mediawiki ##
@@ -160,14 +166,22 @@ Make sure that the following directories:
 
 ### Run the installer ###
 
-Now click on the link 'Transcription Desk' as shown in your mediawiki ( described above ). A console should pop up in a new browser window. Click on the button 'Run new job'. The progress of the install should be displayed in the console. If all goes well then the last console message displayed will be 'Import into MW successful'.
+Now click on the link 'Transcription Desk' as shown in your mediawiki ( described above ).
+
+You will see a list of instructions. Ensure you have completed all steps including importing the installer schema.
+
+Click on the link ' Run the demo image uploader'
+
+A console should pop up in a new browser window. Click on the button 'Run new job'. The progress of the install should be displayed in the console. If all goes well then the last console message displayed will be 'Import into MW successful'.
 
 If you look in the directory you set as 'path.image.export' in config.ini.php, you should see the images tiles in their respective directories.
 
 
 ### View and zoom the tiled image ###
 
-Go your siite home page. For example:
+Go your site home page. For example:
+
+http://cbp-transcription-desk-test.local/w/index.php/Transcription_Desk
 
  http://cbp-transcription-desk.local/w/index.php/Main_Page
 
