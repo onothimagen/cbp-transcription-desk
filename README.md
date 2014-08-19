@@ -189,6 +189,8 @@ A console should pop up in a new browser window. Click on the button 'Run new jo
 
 If you look in the directory you set as 'path.image.export' in config.ini.php, you should see the images tiles in their respective directories.
 
+Once the installer has completed, the window can be refreshed and the processing jobs will be listed.
+
 
 ### View and zoom the tiled image ###
 
