@@ -157,7 +157,7 @@ class File {
 	public function CheckExists( $sName, $sFilePath ){
 
 		if( file_exists( $sFilePath ) === false ){
-			throw new ImporterException( $sName . ' ' . $sFilePath . ' does not exist' );
+			throw new ImporterException( $sName . ' \'' . $sFilePath . '\' does not exist' );
 		}
 
 		return true;

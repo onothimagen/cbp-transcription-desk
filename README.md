@@ -6,22 +6,20 @@ Mediawiki based transcription tools
 
 ## Mediawiki Configuration instructions
 
+NOTE: The extensions and skin may not work with Mediawiki versions earlier than 1.23.x
+
 ### Requirements
 
-In addition to the requirements needed to install MediaWiki, your server will also need
+In addition to the requirements needed to install MediaWiki, your server will also need:
 
-* To have Perl available with the ImageMagick module enabled
-* To have the Apache user able to write to directories
-* Ensure that passthru has not been disabled in php.ini ( see disable_functions )
-* Ensure that both Apache and PHP are configured to allow long running scripts
+* to have Perl available with the ImageMagick module enabled
+* to have the Apache user able to write to directories
+* ensure that passthru has not been disabled in php.ini ( see disable_functions )
+* ensure that both Apache and PHP are configured to allow long running scripts
 
 ### Download Mediawiki
 
-NOTE: These are very basic instructions for the the installation of MediaWiki. For full instructions see [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
-
 [Download the latest version of Mediawiki](http://www.mediawiki.org/wiki/Download). The Transcription Desk has been tested with 1.23.2.
-
-The extensions and skin may not work with versions earlier than 1.23.x
 
 Copy the Mediawiki files to a subdirectory of your website root e.g. /w
 
@@ -33,9 +31,9 @@ Copy .htaccess to your website's root. It has been configured to use 'w' as the 
 
 ### Install Mediawiki
 
-Run the MediaWiki installer wizard by going to your website root. The default settings can be used.
+NOTE: These are very basic instructions for the the installation of MediaWiki. For full instructions see [http://www.mediawiki.org/wiki/Manual:Installation_guide](http://www.mediawiki.org/wiki/Manual:Installation_guide)
 
-At this point, it is advisable that you back up your database. The following steps will make changes to the database. If you have a backup, you can roll back if any of the following steps goes wrong.
+Run the MediaWiki installer wizard by going to your website root. The default settings can be used.
 
 On completion of the install, you will be prompted to download the generated file LocalSettings.php. Save it to your Mediawiki directory e.g. /w
 
@@ -57,6 +55,8 @@ underneath your default configuration.
 Go to the website root and the default Mediawiki website should be displayed. For example:
 
 http://cbp-transcription-desk.local/w/index.php/Main_Page
+
+At this point, it is advisable that you back up your database. The following steps will make changes to the database. If you have a backup, you can roll back if any of the following steps goes wrong.
 
 If you are experiencing problems, try inserting the following line at the top of LocalSettings.php:
 
@@ -82,7 +82,7 @@ cbp-data - Contains all the XML meta data and images
 
 scripts - All the scripts needed to process the images
 
-These should be moved to your site root.
+These should also be moved to your site root.
 
 You should see the following in your site root:
 
@@ -143,6 +143,15 @@ to
 ./scripts/importer/config.ini.php
 ```
 
+### Load the 'importer' schema ###
+
+Load
+```
+./importer/schemas/importer_schema.sql
+```
+..into your MySQL database.
+
+
 ### Edit the configuration file ###
 
 The configuration file config.ini.php is an ini file with several sections.
@@ -153,7 +162,11 @@ After that there can be any number of sections for each environment being deploy
 
 The importer identifies the environment to use by using the 'active.section' value. The environment sections inherit all values from the [common] section which can then be overridden.
 
-For the purposes of running the demo installer, most sections can be left as is apart from 'path.prefix', which should be an absolute path to your website's root, and the 'database.params' for your local database configuration.
+For the purposes of running the demo installer, most sections can be left as is apart from:
+
+* 'perl.path
+* 'path.prefix', which should be an absolute path to your website's root
+* 'database.params' for your local database configuration.
 
 Make sure that the following directories:
 

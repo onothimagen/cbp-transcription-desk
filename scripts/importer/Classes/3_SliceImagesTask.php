@@ -271,7 +271,7 @@ class SliceImagesTask  extends TaskAbstract{
         $sPerlPath        = $this->sPerlPath;
 
         if( empty( $sPerlPath ) ){
-            $sPerlPath = 'perl';
+            $sPerlPath = '/usr/bin/perl';
         }
 
 		$this->oFile->CheckExists( 'ImagePath', $sInputImagePath );

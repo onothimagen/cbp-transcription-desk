@@ -5,7 +5,7 @@
 
 [common]
 active.section	     = development
-mediawiki.version    = 1.23.1
+mediawiki.version    = 1.23.2
 export.version       = 0.7
 database.adapter     = Pdo_Mysql
 database.params.host = localhost
@@ -30,7 +30,7 @@ path.mw.importer     = w/maintenance/importDump.php
 path.slicer          = scripts/Slicer/slicer.pl
 path.csv.import      = cbp-data/import/metatada-table.txt
 path.image.import    = cbp-data/import/images
-path.xml.export      = cbp-data/import/xml
+path.xml.export      = cbp-data/export/xml
 path.logs            = cbp-data/logs
 path.archive         = cbp-data/archive
 
