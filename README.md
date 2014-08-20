@@ -202,6 +202,9 @@ http://cbp-transcription-desk-test.local/w/index.php/Transcription_Desk
 
 Now click on the link to TD/001/001/001. This should display a zoom window containing the tiled images.
 
+### Create a new account to view the JB Toolbar buttons on the editor  ###
+
+Only 'email confirmed' users can edit pages so register as a user and confirm by clicking the link sent by email and the editor should appear next to the image.
 
 
 
