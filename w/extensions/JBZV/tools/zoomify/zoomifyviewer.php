@@ -76,7 +76,7 @@ foreach ( $requiredGetVars as $getVar => $varName ){
 		class="z_embed_style">
 	</embed>
 </object>
-<p><?php echo $useJSMsg ?> <a href="../ajax-tiledviewer/ajax-tiledviewer.php?&image=<?php echo $imageFilePath; ?>&lang=<?php echo $lang; ?>&sitename=<?php echo $siteName; ?>"><?php echo $clickHereMsg; ?></a> <?php echo $insteadMsg; ?>.</p>
+<p><?php echo $useJSMsg ?> <a href="../ajax-tiledviewer/ajax-tiledviewer.php?&image=<?php echo $imageFilePath; ?>&lang=<?php echo $lang; ?>&sitename=<?php echo str_replace( ' ', '%20', $siteName ); ?>"><?php echo $clickHereMsg; ?></a> <?php echo $insteadMsg; ?>.</p>
 </div>
 </body>
 </html>

@@ -1,5 +1,4 @@
 /**
- 
 
 * Copyright (C) 2013 Richard Davis
  *
@@ -34,11 +33,20 @@ var maxMin = '<button id="minimise" type="button" style="position:relative; floa
 
 var $images_path = "extensions/JBTEIToolbar/images/";
 
-mw.loader.using('mediawiki.action.edit', function () {
-	
+var addExtraButtonsToClassicToolBar = function(){
+    /*
+     * The toolbar needs to be moved above the edit form so that
+     * the viewer will float alongside the text area
+     */
+
+    $('#toolbar').insertBefore('#editform');
+
+    $('#wpTextbox1').insertBefore('#zoomviewerframe');
+
+
 	$('#toolbar').empty();
-	
-	mwCustomEditButtons.push({
+
+	mw.toolbar.addButton({
 		'id'        : 'mw-editbutton-linebreak',
 		'imageFile' : $images_path + 'jb-button-linebreak.png',
 		'speedTip'  : mw.msg( 'toolbar-label-line-break' ),
@@ -46,8 +54,8 @@ mw.loader.using('mediawiki.action.edit', function () {
 		'tagClose'  : '',
 		'sampleText': ''
 	});
-	
-	mwCustomEditButtons.push({
+
+	mw.toolbar.addButton({
 		'id'        : 'mw-editbutton-pagebreak',
 		'imageFile' : $images_path + 'jb-button-pagebreak.png',
 		'speedTip'  : mw.msg( 'toolbar-label-page-break' ),
@@ -55,8 +63,8 @@ mw.loader.using('mediawiki.action.edit', function () {
 		'tagClose'  : '',
 		'sampleText': ''
 	});
-    
-    mwCustomEditButtons.push({
+
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-heading',
     	'imageFile' : $images_path + 'jb-button-heading.png',
         'speedTip'  : mw.msg( 'toolbar-label-heading' ),
@@ -64,8 +72,8 @@ mw.loader.using('mediawiki.action.edit', function () {
         'tagClose'  : '</head>',
         'sampleText': mw.msg( 'toolbar-peri-heading' )
     });
-    
-    mwCustomEditButtons.push({
+
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-paragraph',
     	'imageFile' : $images_path + 'jb-button-paragraph.png',
         'speedTip'  : mw.msg( 'toolbar-label-paragraph' ),
@@ -74,7 +82,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-paragraph' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-add',
     	'imageFile' : $images_path + 'jb-button-add.png',
         'speedTip'  : mw.msg( 'toolbar-label-addition' ),
@@ -83,7 +91,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-addition' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-deletion',
     	'imageFile' : $images_path + 'jb-button-deletion.png',
         'speedTip'  : mw.msg( 'toolbar-label-deletion' ),
@@ -92,7 +100,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-deletion' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-questionable',
     	'imageFile' : $images_path + 'jb-button-questionable.png',
         'speedTip'  : mw.msg( 'toolbar-label-questionable' ),
@@ -101,7 +109,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-questionable' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-illegible',
     	'imageFile' : $images_path + 'jb-button-illegible.png',
         'speedTip'  : mw.msg( 'toolbar-label-illegible' ),
@@ -110,7 +118,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': ''
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-note',
     	'imageFile' : $images_path + 'jb-button-note.png',
         'speedTip'  : mw.msg( 'toolbar-label-note' ),
@@ -119,7 +127,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-note' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-underline',
     	'imageFile' : $images_path + 'jb-button-underline.png',
         'speedTip'  : mw.msg( 'toolbar-label-underline' ),
@@ -127,8 +135,8 @@ mw.loader.using('mediawiki.action.edit', function () {
         'tagClose'  : '</hi>',
         'sampleText': mw.msg( 'toolbar-peri-underline' )
     });
-    
-    mwCustomEditButtons.push({
+
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-superscript',
     	'imageFile' : $images_path + 'jb-button-superscript.png',
         'speedTip'  : mw.msg( 'toolbar-label-superscript' ),
@@ -137,7 +145,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-superscript' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-sic',
     	'imageFile' : $images_path + 'jb-button-sic.png',
         'speedTip'  : mw.msg( 'toolbar-label-spelling' ),
@@ -145,8 +153,8 @@ mw.loader.using('mediawiki.action.edit', function () {
         'tagClose'  : '</sic>',
         'sampleText':  mw.msg( 'toolbar-peri-spelling' )
     });
-    
-    mwCustomEditButtons.push({
+
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-foreign',
     	'imageFile' : $images_path + 'jb-button-foreign.png',
         'speedTip'  : mw.msg( 'toolbar-label-foreign' ),
@@ -155,7 +163,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': mw.msg( 'toolbar-peri-foreign' )
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-ampersand',
     	'imageFile' : $images_path + 'jb-button-ampersand.png',
         'speedTip'  : mw.msg( 'toolbar-label-ampersand' ),
@@ -163,8 +171,8 @@ mw.loader.using('mediawiki.action.edit', function () {
         'tagClose'  : '',
         'sampleText': ''
     });
-    
-    mwCustomEditButtons.push({
+
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-longdash',
     	'imageFile' : $images_path + 'jb-button-longdash.png',
         'speedTip'  : mw.msg( 'toolbar-label-long-dash' ),
@@ -173,7 +181,7 @@ mw.loader.using('mediawiki.action.edit', function () {
         'sampleText': ''
     });
 
-    mwCustomEditButtons.push({
+    mw.toolbar.addButton({
     	'id'        : 'mw-editbutton-comment',
     	'imageFile' : $images_path + 'jb-button-comment.png',
         'speedTip'  : mw.msg( 'toolbar-label-comment' ),
@@ -181,43 +189,8 @@ mw.loader.using('mediawiki.action.edit', function () {
         'tagClose'  : ' -->',
         'sampleText': 'user comment'
     });
-    
-    for( var button in mwCustomEditButtons ) {
-	  	
-        mw.toolbar.addButton(
-        		mwCustomEditButtons[ button ].imageFile,
-        		mwCustomEditButtons[ button ].speedTip,
-        		mwCustomEditButtons[ button ].tagOpen,
-        		mwCustomEditButtons[ button ].tagClose,
-        		mwCustomEditButtons[ button ].sampleText
-        );
-  	
-	  	
- 	}
-    
-	/*
-	 * The toolbar needs to be moved above the edit form so that
-	 * the viewer will float alongside the text area
-	 */
-    
-    $('#toolbar').insertBefore('#editform');
-   
-    
-    // Add Maximise and Minimise buttons
-    
-    $('#toolbar').append( maxMin );
-    
-    $(document).ready(function(){
-    	$( '#maximise' ).click(function() {
-    		$("#mw-content-text").addClass("maximise");
-    		$("html, body").animate({ scrollTop: 0 }, "fast");
-    	});
-    	$( '#minimise' ).click(function() {
-    		$("#mw-content-text").removeClass("maximise");  
-    	});
-    });
-    
-});
+
+}
 
 
 
@@ -228,60 +201,86 @@ mw.loader.using('mediawiki.action.edit', function () {
  * The WikiEditor is then populated with the JB TEI button.
  * NOTE: For this to work the WikiEditor must be included
  * before this JBTEIToolBar extension is included. For example:
- * 
+ *
  * require_once( 'WikiEditor/WikiEditor.php' );
  * $wgDefaultUserOptions['usebetatoolbar'] = 1;
- * 
+ *
  * require_once( 'JBTEIToolbar/JBTEIToolbar.php' );
- * 
- * 
+ *
+ *
  */
 
-var customizeToolbar = function() {
-	
+var addExtraButtons = function() {
+
+    /*
+     * The toolbar needs to be moved above the edit form so that
+     * the viewer will float alongside the text area
+     */
+
+    $('.wikiEditor-ui-top').insertBefore('#editform')
+
+    $('.wikiEditor-ui').insertAfter('.wikiEditor-ui-top');
+
+    $('#wpTextbox1').insertBefore('#zoomviewerframe');
+
+    /*
+     * Reorganise editor to fit alongside zoom viewer
+     */
+
+    var $style_sheet = 'extensions/JBTEIToolbar/css/ext.jbteitoolbar.css';
+
+    $("body").before("<link rel='stylesheet' href='" + $style_sheet + "' type='text/css' media='screen' />");
+
+    /*
+     * This overrides the width:38% in ext.jbteitoolbar.css intended for the old editor which creates a blue gap in WikiEditor
+     */
+
+    $('#wpTextbox1').css( "width", "100%" );
+
+
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
         'section': 'advanced'
 	});
-	
+
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
         'section': 'help'
 	});
-	
+
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
         'section': 'characters'
 	});
-		
+
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
 		'section': 'main',
         'group': 'insert'
-	});	
-	
+	});
+
 
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
 		'section': 'main',
         'group': 'format',
         'tool':'italic'
 	} );
-	
+
 	$( '#wpTextbox1' ).wikiEditor( 'removeFromToolbar', {
 		'section': 'main',
         'group': 'format',
         'tool':'bold'
 	} );
-	
+
 	var $fullPath = window.location.pathname;
 
 	var $lastSlashIndex = $fullPath.lastIndexOf('/');
-	
+
 	var $mw_root_directory = $fullPath.substring(0, $lastSlashIndex + 1 );
-	
+
 	var $path = $mw_root_directory + $images_path;
-	
+
 	$( '#wpTextbox1' ).wikiEditor( 'addToToolbar', {
 		'section': 'main',
         'group'  : 'format',
         'tools'  : {
-	        	
+
 	        	'line-break': {
 	        		label :  mw.msg( 'toolbar-label-line-break' ),
 	        		type  : 'button',
@@ -295,7 +294,7 @@ var customizeToolbar = function() {
 	        			}
 	        		}
 	        	},
-	        	
+
 	        	'pagebreak': {
 	        		label : mw.msg( 'toolbar-label-page-break' ),
 	        		type  : 'button',
@@ -308,8 +307,8 @@ var customizeToolbar = function() {
 	        				post: '',
 	        			}
 	        		}
-	        	},   
-	        	
+	        	},
+
 	            'heading': {
 	                label : mw.msg( 'toolbar-label-heading' ),
 	                type  : 'button',
@@ -323,7 +322,7 @@ var customizeToolbar = function() {
 	                        }
 	                }
 	            },
-	        	
+
 	            'paragraph': {
 	                label : mw.msg( 'toolbar-label-paragraph' ),
 	                type  : 'button',
@@ -337,7 +336,7 @@ var customizeToolbar = function() {
 	                        }
 	                }
 	            },
-	
+
 			    'addition': {
 			        label : mw.msg( 'toolbar-label-addition' ),
 			        type  : 'button',
@@ -351,7 +350,7 @@ var customizeToolbar = function() {
 			                }
 			        }
 			    },
-                                  	
+
 			    'deletion': {
 			        label : mw.msg( 'toolbar-label-deletion' ),
 			        type  : 'button',
@@ -365,7 +364,7 @@ var customizeToolbar = function() {
 			                }
 			        }
 			    },
-			      
+
 			    'questionable': {
 			        label : mw.msg( 'toolbar-label-questionable' ),
 			        type  : 'button',
@@ -378,8 +377,8 @@ var customizeToolbar = function() {
 			                    post: '</unclear>',
 			                }
 			        }
-			    },       
-                
+			    },
+
 			    'illegible': {
 			        label : mw.msg( 'toolbar-label-illegible' ),
 			        type  : 'button',
@@ -389,11 +388,11 @@ var customizeToolbar = function() {
 			                options: {
 			                    pre:  '<gap/>',
 			                    peri: '',
-			                    post: '',			                    
+			                    post: '',
 			                }
 			        }
-			    },                 
-                
+			    },
+
 			    'note': {
 			        label : mw.msg( 'toolbar-label-note' ),
 			        type  : 'button',
@@ -406,8 +405,8 @@ var customizeToolbar = function() {
 			                    post: '</note>',
 			                }
 			        }
-			    },                     
-                
+			    },
+
 			    'underline': {
 			        label : mw.msg( 'toolbar-label-underline' ),
 			        type  : 'button',
@@ -417,11 +416,11 @@ var customizeToolbar = function() {
 			                options: {
 			                    pre:  '<hi rend="underline">',
 			                    peri: mw.msg( 'toolbar-peri-underline' ),
-			                    post: '</hi>'        
+			                    post: '</hi>'
 			                }
 			        }
-			    },                 
-                
+			    },
+
 			    'superscript': {
 			        label : mw.msg( 'toolbar-label-superscript' ),
 			        type  : 'button',
@@ -431,11 +430,11 @@ var customizeToolbar = function() {
 			                options: {
 			                	pre : '<hi rend="superscript">',
 			                    peri: mw.msg( 'toolbar-peri-superscript' ),
-			                    post: '</hi>'        
+			                    post: '</hi>'
 			                }
 			        }
-			    },                
-                
+			    },
+
 			    'sic': {
 			        label : mw.msg( 'toolbar-label-spelling' ),
 			        type  : 'button',
@@ -448,8 +447,8 @@ var customizeToolbar = function() {
 			                    post: '</sic>',
 			                }
 			        }
-			    },  	
-			    
+			    },
+
 			    'foreign': {
 			        label : mw.msg( 'toolbar-label-foreign' ),
 			        type  : 'button',
@@ -462,8 +461,8 @@ var customizeToolbar = function() {
 			                    post: '</foreign>',
 			                }
 			        }
-			    },  	
-			    
+			    },
+
 			    'ampersand': {
 			        label : mw.msg( 'toolbar-label-ampersand' ),
 			        type  : 'button',
@@ -473,11 +472,11 @@ var customizeToolbar = function() {
 			                options: {
 			                    pre :  '&amp;',
 			                    peri: '',
-			                    post: '',	                    
+			                    post: '',
 			                }
 			        }
 			    },
-			    
+
 			    'longdash': {
 			        label : mw.msg( 'toolbar-label-long-dash' ),
 			        type  : 'button',
@@ -491,7 +490,7 @@ var customizeToolbar = function() {
 			                }
 			        }
 			    },
-			    
+
 			    'commment': {
 			        label : mw.msg( 'toolbar-label-comment' ),
 			        type  : 'button',
@@ -504,62 +503,48 @@ var customizeToolbar = function() {
 			                    post: ' -->',
 			                }
 			        }
-			    },
-			    				    
-			    		    
-			    
+			    }
         }
 	} );
-	
-	/*
-	 * The toolbar needs to be moved above the edit form so that
-	 * the viewer will float alongside the text area
-	 */
-
-	$('.wikiEditor-ui-top').insertBefore('#editform');
-	
-    $('.toolbar').append( maxMin );
-	
-	/*
-	 * Reorganise editor to fit alongside zoom viewer
-	 */
-	
-	var $style_sheet = 'extensions/JBTEIToolbar/css/ext.jbteitoolbar.css';
-	
-	$("body").before("<link rel='stylesheet' href='" + $style_sheet + "' type='text/css' media='screen' />");
-	
-    
-	/*
-	 * This overrides the width:38% in ext.jbteitoolbar.css intended for the old editor which creates a blue gap in WikiEditor
-	 */
-    $(document).ready(function(){
-    	$('#wpTextbox1').css( "width", "100%" );
-    	
-    	$( '#maximise' ).click(function() {
-    		$("#mw-content-text").addClass("maximise");
-    		$("html, body").animate({ scrollTop: 0 }, "fast");
-    	});
-    	$( '#minimise' ).click(function() {
-    		$("#mw-content-text").removeClass("maximise");  
-    	});
-    	
-    });
-   
-
 };
 
 
 /* Check if view is in edit mode and that the required modules are available. Then, customize the toolbar . . . */
 
-if ( $.inArray( mw.config.get( 'wgAction' ), ['edit', 'submit'] ) !== -1 ) {
+$(document).ready(function(){
+    if( $.inArray( mw.config.get( 'wgAction' ), [ 'edit', 'submit' ] ) !== -1 ) {
+
         mw.loader.using( 'user.options', function () {
-                if ( mw.user.options.get('usebetatoolbar') ) {
-                        mw.loader.using( 'ext.wikiEditor.toolbar', function () {
-                                $(document).ready( customizeToolbar );
-                        } );
+            if ( mw.user.options.get( 'showtoolbar' ) ) {
+
+                if ( mw.user.options.get( 'usebetatoolbar' )) {
+                    mw.loader.using( 'ext.wikiEditor.toolbar', function(){
+                        $( addExtraButtons );
+                    } );
+                } else {
+                    mw.loader.using( 'mediawiki.action.edit', function(){
+                        $( addExtraButtonsToClassicToolBar );
+                    } );
                 }
+
+                // This must come after the buttons are loaded
+
+                $('#toolbar').append( maxMin );
+
+                $( '#maximise' ).click(function() {
+                    $("#mw-content-text").addClass("maximise");
+                    $("html, body").animate({ scrollTop: 0 }, "fast");
+                });
+                $( '#minimise' ).click(function() {
+                    $("#mw-content-text").removeClass("maximise");
+                });
+
+            }
         } );
-}
+    }
+}( mediaWiki, jQuery ) );
+
+
 
 
 

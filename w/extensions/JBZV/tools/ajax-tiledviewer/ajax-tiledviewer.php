@@ -123,5 +123,5 @@ height = "<?php echo $height; ?>";
     <div id="wheelMode"><b>Mouse Wheel:</b><br><input type="radio" checked  onClick="wheelMode1()">&nbsp;Zoom<br><input type="radio" onClick="wheelMode2()" >&nbsp;Next/Prev</div>
     <div id="coords" style="position:absolute;top:2px;right:10px;z-index:10;">
     </div>
-<div id="z_link"><?php echo $useFlashMsg; ?> <a href="../zoomify/zoomifyviewer.php?&image=<?php echo $imageFilePath; ?>&lang=<?php echo $lang; ?>&sitename=<?php echo $siteName; ?>"><?php echo $clickHereMsg; ?></a> <?php echo $insteadMsg; ?>.</div>
+<div id="z_link"><?php echo $useFlashMsg; ?> <a href="../zoomify/zoomifyviewer.php?&image=<?php echo $imageFilePath; ?>&lang=<?php echo $lang; ?>&sitename=<?php echo str_replace( ' ', '%20', $siteName ); ?>"><?php echo $clickHereMsg; ?></a> <?php echo $insteadMsg; ?>.</div>
 </body>
