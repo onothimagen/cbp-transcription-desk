@@ -120,7 +120,7 @@ Done!
 You might want to run rebuildrecentchanges.php to regenerate RecentChanges
 ```
 
-Log in as the Mediawiki adminstrator.
+Log in as the Mediawiki administrator.
 
 Refresh the main page. A 'Transcription Desk' link should appears in the left panel under 'Navigation'.
 
